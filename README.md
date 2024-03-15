@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Blog README
 
-## Getting Started
+Welcome to our blog repository! This document provides an overview of the available commands and their descriptions for managing migrations, seeders, and bundling/transpiling client and server code. Please follow the instructions below to utilize the commands effectively.
 
-First, run the development server:
+
+## Important
+
+Make sure to have all of the necessary environment variables set up. Please refer to the .env.example file for guidance.
+
+## To install dependencies, run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## To install dev dependencies, run:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm install -D
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Available Commands
 
-## Learn More
+### Format Code
+To format code using eslint:
+```bash
+npm run lint
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Auto Fix ESLint Issues
+To automatically fix eslint issues:
+```bash
+npm run lint:fix
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Create a New Migration
+To create a new migration:
+```bash
+npm run migration:create migration-name
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Migrate All Migrations
+To migrate all migrations:
+```bash
+npm run migrate
+```
 
-## Deploy on Vercel
+### Rollback Migrations One Step Backward
+To rollback migrations one step backward:
+```bash
+npm run migrate:rollback
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Rollback All Migrations
+To rollback all migrations (Use with caution and never use on deployment database):
+```bash
+npm run migrate:rollback:all
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Run Seeders
+To run seeders:
+```bash
+npm run seed
+```
+
+### Create a New Seeder
+To create a new seeder:
+```bash
+npm run seed:create seed_name
+```
+
+### Rollback a Seeder One Step Backward
+To rollback a seeder one step backward:
+```bash
+npm run seed:rollback
+```
+
+### To rollback All Seeders
+To rollback all seeders (Use with caution and never use on deployment database):
+```bash
+npm run seed:rollback:all
+```
+
+### Bundle and Transpile Client and Server Code for production
+To bundle and transpile client and server code:
+```bash
+npm run build
+```
+
+### Run the app
+To start app in development mode:
+```bash
+npm run dev
+```
+
+### Run the app in production
+To run app in production mode:
+```bash
+npm run start
+```
+
+
+## Note
+Ensure that you exercise caution, especially when executing commands that affect migrations, seeders, and deployment environments. Always review changes before applying them to production databases.
