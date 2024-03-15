@@ -39,3 +39,7 @@ next-env.d.ts
 # playground
 src/test.js
 test.js
+
+
+#tmp file
+tmp/uploads/*
