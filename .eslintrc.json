@@ -51,7 +51,7 @@
   },
   "ignorePatterns": [
     "node_modules/", // Ignore node_modules directory
-    "dist/", // Ignore build directory
+    ".next", // Ignore build directory
     "*.config.js" // Ignore config files
   ]
 }

@@ -1,20 +1,15 @@
-import Hero from '@/components/Hero';
-import Badge from '@/components/Badge';
 import Card from '@/components/Card';
+import Badge from '@/components/Badge';
 
-export const metadata = {
-  title: 'Blog',
-  description: 'AI blog posts',
-};
-
-export default async function Home() {
+export default function Page() {
   return (
-    <article className="my-4">
-      <Hero />
-      <Badge title="الأحدث" />
-      <Badge title="الأشهر" />
-      <Badge title="الأقدم" />
-      <div className="my-6"></div>
+    <div>
+      <p className="my-4">تم العثور على 250 نتيجة</p>
+      <div className="my-2">
+        <Badge title="الأحدث" />
+        <Badge title="الأشهر" />
+        <Badge title="الأقدم" />
+      </div>
       <Card
         title="أقوال وحكم عربية"
         description="ذو العقل يشقى في النّعيم بعقلهِ، وأخو الجهالة في الشقاوة ينعم. النّاجح يبحث عن الحلول، أما الفاشل فيبحث عن الأعذار. النّاجح جزء من الحل، أما الفاشل فهو جزء من المشكلة. النّاجح لديه خطة وبرنامج، أما الفاشل فلديه تبريرات. يقول النّاجح دعني أقوم بالعمل، أما الفاشل فيقول هذا ليس"
@@ -45,6 +40,6 @@ export default async function Home() {
         image="/demo.png"
         footer={true}
       />
-    </article>
+    </div>
   );
 }

@@ -1,17 +1,25 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Blog",
-  description: "AI blog posts",
-};
+import './globals.css';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import Sidebar from '@/components/Sidebar';
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html className="pt-2" lang="ar" dir="rtl">
+      <body className="md:w-[680px] font-noto">
+        <main className="md:flex">
+          <section>
+            <Navbar />
+            <div className="px-3 md:w-[680px]">
+              <section className="mb-6 min-height">{children}</section>
+            </div>
+          </section>
+          <aside className="hidden md:block">
+            <Sidebar />
+          </aside>
+        </main>
+        <Footer />
+      </body>
     </html>
   );
 }
