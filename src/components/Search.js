@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { RiSearchLine } from '@remixicon/react';
 import clsx from 'clsx';
 
-const Search = ({ tag }) => {
+const Search = ({ tag = null }) => {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -17,6 +17,8 @@ const Search = ({ tag }) => {
   useEffect(() => {
     if (tag) {
       setQuery(tag);
+    } else {
+      inputRef.current.focus();
     }
   }, [tag]);
 
@@ -30,20 +32,25 @@ const Search = ({ tag }) => {
     setShowSuggestions(false);
   };
 
-  const handleCloseClick = () => {
-    setShowSuggestions(true);
+  const handleRemoveClick = () => {
     setQuery('');
+    setShowSuggestions(true);
     inputRef.current.focus();
   };
 
-  const handleKeyDown = () => {};
+  const handleKeyDown = (e) => {
+    console.log(e);
+  };
+
+  const onBlur = () => {
+    setTimeout(() => setShowSuggestions(false), 200);
+  };
 
   return (
     <section>
       <label htmlFor="term" className="relative">
         {''}
         <input
-          disabled={tag}
           className={clsx('search-input ', {
             'rounded-br-none rounded-bl-none': showSuggestions,
           })}
@@ -53,16 +60,17 @@ const Search = ({ tag }) => {
           value={query}
           onChange={handleOnChange}
           onFocus={() => setShowSuggestions(true)}
-          onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+          onBlur={onBlur}
           ref={inputRef}
         />
       </label>
+
       {showSuggestions && (
         <ul className="suggestions rounded-tr-none rounded-tl-none block">
           <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
           <div
             onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={handleKeyDown}
+            onKeyDown={(e) => handleKeyDown(e)}
             role="button"
             tabIndex={0}
           >
@@ -135,7 +143,7 @@ const Search = ({ tag }) => {
       </div>
       <div className="z-11 absolute top-3 left-14">
         {query && (
-          <Hug onClick={handleCloseClick}>
+          <Hug onClick={handleRemoveClick}>
             <RiCloseFill size={20} className="fill-light-onSurfaceVariant" />
           </Hug>
         )}

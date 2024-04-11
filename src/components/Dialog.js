@@ -40,7 +40,6 @@ const Dialog = ({
       border-solid 
       border-light-outlineVariant 
       bg-light-surfaceContainerHigh rounded-lg
-      backdrop:bg-grey-500
       "
       ref={dialogRef}
     >

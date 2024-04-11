@@ -18,7 +18,9 @@ export default function RootLayout({ children }) {
             <Sidebar />
           </aside>
         </main>
-        <Footer />
+        <div className="px-3">
+          <Footer />
+        </div>
       </body>
     </html>
   );

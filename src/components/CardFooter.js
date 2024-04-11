@@ -1,10 +1,29 @@
+'use client';
+
 import Tag from './Tag';
 import Hug from './Hug';
-import { RiShareForwardLine } from '@remixicon/react';
+import { RiShareLine } from '@remixicon/react';
+import { useState } from 'react';
+import Notification from './Notification';
 
 const CardFooter = ({ shareText = true }) => {
+  const [copyNotification, setCopyNotification] = useState(false);
+  const onShare = async () => {
+    await navigator.clipboard.writeText(window.location.href);
+    setCopyNotification(true);
+  };
   return (
     <section className="min-w-full">
+      <div>
+        <Notification
+          onShow={() => setCopyNotification(true)}
+          onClose={() => setCopyNotification(false)}
+          isShow={copyNotification}
+          type="copy"
+          text="تم نسخ الرابط بنجاح!."
+        />
+      </div>
+
       <footer className="h-14 flex items-center justify-between">
         <div className="truncate flex">
           <div className="truncate">
@@ -20,12 +39,11 @@ const CardFooter = ({ shareText = true }) => {
               مشاركة
             </p>
           )}
-          <Hug>
-            <RiShareForwardLine
-              size="20"
-              className="fill-light-primary  scale-x-[-1]"
-            />
-          </Hug>
+          <div>
+            <Hug onClick={onShare}>
+              <RiShareLine size="20" className="fill-light-primary" />
+            </Hug>
+          </div>
         </div>
       </footer>
       <hr className="mt-2 mb-6" />

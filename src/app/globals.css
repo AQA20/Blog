@@ -119,9 +119,12 @@ p {
   background-color: unset;
   color: unset;
 }
+.suggestions div:hover {
+  background-color: grey;
+  color: white;
+}
 
-
-.suggestions li:last-child:hover {
+.suggestions div:last-child:hover {
   border-bottom-right-radius: 24px;
   border-bottom-left-radius: 24px;
 }

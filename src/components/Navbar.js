@@ -25,7 +25,7 @@ const Navbar = () => {
   }, [params.tag, path]);
 
   return (
-    <section className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 py-2 z-10">
+    <section className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 py-2">
       <nav className="flex justify-between items-center py-1">
         <div>
           {/* If home page show logo */}
