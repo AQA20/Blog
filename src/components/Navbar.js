@@ -41,23 +41,6 @@ const subMenuItems = {
       icon: <RiSunLine size={24} />,
     },
   ],
-  '2طابع الواجهة': [
-    {
-      name: 'تلقائي',
-      onClick: () => null,
-      icon: <RiContrastFill size={24} />,
-    },
-    {
-      name: 'وضع الليل',
-      onClick: () => null,
-      icon: <RiMoonLine size={24} />,
-    },
-    {
-      name: 'وضع النهار',
-      onClick: () => null,
-      icon: <RiSunLine size={24} />,
-    },
-  ],
 };
 
 const footerItems = [
