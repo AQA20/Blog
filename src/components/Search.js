@@ -8,19 +8,16 @@ import { useRouter } from 'next/navigation';
 import { RiSearchLine } from '@remixicon/react';
 import clsx from 'clsx';
 
-const Search = ({ tag = null }) => {
+const Search = ({ isShow, tag = null }) => {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    if (tag) {
-      setQuery(tag);
-    } else {
-      inputRef.current.focus();
-    }
-  }, [tag]);
+    tag && setQuery(tag);
+    isShow && inputRef.current.focus();
+  }, [tag, isShow]);
 
   const handleOnChange = (e) => {
     e.preventDefault();
@@ -38,10 +35,6 @@ const Search = ({ tag = null }) => {
     inputRef.current.focus();
   };
 
-  const handleKeyDown = (e) => {
-    console.log(e);
-  };
-
   const onBlur = () => {
     setTimeout(() => setShowSuggestions(false), 200);
   };
@@ -52,7 +45,8 @@ const Search = ({ tag = null }) => {
         {''}
         <input
           className={clsx('search-input ', {
-            'rounded-br-none rounded-bl-none': showSuggestions,
+            'rounded-br-none rounded-bl-none transition-all duration-[800ms]':
+              showSuggestions,
           })}
           type="text"
           name="term"
@@ -68,71 +62,46 @@ const Search = ({ tag = null }) => {
       {showSuggestions && (
         <ul className="suggestions rounded-tr-none rounded-tl-none block">
           <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
-          <div
-            onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={(e) => handleKeyDown(e)}
-            role="button"
-            tabIndex={0}
-          >
+          <button onClick={() => handleSuggestClick('عشوائي')}>
             <li>
               <Hug>
                 <RiSearchLine size={24} />
               </Hug>
               عشوائي
             </li>
-          </div>
-          <div
-            onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={handleKeyDown}
-            role="button"
-            tabIndex={0}
-          >
+          </button>
+          <button onClick={() => handleSuggestClick('عشوائي')}>
             <li>
               <Hug>
                 <RiSearchLine size={24} />
               </Hug>
               عشوائي
             </li>
-          </div>
-          <div
-            onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={handleKeyDown}
-            role="button"
-            tabIndex={0}
-          >
+          </button>
+          <button onClick={() => handleSuggestClick('عشوائي')}>
             <li>
               <Hug>
                 <RiSearchLine size={24} />
               </Hug>
               عشوائي
             </li>
-          </div>
-          <div
-            onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={handleKeyDown}
-            role="button"
-            tabIndex={0}
-          >
+          </button>
+          <button onClick={() => handleSuggestClick('عشوائي')}>
             <li>
               <Hug>
                 <RiSearchLine size={24} />
               </Hug>
               عشوائي
             </li>
-          </div>
-          <div
-            onClick={() => handleSuggestClick('عشوائي')}
-            onKeyDown={handleKeyDown}
-            role="button"
-            tabIndex={0}
-          >
+          </button>
+          <button onClick={() => handleSuggestClick('عشوائي')}>
             <li>
               <Hug>
                 <RiSearchLine size={24} />
               </Hug>
               عشوائي
             </li>
-          </div>
+          </button>
         </ul>
       )}
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Hug from './Hug';
 import clsx from 'clsx';
 import { debounce } from '@/lib';
@@ -19,10 +19,30 @@ const Notification = ({
   type,
   autoHide = true,
 }) => {
+  const notificationRef = useRef(null);
+
+  const handleMouseEnter = () => {
+    onShow();
+  };
+
+  const handleTouchStart = () => {
+    onShow();
+  };
+
   useEffect(() => {
-    // Automatically hide the notification after 3 seconds;
+    // Save notification ref to use it in cleanup function
+    const element = notificationRef.current;
+    element.addEventListener('mouseenter', handleMouseEnter);
+    element.addEventListener('touchstart', handleTouchStart);
+
+    // Automatically hide the notification after specified ms;
     const hideAuto = debounce(onClose, 5000);
     isShow && autoHide && hideAuto();
+
+    return () => {
+      element.removeEventListener('mouseenter', handleMouseEnter);
+      element.removeEventListener('touchstart', handleTouchStart);
+    };
   }, [isShow]);
 
   const Icon = () => {
@@ -54,6 +74,7 @@ const Notification = ({
 
   return (
     <div
+      ref={notificationRef}
       className={clsx(
         'fixed max-w-sm md:max-w-md top-6 right-2 px-4 py-2 rounded-lg transition-opacity duration-[5000ms]',
         {
@@ -64,8 +85,6 @@ const Notification = ({
         }
       )}
       style={{ opacity: isShow ? 1 : 0 }}
-      onMouseEnter={onShow}
-      onTouchStart={onShow}
     >
       <div className="flex justify-between">
         <div className="flex items-center gap-2">

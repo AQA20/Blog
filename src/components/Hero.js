@@ -7,10 +7,12 @@ const Hero = () => {
     <article>
       <RoundedImage src="/hero.png" priority width="680" height="510" />
       <header>
-        <h1 className=" text-">تعرف على ما يعتقده الذكاء الإصطناعي</h1>
+        <h1 className="hover:cursor-pointer">
+          تعرف على ما يعتقده الذكاء الإصطناعي
+        </h1>
       </header>
       <section>
-        <p className="long-text mb-2  text-headline">
+        <p className="long-text mb-2 text-headline">
           كن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة
           السرور ومدح الألم ، وسأقدم لك وصفًا كاملاً للنظام ، وأشرح التعاليم
           الفعلية للمستكشف العظيم للحقيقة ، الباني البارع. السعادة البشرية. لا

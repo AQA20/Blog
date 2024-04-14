@@ -12,9 +12,12 @@ const CardFooter = ({ shareText = true }) => {
     await navigator.clipboard.writeText(window.location.href);
     setCopyNotification(true);
   };
+
   return (
     <section className="min-w-full">
-      <div>
+      {/* //Todo fix element being showed on mouseenter & touchstart after unmount */}
+      {/* A temporarily fix for notification mouseenter & touchstart issue (this removes animation) */}
+      {copyNotification && (
         <Notification
           onShow={() => setCopyNotification(true)}
           onClose={() => setCopyNotification(false)}
@@ -22,7 +25,7 @@ const CardFooter = ({ shareText = true }) => {
           type="copy"
           text="تم نسخ الرابط بنجاح!."
         />
-      </div>
+      )}
 
       <footer className="h-14 flex items-center justify-between">
         <div className="truncate flex">
