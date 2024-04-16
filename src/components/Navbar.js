@@ -44,9 +44,9 @@ const subMenuItems = {
 };
 
 const footerItems = [
-  { name: 'شروط الخدمة', url: '/policy/terms-of-service' },
-  { name: 'سياسة الخصوصية', url: '/policy/privacy-policy' },
-  { name: 'سياسة الكوكيز', url: '/policy/cookies-policy' },
+  { name: 'شروط الخدمة', url: '/policy?index=1' },
+  { name: 'سياسة الخصوصية', url: '/policy?index=2' },
+  { name: 'سياسة الكوكيز', url: '/policy?index=3' },
 ];
 
 const Navbar = () => {
@@ -66,7 +66,7 @@ const Navbar = () => {
   }, [params.tag, path]);
 
   return (
-    <section className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 py-2">
+    <div className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 py-2 z-10">
       <nav className="flex justify-between items-center py-1">
         <div>
           {/* If home page show logo and search is hidden */}
@@ -129,7 +129,7 @@ const Navbar = () => {
           </div>
         </div>
       </nav>
-    </section>
+    </div>
   );
 };
 

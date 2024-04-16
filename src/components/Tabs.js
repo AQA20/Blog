@@ -1,35 +1,48 @@
 'use client';
 
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import { useEffect, useState } from 'react';
+import clsx from 'clsx';
 
-export default function Taps({ index }) {
-  const [value, setValue] = React.useState(index);
+const Tabs = ({ tabs, index }) => {
+  const [currentIndex, setCurrentIndex] = useState(1);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  useEffect(() => {
+    index && setCurrentIndex(index);
+  }, [index]);
 
   return (
-    <div>
-      <Box sx={{ width: '100%', typography: 'body1' }}>
-        <TabContext className="relative" value={value}>
-          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
-              <Tab label="Item One" value="1" />
-              <Tab label="Item Two" value="2" />
-              <Tab label="Item Three" value="3" />
-            </TabList>
-          </Box>
-          <TabPanel value="1">Item One</TabPanel>
-          <TabPanel value="2">Item Two</TabPanel>
-          <TabPanel value="3">Item Three</TabPanel>
-        </TabContext>
-      </Box>
-    </div>
+    <>
+      {
+        <div className="relative flex items-center gap-[16px] border-b-dark-outlineVariant">
+          {Object.keys(tabs).map((header, index) => (
+            <button
+              key={header}
+              onClick={() => setCurrentIndex(index + 1)}
+              className="flex items-center h-10  hover:cursor-pointer hover:text-light-primary"
+            >
+              <div className="relative">
+                <p
+                  className={clsx('text-sm', {
+                    'text-light-primary': currentIndex === index + 1,
+                  })}
+                >
+                  {header}
+                </p>
+                {currentIndex === index + 1 && (
+                  <hr className="absolute w-full top-[31px] h-1 bg-light-primary rounded-t-[100px] rounder-r-[100px]" />
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      }
+      <hr className="text-light-outlineVariant mt-1 mb-4" />
+      {Object.values(tabs).map(
+        (tab, index) =>
+          currentIndex === index + 1 && <div key={index}>{tab}</div>
+      )}
+    </>
   );
-}
+};
+
+export default Tabs;
