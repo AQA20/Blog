@@ -12,7 +12,7 @@ const s3Service = new S3Service();
 
 export const up = async ({ context: { sequelize } }) => {
   const fileUrl = s3Service.uploadFile(fullPath);
-  const user = await User.findOne({ email: 'ahmedqss120@gmail.com' });
+  const user = await User.findOne({ email: 'admin@500words.com' });
   return sequelize.getQueryInterface().bulkInsert('images', [
     {
       imageable_id: user.id,
@@ -25,7 +25,7 @@ export const up = async ({ context: { sequelize } }) => {
 };
 
 export const down = async ({ context: { sequelize } }) => {
-  const user = await User.findOne({ email: 'ahmedqss120@gmail.com' });
+  const user = await User.findOne({ email: 'admin@500words.com' });
   const image = await Image.findOne({ imageable_id: user.id });
   if (image) {
     await s3Service.deleteFile(image.image_url);

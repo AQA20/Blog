@@ -41,15 +41,21 @@ export default class S3Service {
   }
 
   async getFile(fileName) {
-    const params = {
-      Bucket: process.env.AWS_FILE_BUCKET,
-      Key: fileName,
-    };
+    try {
+      const params = {
+        Bucket: process.env.AWS_FILE_BUCKET,
+        Key: fileName,
+      };
 
-    // Create GetObjectCommand instance
-    const getObjectCommand = new GetObjectCommand(params);
+      // Create GetObjectCommand instance
+      const getObjectCommand = new GetObjectCommand(params);
 
-    return await this.#s3Client.send(getObjectCommand);
+      // return the response
+      return await this.#s3Client.send(getObjectCommand);
+    } catch (error) {
+      console.error('heeeeeeeeeeeeeeeeeeeeeeeeeeeeer', error);
+      throw error;
+    }
   }
 
   async deleteFile(fileName) {

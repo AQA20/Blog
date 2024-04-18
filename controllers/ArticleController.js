@@ -20,20 +20,7 @@ export default class ArticleController {
     });
   }
 
-  static async #uploadImage(file, user) {
-    const url = ArticleController.s3client.uploadFile(file.path);
-    const image = await Image.create({
-      imageable_id: user.id,
-      imageable_type: Image.USER,
-      image_url: url,
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
-    return image;
-  }
-
-  static async getArticles(req, res, next) {
+  static async fetchAllArticles() {
     try {
       const articles = await Article.findAll({
         where: { status: Article.APPROVED },
@@ -44,12 +31,38 @@ export default class ArticleController {
           { model: Image, attributes: ['id', 'image_url'] },
         ],
       });
+      return articles;
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+    }
+  }
+
+  static async getArticles(req, res, next) {
+    try {
+      const articles = await ArticleController.fetchAllArticles();
       return resHandler(200, articles, res);
     } catch (error) {
       next(error);
     }
   }
+
   static async getArticle(req, res, next) {
+    try {
+      const article = await Article.findOne({
+        where: { status: Article.APPROVED, id: req.params.id },
+        include: [
+          { model: User, as: 'author', attributes: ['id', 'name'] },
+          { model: Category, as: 'category', attributes: ['id', 'name'] },
+          { model: Tag, as: 'tags', attributes: ['id', 'name'] },
+          { model: Image, attributes: ['id', 'image_url'] },
+        ],
+      });
+      return resHandler(200, article, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+  static async getArticleThumbnail(req, res, next) {
     try {
       const article = await Article.findOne({
         where: { status: Article.APPROVED, id: req.params.id },

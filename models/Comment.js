@@ -37,7 +37,7 @@ Comment.init(
       type: DataTypes.STRING(1000),
       allowNull: false,
       validate: {
-        len: [60, 1000], // Validates length between 60 and 1000 characters
+        len: [45, 1000], // Validates length between 60 and 1000 characters
       },
     },
     user_id: {

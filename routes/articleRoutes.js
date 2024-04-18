@@ -14,6 +14,9 @@ const router = express.Router();
 // Get all articles
 router.get('/articles', ArticleController.getArticles);
 
+// Get article
+router.get('/article/:id', ArticleController.getArticle);
+
 // Create article
 router.post(
   '/create-article',
@@ -61,7 +64,5 @@ router.post(
   createArticleCategoryRequest,
   ArticleController.createArticleCategory
 );
-// Get article
-router.get('/article/:id', ArticleController.getArticle);
 
 export default router;

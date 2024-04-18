@@ -16,7 +16,7 @@ const Search = ({ isShow, tag = null }) => {
 
   useEffect(() => {
     tag && setQuery(tag);
-    isShow && inputRef.current.focus();
+    isShow && !tag && inputRef.current.focus();
   }, [tag, isShow]);
 
   const handleOnChange = (e) => {
@@ -37,6 +37,10 @@ const Search = ({ isShow, tag = null }) => {
 
   const onBlur = () => {
     setTimeout(() => setShowSuggestions(false), 200);
+  };
+
+  const handleBackClick = () => {
+    router.back();
   };
 
   return (
@@ -106,7 +110,7 @@ const Search = ({ isShow, tag = null }) => {
       )}
 
       <div className="absolute top-3 right-4">
-        <Hug onClick={() => router.back()}>
+        <Hug onClick={handleBackClick}>
           <RiArrowRightLine size={20} className="fill-light-onSurfaceVariant" />
         </Hug>
       </div>

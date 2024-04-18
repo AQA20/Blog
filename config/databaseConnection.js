@@ -2,14 +2,11 @@ import Sequelize from 'sequelize';
 import { env } from 'process';
 import configuration from './databaseConfig.js';
 import mysql2 from 'mysql2';
-import { fileURLToPath } from 'url';
-import path from 'path';
-import fs from 'fs';
+import { initAssociations } from '../models/associations.js';
 
 const _env = env.NODE_ENV || 'development';
 const config = configuration[_env];
 const db = {};
-const models = {};
 
 // Fix "Please install mysql2 package manually".
 if (config.dialect === 'mysql') {
@@ -31,39 +28,25 @@ if (config.use_env_variable) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-//Test connection
-try {
-  await db.sequelize.authenticate();
-  console.log('Database connection has been established successfully.');
-} catch (error) {
-  const errorMessage = 'Unable to connect to the database';
-  console.error(errorMessage);
-  throw new Error(errorMessage);
-}
-
-// Get the directory name of the current module
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const modelFiles = fs.readdirSync(path.join(__dirname, '../models'));
-
-const importModels = async () => {
-  for (const file of modelFiles) {
-    const modelName = file.split('.')[0];
-    const modelPath = await import(path.join(__dirname, `../models/${file}`));
-    models[modelName] = modelPath.default;
-  }
-};
+// Test connection
+db.sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connection has been established successfully.');
+  })
+  .catch((error) => {
+    const errorMessage = 'Unable to connect to the database';
+    console.error(errorMessage, error);
+    throw new Error(errorMessage);
+  });
 
 // Associate models
-importModels()
-  .then(() => {
-    Object.keys(models).forEach((model) => {
-      if (models[model].associate) {
-        models[model].associate(models);
-      }
-    });
-  })
-  .catch((error) => console.log('Error importing models', error));
+initAssociations()
+  .then((models) => (db.models = models))
+  .catch((error) => {
+    const errorMessage = 'Unable to associate models';
+    console.error(errorMessage, error);
+    throw new Error(errorMessage);
+  });
 
 export default db;

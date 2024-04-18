@@ -6,7 +6,7 @@ import { RiShareLine } from '@remixicon/react';
 import { useState } from 'react';
 import Notification from './Notification';
 
-const CardFooter = ({ shareText = true }) => {
+const CardFooter = ({ tags = [], shareText = true }) => {
   const [copyNotification, setCopyNotification] = useState(false);
   const onShare = async () => {
     await navigator.clipboard.writeText(window.location.href);
@@ -28,12 +28,11 @@ const CardFooter = ({ shareText = true }) => {
       )}
 
       <footer className="h-14 flex items-center justify-between">
-        <div className="truncate flex">
+        <div className="flex">
           <div className="truncate">
-            <Tag name="المستكشف" />
-            <Tag name="الباني البارع" />
-            <Tag name="السعادة البشرية" />
-            <Tag name="السعادة البشرية" />
+            {tags.map((tag) => (
+              <Tag key={tag.id} name={tag.name} />
+            ))}
           </div>
         </div>
         <div className="flex items-center">

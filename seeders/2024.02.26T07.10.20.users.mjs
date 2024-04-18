@@ -3,8 +3,8 @@ import bcrypt from 'bcryptjs';
 export const up = async ({ context: { sequelize } }) => {
   return sequelize.getQueryInterface().bulkInsert('users', [
     {
-      name: 'Ahmad AbuDawaba',
-      email: 'ahmedqss120@gmail.com',
+      name: 'Admin',
+      email: 'admin@500words.com',
       password: await bcrypt.hash('ggdsfg435d$%$#', 10),
       created_at: new Date(),
       updated_at: new Date(),

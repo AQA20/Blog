@@ -76,7 +76,7 @@ const Notification = ({
     <div
       ref={notificationRef}
       className={clsx(
-        'fixed max-w-sm md:max-w-md top-6 right-2 px-4 py-2 rounded-lg transition-opacity duration-[5000ms]',
+        'fixed max-w-sm md:max-w-md top-16 right-2 px-4 py-2 rounded-lg transition-opacity duration-[5000ms]',
         {
           'bg-[#fbbf24]': type === 'warning',
           'bg-[#dc2626]': type === 'error',

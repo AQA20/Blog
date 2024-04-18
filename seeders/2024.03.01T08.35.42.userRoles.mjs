@@ -5,6 +5,7 @@ import UserRole from '../models/UserRole.js';
 export const up = async () => {
   const users = await User.findAll();
   const roles = await Role.findAll();
+  // Get the id of the last created roles (Roles are sorted by date asec)
   let increment = roles[0].id;
   for (const user of users.slice(0, roles.length)) {
     UserRole.create({

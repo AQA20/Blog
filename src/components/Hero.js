@@ -1,45 +1,48 @@
-import RoundedImage from './RoundedImage';
+'use client';
+
+import Image from 'next/image';
 import Button from './Button';
 import { RiArrowDownLine } from '@remixicon/react';
+import { useEffect, useState, Suspense, useRef } from 'react';
+import { fetchImage } from '@/lib/api';
 
-const Hero = () => {
+const Hero = ({ article }) => {
+  const [imageUrl, setImageUrl] = useState(null);
+  const componentRef = useRef(null);
+  useEffect(() => {
+    fetchImage(article.thumbnail_id)
+      .then((url) => setImageUrl(url))
+      .catch((error) => setImageUrl(null));
+  }, []);
+
   return (
     <article>
-      <RoundedImage src="/hero.png" priority width="680" height="510" />
+      {imageUrl && (
+        <Suspense fallback={<p>...loading</p>}>
+          <Image
+            className="my-2 rounded-lg "
+            src={imageUrl}
+            width="680"
+            height="510"
+            alt={article.title}
+          />
+        </Suspense>
+      )}
+
       <header>
-        <h1 className="hover:cursor-pointer">
-          تعرف على ما يعتقده الذكاء الإصطناعي
-        </h1>
+        <h1 className="hover:cursor-pointer">{article.title}</h1>
       </header>
       <section>
-        <p className="long-text mb-2 text-headline">
-          كن يجب أن أشرح لك كيف ولدت كل هذه الفكرة الخاطئة المتمثلة في إدانة
-          السرور ومدح الألم ، وسأقدم لك وصفًا كاملاً للنظام ، وأشرح التعاليم
-          الفعلية للمستكشف العظيم للحقيقة ، الباني البارع. السعادة البشرية. لا
-          أحد يرفض أو يكره أو يتجنب المتعة نفسها ، لأنها متعة ، ولكن لأن أولئك
-          الذين لا يعرفون كيفية السعي وراء المتعة يواجهون عواقب مؤلمة للغاية.
-          ولا يوجد أيضًا أي شخص يحب أو يسعى أو يرغب في الحصول على الألم من نفسه
-          ، لأنه ألم ، ولكن في بعض الأحيان تحدث ظروف يمكن أن يجلب له فيها الكدح
-          والألم بعض المتعة الكبيرة. لنأخذ مثالا تافها ، أي منا يقوم بتمارين
-          بدنية شاقة ، إلا للحصول على بعض المزايا منها؟ ولكن من له الحق في أن
-          يخطئ في رجل يختار أن يستمتع بسرور ليس له عواقب مزعجة ، أو من يتجنب
-          الألم الذي لا ينتج عنه متعة؟من ناحية أخرى ، فإننا نشجب بسخط صالح ونكره
-          الرجال الذين خدعهم سحر اللذة اللحظية وإحباطهم ، وأعمتهم الرغبة ، لدرجة
-          أنهم لا يستطيعون التنبؤ بالألم والمتاعب التي لا بد أن تنجم عن ذلك ؛
-          واللوم المتساوي يقع على أولئك الذين يفشلون في أداء واجبهم بسبب ضعف
-          الإرادة ، وهو نفس القول من خلال الانكماش من الكد والألم. هذه الحالات
-          بسيطة للغاية وسهلة التمييز. في ساعة مجانية ، عندما تكون قدرتنا على
-          الاختيار غير مقيدة وعندما لا شيء يمنعنا من القيام بما نفضله ، يجب
-          الترحيب بكل متعة وتجنب كل ألم. ولكن في ظروف معينة وبسبب ادعاءات الواجب
-          أو التزامات العمل ، سيحدث في كثير من الأحيان أنه يجب نبذ الملذات وقبول
-          الإزعاج. لذلك يتمسك الرجل الحكيم دائمًا في هذه الأمور بمبدأ الاختيار
-          هذا: فهو يرفض الملذات لتأمين ملذات أعظم أخرى ، وإلا فإنه يتحمل الآلام
-          لتجنب الآلام السيئ
-        </p>
+        <p className="long-text mb-2 text-headline">{article.description}</p>
       </section>
-
+      <div ref={componentRef}></div>
       <footer className="mb-4">
-        <Button title="استكشف">
+        <Button
+          title="استكشف"
+          onClick={() =>
+            componentRef.current.scrollIntoView({ behavior: 'smooth' })
+          }
+        >
           <RiArrowDownLine size="20px" className="fill-white" />
         </Button>
       </footer>

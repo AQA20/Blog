@@ -3,7 +3,7 @@ import Badge from './Badge';
 
 const Sidebar = () => {
   return (
-    <article className="max-w-[344px] mr-12 pr-2 sticky top-0 py-2">
+    <article className="w-[344px] mr-12 pr-2 sticky top-0 py-2">
       <header>
         <h2 className="mb-4 mt-2">الأكثر قراءة</h2>
       </header>

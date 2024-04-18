@@ -58,12 +58,16 @@ const Navbar = () => {
   const params = useParams();
   const isHomePage = path === '/';
 
+  const handleBackClick = () => {
+    router.back();
+  };
+
   useEffect(() => {
     if (path.includes('tags') && params.tag) {
       setTag(`#${decodeURIComponent(params.tag)}`);
       setShowSearch(true);
     }
-  }, [params.tag, path]);
+  }, [params.tag, path, showSearch]);
 
   return (
     <div className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 py-2 z-10">
@@ -77,7 +81,7 @@ const Navbar = () => {
           )}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
-            <Hug onClick={() => router.back()}>
+            <Hug onClick={handleBackClick}>
               <RiArrowRightLine
                 size={24}
                 className="fill-light-onSurfaceVariant"
