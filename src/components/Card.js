@@ -33,17 +33,16 @@ const Card = ({
 
   return (
     <section>
+      <time>
+        <p>{timeAgo ? timeAgo : 'منذ شهرين'}</p>
+      </time>
       <article
-        className={clsx('max-w-2xl', {
-          'flex justify-between items-center gap-2': imageUrl,
+        className={clsx('my-1 max-w-2xl', {
+          'flex justify-between gap-6': imageUrl,
         })}
       >
         <section className="max-w-[240px] md:max-w-2xl">
-          <time>
-            <p>{timeAgo ? timeAgo : 'منذ شهرين'}</p>
-          </time>
-
-          <header>
+          <header className="mb-1">
             <h2>{title}</h2>
           </header>
           <section className={clsx('long-text', { 'max-w-lg': !largeTitle })}>
@@ -52,11 +51,11 @@ const Card = ({
         </section>
 
         {imageUrl && (
-          <figure>
+          <figure className="flex min-w-[180px] min-h-[120px] w-[180px] h-[120px]">
             <Suspense fallback={<p>Loading image...</p>}>
               <RoundedImage
                 src={imageUrl}
-                width="120"
+                width="180"
                 height="120"
                 alt={title}
               />

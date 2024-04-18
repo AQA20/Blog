@@ -2,41 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: 'Noto';
-  src: url('/fonts/NotoSansArabic-Regular.ttf') format('ttf');
-}
 
 html {
-  font-family: 'Noto';
+  font-family: var(--font-noto-sans-arabic);
   max-width: 1080px;
   margin: 0 auto;
 }
 
 /* default text tags default font size */
 h1 {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: 700;
-  line-height: 42px;
+  line-height: 2.625rem;
 }
 
 h2 {
-  font-size: 25px;
+  font-size: 1.25rem;
   font-weight: 700;
-  line-height: 32px;
+  line-height: 2rem;
 }
 
 h3 {
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: 700;
-  line-height: 24px;
+  line-height: 1.5rem;
 }
 
 p {
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 400;
-  color: #41484d;
+  color: theme(textColor.light.onSurfaceVariant);
 }
 /* End of  text tags default font size */
 

@@ -8,19 +8,82 @@ module.exports = {
   darkMode: 'selector',
   theme: {
     extend: {
-      fontFamily: {
-        noto: ['Noto', 'sans-serif'],
-      },
+      // fontFamily: {
+      //   sans: ['var(--font-noto-sans-arabic)'],
+      // },
       fontSize: {
-        headline: {
-          large:[
-            '0.5rem',
-            {
-              lineHeight: '1rem',
-              fontWeight: '100',
-            },
-          ],
-        }
+        'headline-l': [
+          '2rem', {
+            lineHeight: '2.875rem',
+            fontWeight: '700',
+          },
+        ],
+        'headline-m': [
+          '1.75rem', {
+            lineHeight: '2.625rem',
+            fontWeight: '700',
+          },
+        ],
+        'headline-s': [
+          '1.5rem', {
+            lineHeight: '2.375rem',
+            fontWeight: '700',
+          },
+        ],
+        'title-l': [
+          '1.25rem', {
+            lineHeight: '2rem',
+            fontWeight: '700',
+          },
+        ],
+        'title-m': [
+          '1rem', {
+            lineHeight: '1.5rem',
+            fontWeight: '700',
+          },
+        ],
+        'title-s': [
+          '0.875rem', {
+            lineHeight: '1.25rem',
+            fontWeight: '700',
+          },
+        ],
+        'body-xl': [
+          '1.125rem', {
+            lineHeight: '2rem',
+            fontWeight: '500',
+          },
+        ],
+        'body-l': [
+          '1rem', {
+            lineHeight: '1.5rem',
+            fontWeight: '400',
+          },
+        ],
+        'body-m': [
+          '0.875rem', {
+            lineHeight: '1.25rem',
+            fontWeight: '400',
+          },
+        ],
+        'body-s': [
+          '0.75rem', {
+            lineHeight: '1rem',
+            fontWeight: '400',
+          },
+        ],
+        'label-l': [
+          '0.875rem', {
+            lineHeight: '1.25rem',
+            fontWeight: '600',
+          },
+        ],
+        'label-m': [
+          '0.75rem', {
+            lineHeight: '1rem',
+            fontWeight: '600',
+          },
+        ],
       },
       colors: {
         white: '#ffffff',

@@ -16,11 +16,11 @@ const Hero = ({ article }) => {
   }, []);
 
   return (
-    <article>
+    <article className="mt-4 mb-6">
       {imageUrl && (
         <Suspense fallback={<p>...loading</p>}>
           <Image
-            className="my-2 rounded-lg "
+            className="rounded-lg "
             src={imageUrl}
             width="680"
             height="510"
@@ -29,14 +29,15 @@ const Hero = ({ article }) => {
         </Suspense>
       )}
 
-      <header>
-        <h1 className="hover:cursor-pointer">{article.title}</h1>
-      </header>
-      <section>
-        <p className="long-text mb-2 text-headline">{article.description}</p>
-      </section>
+      <section className='my-5'>
+        <header>
+          <h1 className="hover:cursor-pointer">{article.title}</h1>
+        </header>
+        <section>
+          <p className="long-text mt-2 text-headline">{article.description}</p>
+        </section></section>
       <div ref={componentRef}></div>
-      <footer className="mb-4">
+      <footer>
         <Button
           title="استكشف"
           onClick={() =>
