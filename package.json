@@ -15,7 +15,7 @@
     "seed:rollback:all": "node --env-file .env umzug/seed down --to 0",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "dev": "nodemon --env-file .env server.js",
+    "dev": "nodemon --watch ./src/*/** --ext js,mjs,jsx,json --exec 'node --env-file .env server.js'",
     "start": "node server.js"
   },
   "author": "Ahmad Abudawba",

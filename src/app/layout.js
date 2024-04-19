@@ -3,16 +3,16 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
 
-import { Noto_Sans_Arabic } from 'next/font/google'
- 
+import { Noto_Sans_Arabic } from 'next/font/google';
+
 // If loading a variable font, you don't need to specify the font weight
 const noto_sans_arabic = Noto_Sans_Arabic({
   weight: ['400', '500', '600', '700'],
   subsets: ['arabic'],
   display: 'swap',
   variable: '--font-noto-sans-arabic',
-})
- 
+});
+
 export default function RootLayout({ children }) {
   return (
     <html className={`pt-4 ${noto_sans_arabic.variable}`} lang="ar" dir="rtl">

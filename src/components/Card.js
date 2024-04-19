@@ -33,7 +33,6 @@ const Card = ({
 
   return (
     <section>
-  
       <article
         className={clsx('my-1  max-w-2xl', {
           'flex ijustify-between gap-4 sm:gap-6': imageUrl,
