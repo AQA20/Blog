@@ -7,6 +7,7 @@ html {
   font-family: var(--font-noto-sans-arabic);
   max-width: 1080px;
   margin: 0 auto;
+  font-size: 16px;
 }
 
 /* default text tags default font size */
@@ -20,6 +21,14 @@ h2 {
   font-size: 1.25rem;
   font-weight: 700;
   line-height: 2rem;
+}
+
+@media (max-width: 640px) {
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.75rem;
+  }
 }
 
 h3 {
@@ -43,20 +52,22 @@ p {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3; /* Adjust to the number of lines you want */
   overflow: hidden;
+  max-height: calc(1.5em * 3); /* Adjust line height and line count */
 }
 
-/* For other browsers */
-.long-text {
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Adjust to the number of lines you want */
-  -webkit-box-orient: vertical;
-  max-height: calc(1.5em * 3); /* Adjust line height and line count */
-  overflow: hidden;
+@media (max-width: 640px) {
+  .long-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* Adjust to the number of lines you want */
+    overflow: hidden;
+    max-height: calc(1.5em * 2); /* Adjust line height and line count */
+  }
 }
 
 /* For modern browsers */
 .max-2-lines {
-  max-width: 300px;
+  
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2; /* Adjust to the number of lines you want */

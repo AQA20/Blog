@@ -6,7 +6,7 @@ const RoundedImage = ({ src, width, height, alt = '' }) => {
         width="100%"
         src={src}
         alt={alt}
-        className="rounded-lg object-cover shrink-0 "
+        className="rounded-2xl object-cover shrink-0 "
       />
   );
 };
