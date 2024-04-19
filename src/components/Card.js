@@ -10,6 +10,7 @@ const Card = ({
   title,
   description,
   tags,
+  isSmall = false,
   timeAgo = null,
   imageId = null,
   largeTitle = false,
@@ -34,7 +35,7 @@ const Card = ({
   return (
     <section>
       <article
-        className={clsx('my-1  max-w-2xl', {
+        className={clsx('my-1 max-w-2xl', {
           'flex ijustify-between gap-4 sm:gap-6': imageUrl,
         })}
       >
@@ -42,16 +43,32 @@ const Card = ({
           <time>
             <p>{timeAgo ? timeAgo : 'منذ شهرين'}</p>
           </time>
-          <header >
-            <h2 className="mb-1 max-2-lines">{title}</h2>
+          <header>
+            <h2
+              className={clsx('mb-1 max-2-lines', {
+                'text-lg': isSmall,
+              })}
+            >
+              {title}
+            </h2>
           </header>
-          <section className={clsx('long-text', { 'max-w-lg': !largeTitle })}>
+          <section
+            className={clsx('long-text', {
+              'max-w-lg': !largeTitle,
+              'max-2-lines': isSmall,
+            })}
+          >
             <p>{description}</p>
           </section>
         </section>
 
         {imageUrl && (
-          <figure className="flex mt-2 min-w-[120px] min-h-[80px] w-[120px] h-[80px] sm:min-w-[180px] sm:min-h-[120px] sm:w-[180px] sm:h-[120px]">
+          <figure
+            className={clsx(
+              'flex mt-2 min-w-[120px] h-[80px] sm:min-w-[180px] sm:min-h-[120px]',
+              { 'sm:min-w-[120px] sm:min-h-[90px]': isSmall }
+            )}
+          >
             <Suspense fallback={<p>Loading image...</p>}>
               <RoundedImage
                 src={imageUrl}
@@ -63,7 +80,7 @@ const Card = ({
           </figure>
         )}
       </article>
-      {footer && <CardFooter tags={tags} />}
+      {footer && <CardFooter tags={tags} shareText={!isSmall} />}
     </section>
   );
 };

@@ -1,5 +1,5 @@
 import Badge from '@/components/Badge';
-import SidebarCard from '@/components/SidebarCard';
+import Card from '@/components/Card';
 import Button from '@/components/Button';
 
 export default function RootLayout({ children }) {
@@ -27,43 +27,61 @@ export default function RootLayout({ children }) {
       </div>
       <section className="mt-4 flex flex-wrap md:flex-nowrap w-auto items-center gap-4">
         <section className="max-w-sm md:max-w-[320px]">
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
         </section>
         <section className="max-w-sm md:max-w-[320px]">
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
-          <SidebarCard
+          <Card
             title="كيف اصبح الدكتور فيلسوف"
             description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+            tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
+            isSmall={true}
+            footer={true}
           />
         </section>
       </section>

@@ -1,4 +1,4 @@
-import SidebarCard from './SidebarCard';
+import Card from './Card';
 import Badge from './Badge';
 
 const Sidebar = () => {
@@ -8,21 +8,32 @@ const Sidebar = () => {
         <h2 className="mb-4 mt-2">الأكثر قراءة</h2>
       </header>
       <section>
-        <SidebarCard
+        <Card
           title="كيف اصبح الدكتور فيلسوف"
           description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+          tags={['كن', 'كان', 'يكن']}
           image={'/sidebar-demo.png'}
+          isSmall={true}
+          footer={true}
         />
-        <SidebarCard
+        <Card
           title="كيف اصبح الدكتور فيلسوف"
-          description="تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+          description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
+تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+          tags={['كن', 'كان', 'يكن']}
           image={'/sidebar-demo.png'}
+          isSmall={true}
+          footer={true}
         />
-        <SidebarCard
+        <Card
           title="كيف اصبح الدكتور فيلسوف"
-          description="تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+          description=" تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها
+تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
+          tags={['كن', 'كان', 'يكن']}
           image={'/sidebar-demo.png'}
+          isSmall={true}
+          footer={true}
         />
       </section>
       <h2 className="mb-2">أشهر المواضيع</h2>
