@@ -11,6 +11,7 @@ const Card = ({
   description,
   tags,
   isSmall = false,
+  isXSmall = false,
   timeAgo = null,
   imageId = null,
   largeTitle = false,
@@ -46,7 +47,7 @@ const Card = ({
           <header>
             <h2
               className={clsx('mb-1 max-2-lines', {
-                'text-lg': isSmall,
+                'text-lg': isSmall || isXSmall,
               })}
             >
               {title}
@@ -56,6 +57,7 @@ const Card = ({
             className={clsx('long-text', {
               'max-w-lg': !largeTitle,
               'max-2-lines': isSmall,
+              'max-1-line ': isXSmall,
             })}
           >
             <p>{description}</p>
@@ -65,8 +67,9 @@ const Card = ({
         {imageUrl && (
           <figure
             className={clsx('flex mt-2 min-w-[120px] h-[80px]', {
+              'sm:min-w-[108px] sm:min-h-[72px]': isXSmall,
               'sm:min-w-[120px] sm:min-h-[80px]': isSmall,
-              'sm:min-w-[180px] sm:min-h-[120px]': !isSmall,
+              'sm:min-w-[180px] sm:min-h-[120px]': !isSmall && !isXSmall,
             })}
           >
             <Suspense fallback={<p>Loading image...</p>}>

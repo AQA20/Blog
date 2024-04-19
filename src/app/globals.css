@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 html {
   font-family: var(--font-noto-sans-arabic);
   max-width: 1080px;
@@ -41,12 +40,11 @@ p {
   font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 400;
-  color: theme(textColor.light.onSurfaceVariant);
+  color: theme('textColor.light.onSurfaceVariant');
 }
 /* End of  text tags default font size */
 
 /* Handle long text on cards */
-/* For modern browsers */
 .long-text {
   display: -webkit-box;
   -webkit-box-orient: vertical;
@@ -59,28 +57,26 @@ p {
   .long-text {
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2; /* Adjust to the number of lines you want */
+    -webkit-line-clamp: 2;
     overflow: hidden;
-    max-height: calc(1.5em * 2); /* Adjust line height and line count */
+    max-height: calc(1.5em * 2);
   }
 }
 
-/* For modern browsers */
 .max-2-lines {
-  
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2; /* Adjust to the number of lines you want */
+  -webkit-line-clamp: 2;
   overflow: hidden;
+  max-height: calc(1.5em * 2); 
 }
 
-/* For other browsers */
-.max-2-lines {
+.max-1-line {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* Adjust to the number of lines you want */
   -webkit-box-orient: vertical;
-  max-height: calc(1.5em * 2); /* Adjust line height and line count */
+  -webkit-line-clamp: 1;
   overflow: hidden;
+  max-height: calc(1.5em * 1); 
 }
 /* End of Handle long text on cards */
 
@@ -152,7 +148,6 @@ p {
     animation: expandWidthSm 0.3s forwards;
   }
 }
-
 
 @keyframes expandWidth {
   0% {

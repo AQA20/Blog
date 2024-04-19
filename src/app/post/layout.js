@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
           <Card
@@ -42,7 +42,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
           <Card
@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
         </section>
@@ -62,7 +62,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
           <Card
@@ -71,7 +71,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
           <Card
@@ -80,7 +80,7 @@ export default function RootLayout({ children }) {
 تخيل ان تكون طبيبا فتسيقظ لتصبح فيلسوفا فاجأة وبين ليلة وضحاها"
             tags={['كن', 'كان', 'يكن']}
             image={'/sidebar-demo.png'}
-            isSmall={true}
+            isXSmall={true}
             footer={true}
           />
         </section>
