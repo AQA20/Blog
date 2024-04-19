@@ -2,8 +2,19 @@
 
 import Dialog from './Dialog';
 import { RiCake3Line } from '@remixicon/react';
+import { useEffect, useState } from 'react';
 
 const Footer = () => {
+  const [useCookies, setUseCookies] = useState(false);
+  useEffect(() => {
+    const isUseCookies = localStorage.getItem('useCookies');
+    setUseCookies(isUseCookies);
+  }, [useCookies]);
+
+  const handleOkClick = () => {
+    localStorage.setItem('useCookies', true);
+  };
+
   return (
     <footer className="mb-8 text-light-black text-sm">
       <section>
@@ -20,18 +31,24 @@ const Footer = () => {
         </ul>
         <div>جميع الحقوق محفوظة &copy; 2024</div>
       </section>
-      <Dialog okButtonTitle="قبول" closeButtonTitle="رفض" onOk={() => null}>
-        <div className="my-4">
-          <RiCake3Line size={48} className="text-light-onSurfaceVariant" />
-          <header>
-            <h1>نحن نستخدم الكوكيز</h1>
-          </header>
-          <p>
-            الكوكيز مثل البسكويت أو الكيك ولكن لجهازك,وهي مفيدة لإعطاءك أفضل
-            تجربة على موقعنا. فهل تقبل بالسماح لنا باستخدام الكوكيز؟
-          </p>
-        </div>
-      </Dialog>
+      {useCookies === null && (
+        <Dialog
+          okButtonTitle="قبول"
+          closeButtonTitle="رفض"
+          onOk={handleOkClick}
+        >
+          <div className="my-4">
+            <RiCake3Line size={48} className="text-light-onSurfaceVariant" />
+            <header>
+              <h1>نحن نستخدم الكوكيز</h1>
+            </header>
+            <p>
+              الكوكيز مثل البسكويت أو الكيك ولكن لجهازك,وهي مفيدة لإعطاءك أفضل
+              تجربة على موقعنا. فهل تقبل بالسماح لنا باستخدام الكوكيز؟
+            </p>
+          </div>
+        </Dialog>
+      )}
     </footer>
   );
 };

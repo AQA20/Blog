@@ -64,10 +64,10 @@ const Card = ({
 
         {imageUrl && (
           <figure
-            className={clsx(
-              'flex mt-2 min-w-[120px] h-[80px] sm:min-w-[180px] sm:min-h-[120px]',
-              { 'sm:min-w-[120px] sm:min-h-[90px]': isSmall }
-            )}
+            className={clsx('flex mt-2 min-w-[120px] h-[80px]', {
+              'sm:min-w-[120px] sm:min-h-[80px]': isSmall,
+              'sm:min-w-[180px] sm:min-h-[120px]': !isSmall,
+            })}
           >
             <Suspense fallback={<p>Loading image...</p>}>
               <RoundedImage

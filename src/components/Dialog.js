@@ -34,7 +34,7 @@ const Dialog = ({
       left-1
       right-1
       w-sm 
-      md:w-[500px]
+      md:w-[1080px]
       p-6 
       border 
       border-solid 
