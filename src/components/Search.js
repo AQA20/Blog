@@ -45,10 +45,10 @@ const Search = ({ isShow, tag = null }) => {
 
   return (
     <section>
-      <label htmlFor="term" className="relative">
+      <label htmlFor="term">
         {''}
         <input
-          className={clsx('search-input ', {
+          className={clsx('search-input relative', {
             'rounded-br-none rounded-bl-none transition-all duration-[800ms]':
               showSuggestions,
           })}
@@ -109,12 +109,12 @@ const Search = ({ isShow, tag = null }) => {
         </ul>
       )}
 
-      <div className="absolute top-3 right-4">
+      <div className="absolute top-[16%] right-4">
         <Hug onClick={handleBackClick}>
           <RiArrowRightLine size={20} className="fill-light-onSurfaceVariant" />
         </Hug>
       </div>
-      <div className="z-11 absolute top-3 left-14">
+      <div className="z-11 absolute top-[16%] left-14">
         {query && (
           <Hug onClick={handleRemoveClick}>
             <RiCloseFill size={20} className="fill-light-onSurfaceVariant" />
