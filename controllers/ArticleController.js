@@ -24,8 +24,8 @@ export default class ArticleController {
     try {
       const articles = await Article.findAll({
         where: { status: Article.APPROVED },
+        attributes: { exclude: ['content'] },
         include: [
-          { model: User, as: 'author', attributes: ['id', 'name'] },
           { model: Category, as: 'category', attributes: ['id', 'name'] },
           { model: Tag, as: 'tags', attributes: ['id', 'name'] },
           { model: Image, attributes: ['id', 'image_url'] },
@@ -34,6 +34,22 @@ export default class ArticleController {
       return articles;
     } catch (error) {
       console.error('Error fetching articles:', error);
+    }
+  }
+  static async getSidebarArticles(req, res, next) {
+    try {
+      const articles = await Article.findAll({
+        limit: 3,
+        where: { status: Article.APPROVED },
+        attributes: { exclude: ['content'] },
+        include: [
+          { model: Tag, as: 'tags', attributes: ['id', 'name'] },
+          { model: Image, attributes: ['id', 'image_url'] },
+        ],
+      });
+      return resHandler(200, articles, res);
+    } catch (error) {
+      next(error);
     }
   }
 

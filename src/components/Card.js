@@ -16,7 +16,7 @@ const Card = ({
   imageId = null,
   largeTitle = false,
   image = null,
-  footer = false,
+  footer = true,
 }) => {
   const [imageUrl, setImageUrl] = useState(null);
 

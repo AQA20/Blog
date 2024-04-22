@@ -2,6 +2,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
+import api from '@/lib/api';
 
 import { Noto_Sans_Arabic } from 'next/font/google';
 
@@ -13,25 +14,33 @@ const noto_sans_arabic = Noto_Sans_Arabic({
   variable: '--font-noto-sans-arabic',
 });
 
-export default function RootLayout({ children }) {
-  return (
-    <html className={`pt-4 ${noto_sans_arabic.variable}`} lang="ar" dir="rtl">
-      <body className="md:w-[680px] font-noto">
-        <main className="md:flex">
-          <section>
-            <Navbar />
-            <div className="px-3 md:w-[680px]">
-              <section className="mb-6 min-height">{children}</section>
-            </div>
-          </section>
-          <aside className="hidden md:block">
-            <Sidebar />
-          </aside>
-        </main>
-        <div className="px-3">
-          <Footer />
-        </div>
-      </body>
-    </html>
-  );
+export default async function RootLayout({ children }) {
+  try {
+    const {
+      data: { data },
+    } = await api.get('/sidebar/articles');
+
+    return (
+      <html className={`pt-4 ${noto_sans_arabic.variable}`} lang="ar" dir="rtl">
+        <body className="md:w-[680px] font-noto">
+          <main className="md:flex">
+            <section>
+              <Navbar />
+              <div className="px-3 md:w-[680px]">
+                <section className="mb-6 min-height">{children}</section>
+              </div>
+            </section>
+            <aside className="hidden md:block">
+              <Sidebar articles={data} />
+            </aside>
+          </main>
+          <div className="px-3">
+            <Footer />
+          </div>
+        </body>
+      </html>
+    );
+  } catch (error) {
+    console.error(error);
+  }
 }

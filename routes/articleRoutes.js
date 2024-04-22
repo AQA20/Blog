@@ -17,6 +17,9 @@ router.get('/articles', ArticleController.getArticles);
 // Get article
 router.get('/article/:id', ArticleController.getArticle);
 
+// Get sidebar articles
+router.get('/sidebar/articles', ArticleController.getSidebarArticles);
+
 // Create article
 router.post(
   '/create-article',
