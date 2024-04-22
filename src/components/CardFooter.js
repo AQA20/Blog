@@ -15,18 +15,12 @@ const CardFooter = ({ tags = [], shareText = true }) => {
 
   return (
     <section className="min-w-full">
-      {/* //Todo fix element being showed on mouseenter & touchstart after unmount */}
-      {/* A temporarily fix for notification mouseenter & touchstart issue (this removes animation) */}
-      {copyNotification && (
-        <Notification
-          onShow={() => setCopyNotification(true)}
-          onClose={() => setCopyNotification(false)}
-          isShow={copyNotification}
-          type="copy"
-          text="تم نسخ الرابط بنجاح!."
-        />
-      )}
-
+      <Notification
+        onClose={() => setCopyNotification(false)}
+        isShow={copyNotification}
+        type="copy"
+        text="تم نسخ الرابط بنجاح!."
+      />
       <footer className="h-14 flex items-center justify-between">
         <div className="flex">
           <div className="truncate">
@@ -36,16 +30,19 @@ const CardFooter = ({ tags = [], shareText = true }) => {
           </div>
         </div>
         <div className="flex items-center">
-          {shareText && (
-            <p className="hidden md:block text-light-primary align-start">
-              مشاركة
-            </p>
-          )}
-          <div>
+          {shareText ? (
+            <button
+              onClick={onShare}
+              className="sm:flex rounded-full gap-2 py-[5px] pr-4 pl-3 justify-between items-center"
+            >
+              <p className="text-light-primary hidden sm:block">مشاركة</p>
+              <RiShareLine size="20" className="fill-light-primary" />
+            </button>
+          ) : (
             <Hug onClick={onShare}>
               <RiShareLine size="20" className="fill-light-primary" />
             </Hug>
-          </div>
+          )}
         </div>
       </footer>
       <hr className="mt-2 mb-6" />
