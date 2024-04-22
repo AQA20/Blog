@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { useEffect, useState, Suspense } from 'react';
 import RoundedImage from './RoundedImage';
 import CardFooter from './CardFooter';
-import { fetchImage } from '@/lib/api';
+import { fetchImage } from '@/lib';
 
 const Card = ({
   title,

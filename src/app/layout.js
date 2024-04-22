@@ -2,7 +2,7 @@ import './globals.css';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import Sidebar from '@/components/Sidebar';
-import api from '@/lib/api';
+import { api } from '@/lib';
 
 import { Noto_Sans_Arabic } from 'next/font/google';
 

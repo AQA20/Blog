@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Button from './Button';
 import { RiArrowDownLine } from '@remixicon/react';
 import { useEffect, useState, Suspense, useRef } from 'react';
-import { fetchImage } from '@/lib/api';
+import { fetchImage } from '@/lib';
 
 const Hero = ({ article }) => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -29,13 +29,14 @@ const Hero = ({ article }) => {
         </Suspense>
       )}
 
-      <section className='my-5'>
+      <section className="my-5">
         <header>
           <h1 className="hover:cursor-pointer">{article.title}</h1>
         </header>
         <section>
           <p className="long-text mt-2 text-headline">{article.description}</p>
-        </section></section>
+        </section>
+      </section>
       <div ref={componentRef}></div>
       <footer>
         <Button

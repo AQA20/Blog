@@ -1,7 +1,7 @@
 import Hero from '@/components/Hero';
 import Badge from '@/components/Badge';
 import Card from '@/components/Card';
-import api from '@/lib/api';
+import { api } from '@/lib';
 import { timeAgo } from '@/lib';
 
 export const metadata = {
