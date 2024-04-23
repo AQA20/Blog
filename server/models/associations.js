@@ -22,7 +22,7 @@ export const initAssociations = async () => {
     // Call model associate function
     // To initialize relationships
     Object.values(models).forEach(
-      (model) => model.associate && model.associate(models)
+      (model) => model.associate && model.associate(models),
     );
     return models;
   } catch (error) {

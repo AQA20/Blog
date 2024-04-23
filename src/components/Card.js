@@ -24,7 +24,7 @@ const Card = ({
     if (imageId) {
       fetchImage(imageId)
         .then((url) => setImageUrl(url))
-        .catch((error) => console.error(error));
+        .catch((error) => setImageUrl(null));
     } else if (image) {
       setImageUrl(image);
     }

@@ -5,7 +5,7 @@ import { validateWordsLength } from '../../../utils/validations.js';
 const wordsCount = (value, helpers) => {
   if (!validateWordsLength(value, 300, 5000)) {
     return helpers.error(
-      'Article content must be minimum of 300 words and max of 5000 words'
+      'Article content must be minimum of 300 words and max of 5000 words',
     );
   }
   return value;
@@ -24,7 +24,7 @@ const updateArticleRequest = Joi.object({
       Joi.string()
         .pattern(/^\w+(\s\w+)?$/)
         .trim()
-        .lowercase()
+        .lowercase(),
     )
     .min(1)
     .max(5),

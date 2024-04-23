@@ -27,7 +27,7 @@ const Sidebar = ({ articles }) => {
       <h2 className="mb-2">أشهر المواضيع</h2>
       <footer className="flex flex-wrap">
         {articles.map((article) =>
-          article.tags.map((tag) => <Badge key={tag.name} title={tag.name} />)
+          article.tags.map((tag) => <Badge key={tag.name} title={tag.name} />),
         )}
       </footer>
     </article>

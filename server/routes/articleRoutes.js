@@ -27,7 +27,7 @@ router.post(
   isAdmin,
   multerImageUpload.array('files', 5),
   createArticleRequest,
-  ArticleController.createArticle
+  ArticleController.createArticle,
 );
 
 // Update article
@@ -37,7 +37,7 @@ router.put(
   isAdmin,
   multerImageUpload.array('files', 5),
   updateArticleRequest,
-  ArticleController.updateArticle
+  ArticleController.updateArticle,
 );
 
 // Update article status
@@ -46,7 +46,7 @@ router.put(
   authorized,
   isAdmin,
   updateArticleStatus,
-  ArticleController.updateArticleStatus
+  ArticleController.updateArticleStatus,
 );
 
 // Set article thumbnail
@@ -56,7 +56,7 @@ router.post(
   isAdmin,
   multerImageUpload.single('file'),
   uploadFileRequest,
-  ArticleController.setArticleThumbnail
+  ArticleController.setArticleThumbnail,
 );
 
 // Create article category
@@ -65,7 +65,7 @@ router.post(
   authorized,
   isAdmin,
   createArticleCategoryRequest,
-  ArticleController.createArticleCategory
+  ArticleController.createArticleCategory,
 );
 
 export default router;

@@ -131,12 +131,12 @@ export default class ArticleController {
     const imgUrl = ArticleController.s3client.uploadFile(file.path);
     const image = await ArticleController.#createArticleImage(
       articleId,
-      imgUrl
+      imgUrl,
     );
     if (file.isThumbnail) {
       await Article.update(
         { thumbnail_id: image.id },
-        { where: { id: articleId } }
+        { where: { id: articleId } },
       );
     }
   }
@@ -155,7 +155,7 @@ export default class ArticleController {
 
       // Create article category
       req.body.category_id = ArticleController.#createArticleCategory(
-        req.body.category
+        req.body.category,
       ).id;
 
       // Create article
@@ -185,7 +185,7 @@ export default class ArticleController {
       // Create article category
       if (req.body.category) {
         req.body.category_id = ArticleController.#createArticleCategory(
-          req.body.category
+          req.body.category,
         ).id;
       }
 
@@ -224,7 +224,7 @@ export default class ArticleController {
       // Update article status
       await Article.update(
         { status: req.body.status },
-        { where: { id: req.params.id } }
+        { where: { id: req.params.id } },
       );
       return resHandler(201, 'Article status has been updated', res);
     } catch (error) {
@@ -243,18 +243,18 @@ export default class ArticleController {
       const imgUrl = ArticleController.s3client.uploadFile(req.file.path);
       const image = await ArticleController.#createArticleImage(
         req.params.id,
-        imgUrl
+        imgUrl,
       );
 
       await Article.update(
         { thumbnail_id: image.id },
-        { where: { id: req.params.id } }
+        { where: { id: req.params.id } },
       );
 
       return resHandler(
         201,
         "Article's thumbnail image was set successfully",
-        res
+        res,
       );
     } catch (error) {
       next(error);
@@ -270,7 +270,7 @@ export default class ArticleController {
       });
       await Article.update(
         { category_id: category.id },
-        { where: { id: req.params.id } }
+        { where: { id: req.params.id } },
       );
       return resHandler(201, category, res);
     } catch (error) {

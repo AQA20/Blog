@@ -21,7 +21,7 @@ router.post(
   authorized,
   uploadImage.single('file'),
   uploadFileRequest,
-  UserController.uploadProfilePicture
+  UserController.uploadProfilePicture,
 );
 
 // Route to change profile picture
@@ -30,7 +30,7 @@ router.post(
   authorized,
   uploadImage.single('file'),
   uploadFileRequest,
-  UserController.changeProfilePicture
+  UserController.changeProfilePicture,
 );
 
 export default router;

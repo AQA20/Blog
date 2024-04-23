@@ -1,6 +1,13 @@
 import debounce from './debounce';
+import apiClient from './apiClient.js';
 import timeAgo from './timeAgo';
-import { fetchImage } from './data';
-import api from './api.js';
+import { fetchArticles, fetchSidebarData, fetchImage } from './data';
 
-export { debounce, timeAgo, fetchImage, api };
+export {
+  apiClient,
+  debounce,
+  timeAgo,
+  fetchArticles,
+  fetchSidebarData,
+  fetchImage,
+};

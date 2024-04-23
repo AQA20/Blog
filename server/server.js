@@ -3,35 +3,27 @@ import userRoutes from './routes/userRoutes.js';
 import articleRoutes from './routes/articleRoutes.js';
 import imageRoutes from './routes/imageRoutes.js';
 import handleError from './middleware/handleError.js';
-import next from 'next';
+import cors from 'cors';
 
-const dev = process.env.NODE_ENV !== 'production';
-const hostname = process.env.HOSTNAME || 'localhost';
 const PORT = process.env.PORT || 8080;
-const app = next({ dev, hostname, PORT });
-const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
-  const server = express();
+const app = express();
+app.use(cors());
 
-  server.use(express.json());
+// A middleware to parse JSON data in the request body
+// and make it available in req.body within route handlers.
+app.use(express.json());
 
-  // Register routers
-  server.use('/api', userRoutes);
-  server.use('/api', articleRoutes);
-  server.use('/api', imageRoutes);
+// Register routers
+app.use('/api', userRoutes);
+app.use('/api', articleRoutes);
+app.use('/api', imageRoutes);
 
-  //? Error handling middleware (Note that it's
-  //? placed under all other routes and middlewares
-  //? as express run middlewares by order)
-  server.use(handleError);
+//? Error handling middleware (Note that it's
+//? placed under all other routes and middlewares
+//? as express run middlewares by order)
+app.use(handleError);
 
-  // Handle Next.js requests
-  server.all('*', (req, res) => {
-    return handle(req, res);
-  });
-
-  server.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-  });
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });

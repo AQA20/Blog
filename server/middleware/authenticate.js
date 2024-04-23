@@ -17,7 +17,7 @@ export default async (req, res, next) => {
     // Verify password
     const isPasswordValid = bcrypt.compareSync(
       req.body.password,
-      user.dataValues.password
+      user.dataValues.password,
     );
 
     // Handle invalid password
@@ -29,7 +29,7 @@ export default async (req, res, next) => {
     const token = jwt.sign(
       { user: { id: user.id, email: user.email } },
       process.env.JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '24h' },
     );
     user.setDataValue('token', token);
     user.setDataValue('password', null);
