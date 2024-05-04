@@ -106,7 +106,13 @@ const Navbar = () => {
             </div>
           )}
           {/* Show search input when showSearch is true */}
-          {showSearch && <Search tag={tag} isShow={showSearch} onHideSearch={() => setShowSearch(false) } />}
+          {showSearch && (
+            <Search
+              tag={tag}
+              isShow={showSearch}
+              onHideSearch={() => setShowSearch(false)}
+            />
+          )}
           <div className="relative">
             {/* Show menu ico when showMenu is true */}
             {!showMenu && (
