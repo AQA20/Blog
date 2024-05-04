@@ -67,6 +67,7 @@ const Navbar = () => {
       setTag(`#${decodeURIComponent(params.tag)}`);
       setShowSearch(true);
     }
+    return () => setShowSearch(false);
   }, [params.tag, path, showSearch]);
 
   return (
