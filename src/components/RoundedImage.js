@@ -14,7 +14,7 @@ const RoundedImage = ({
       height={height}
       src={src}
       alt={alt}
-      className="rounded-2xl my-2 object-cover shrink-0 cursor-pointer"
+      className="rounded-2xl object-cover shrink-0 cursor-pointer"
     />
   );
 };
