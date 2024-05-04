@@ -19,7 +19,7 @@ export default class ArticleController {
     const { name } = await Image.findByPk(id, {
       attributes: ['name'],
     });
-    return await ArticleController.s3client.getFile(name);
+    return ArticleController.s3client.getFile(name);
   }
 
   static async #fetchImgs(images) {

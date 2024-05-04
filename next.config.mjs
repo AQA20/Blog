@@ -5,7 +5,7 @@ const nextConfig = {
     PROD_API_URL: process.env.PROD_API_URL,
   },
   images: {
-    domains: ['500-words.s3.me-central-1.amazonaws.com'],
+    domains: ['d1loxlb2lhlbxb.cloudfront.net'],
   },
 };
 

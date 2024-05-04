@@ -6,7 +6,7 @@ export default class ImageController {
 
   static async getImage(req, res) {
     const { name } = await Image.findByPk(req.params.id);
-    const url = await ImageController.s3client.getFile(name);
+    const url = ImageController.s3client.getFile(name);
     return res.status(200).send(url);
   }
 }

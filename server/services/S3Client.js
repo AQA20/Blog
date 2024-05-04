@@ -1,10 +1,9 @@
 import {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
 import { readFileAsync } from '../utils/fsUtils.js';
@@ -40,7 +39,7 @@ export default class S3Service {
         Body: imgBuffer,
         ContentType: imgFile
           ? imgFile.mimetype
-          : `image/${path.extname(imgPath)}`,
+          : `image/${path.extname(imgPath).replace('.', '')}`,
       };
 
       // Create PutObjectCommand instance
@@ -54,24 +53,13 @@ export default class S3Service {
     }
   }
 
-  async getFile(fileName) {
-    try {
-      const params = {
-        Bucket: process.env.AWS_FILE_BUCKET,
-        Key: fileName,
-      };
-
-      // Create GetObjectCommand instance
-      const getObjectCommand = new GetObjectCommand(params);
-
-      // return the response
-      return await getSignedUrl(this.#s3Client, getObjectCommand, {
-        expiresIn: 3600,
-      });
-    } catch (error) {
-      console.error('Error retrieving file from S3', error);
-      throw error;
-    }
+  getFile(fileName) {
+    return getSignedUrl({
+      url: `${process.env.CLOUDFRONT_BASE_URL}/${fileName}`,
+      dateLessThan: moment().add('24', 'hours'),
+      privateKey: process.env.CLOUDFRONT_PRIVATE_KEY,
+      keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID,
+    });
   }
 
   async deleteFile(fileName) {
