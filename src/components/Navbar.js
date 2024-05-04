@@ -69,6 +69,7 @@ const Navbar = () => {
     }
     return () => {
       setShowSearch(false);
+      setShowMenu(false);
     };
   }, [params.tag, path]);
 
