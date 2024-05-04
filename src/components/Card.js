@@ -22,9 +22,9 @@ const Card = ({
   const router = useRouter();
 
   return (
-    <section>
+    <section className="group">
       <article
-        className={clsx('my-1 max-w-2xl', {
+        className={clsx('my-1 max-w-2xl cursor-pointer', {
           'flex justify-between gap-4 sm:gap-6': imgUrl,
         })}
       >
@@ -39,22 +39,23 @@ const Card = ({
                 'text-lg': isSmall || isXSmall,
               })}
             >
-              <Link className="hover:text-light-primary" href={`/${slug}`}>
+              <Link
+                className="group-hover:text-light-primary"
+                href={`/${slug}`}
+              >
                 {title}
               </Link>
             </h2>
           </header>
           <section
-            className={clsx('long-text cursor-pointer', {
+            className={clsx('long-text', {
               'max-w-lg': !largeTitle,
               'max-2-lines': isSmall,
               'max-1-line ': isXSmall,
             })}
           >
             <p>
-              <Link className="hover:text-light-primary" href={`/${slug}`}>
-                {description}
-              </Link>
+              <Link href={`/${slug}`}>{description}</Link>
             </p>
           </section>
         </section>
