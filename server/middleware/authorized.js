@@ -1,13 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { ErrorHandler } from '../services/ErrorHandler.js';
+import ApiError from '../services/ApiError.js';
 
-export default (req, res, next) => {
+const authorized = (req, res, next) => {
   try {
     // Extract token from request headers
     const authorization = req.headers.authorization;
 
     if (!authorization) {
-      throw new ErrorHandler(401, 'Unauthorized');
+      throw new ApiError('Unauthorized', 401);
     }
     const token = authorization.split(' ')[1];
     // Verify token
@@ -18,3 +18,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default authorized;

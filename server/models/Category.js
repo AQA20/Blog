@@ -13,23 +13,29 @@ Category.init(
       autoIncrement: true,
       allowNull: false,
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'Category',
-    tableName: 'categories',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Category.associate = (models) => {
-  Category.hasMany(models.Article, {
-    foreignKey: 'category_id',
-    as: 'articles',
-  });
+  Category.hasMany(models.Article, { foreignKey: 'id' });
 };
 
 export default Category;

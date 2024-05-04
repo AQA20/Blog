@@ -15,10 +15,11 @@ const Sidebar = ({ articles }) => {
             <Card
               key={article.title}
               title={article.title}
+              slug={article.slug}
               description={article.description}
-              tags={article.tags}
-              imageId={article.thumbnail_id}
-              timeAgo={timeAgo(article.created_at)}
+              tags={article.Tags}
+              imgUrl={article.featuredImg}
+              timeAgo={timeAgo(article.createdAt)}
               isSmall={true}
             />
           ))}
@@ -27,7 +28,7 @@ const Sidebar = ({ articles }) => {
       <h2 className="mb-2">أشهر المواضيع</h2>
       <footer className="flex flex-wrap">
         {articles.map((article) =>
-          article.tags.map((tag) => <Badge key={tag.name} title={tag.name} />),
+          article.Tags.map((tag) => <Badge key={tag.name} title={tag.name} />),
         )}
       </footer>
     </article>

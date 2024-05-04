@@ -6,10 +6,12 @@ import { RiShareLine } from '@remixicon/react';
 import { useState } from 'react';
 import Notification from './Notification';
 
-const CardFooter = ({ tags = [], shareText = true }) => {
+const CardFooter = ({ clipboardContent, tags = [], shareText = true }) => {
   const [copyNotification, setCopyNotification] = useState(false);
   const onShare = async () => {
-    await navigator.clipboard.writeText(window.location.href);
+    await navigator.clipboard.writeText(
+      `${window.location.href}${clipboardContent}`,
+    );
     setCopyNotification(true);
   };
 
@@ -22,7 +24,7 @@ const CardFooter = ({ tags = [], shareText = true }) => {
         text="تم نسخ الرابط بنجاح!."
       />
       <footer className="h-14 flex items-center justify-between">
-        <div className="flex">
+        <div className="flex truncate">
           <div className="truncate">
             {tags.map((tag) => (
               <Tag key={tag.id} name={tag.name} />

@@ -7,7 +7,7 @@ const signupRequest = Joi.object({
   repeat_password: Joi.ref('password'),
 }).with('password', 'repeat_password');
 
-export default (req, res, next) => {
+const signupRequestMiddleware = (req, res, next) => {
   try {
     const { error } = signupRequest.validate(req.body);
     if (error) {
@@ -18,3 +18,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default signupRequestMiddleware;

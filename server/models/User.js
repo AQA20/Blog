@@ -11,10 +11,10 @@ const sequelize = db.sequelize;
 class User extends Model {
   async getUserRoles() {
     return await UserRole.findAll({
-      where: { user_id: this.id },
+      where: { userId: this.id },
       include: {
         model: Role,
-        include: { model: Permission, as: 'permissions' },
+        include: { model: Permission },
       },
     });
   }
@@ -46,34 +46,29 @@ User.init(
       allowNull: false,
       type: DataTypes.STRING,
     },
-    created_at: {
-      allowNull: false,
+    createdAt: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
     },
-    updated_at: {
-      allowNull: false,
+    updatedAt: {
       type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
     },
   },
   {
     sequelize,
-    modelName: 'User',
-    tableName: 'users',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 User.associate = (models) => {
   User.hasMany(models.Article, {
-    foreignKey: 'author_id',
-    as: 'articles',
+    foreignKey: 'authorId',
   });
   User.belongsToMany(models.Role, {
-    through: 'user_roles',
-    foreignKey: 'user_id',
-    as: 'roles',
+    through: 'UserRoles',
     onDelete: 'CASCADE',
   });
 };

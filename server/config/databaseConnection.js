@@ -3,6 +3,7 @@ import { env } from 'process';
 import configuration from './databaseConfig.js';
 import mysql2 from 'mysql2';
 import { initAssociations } from '../models/associations.js';
+import cls from 'cls-hooked';
 
 const _env = env.NODE_ENV || 'development';
 const config = configuration[_env];
@@ -26,6 +27,10 @@ if (config.use_env_variable) {
 }
 
 db.sequelize = sequelize;
+//Automatically pass transactions to all queries
+const namespace = cls.createNamespace('default-namespace');
+// eslint-disable-next-line react-hooks/rules-of-hooks
+Sequelize.useCLS(namespace);
 db.Sequelize = Sequelize;
 
 // Test connection

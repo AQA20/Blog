@@ -1,30 +1,35 @@
-import Article from '../models/Article.js';
-import Comment from '../models/Comment.js';
+import { readFileAsync } from '../utils/fsUtils.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { handleAsyncError } from '../utils/handleErrors.js';
 
-export const up = async () => {
-  // Fetch all articles
-  const articles = await Article.findAll({
-    where: {
-      status: Article.APPROVED,
-    },
-  });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const fullPath = path.join(__dirname, '/samples/comments.json');
 
-  // Since this is test data, just add
-  // the same comment for all of the articles
-  articles.map(async (article) => {
-    Comment.create({
-      status: Comment.APPROVED,
-      content: 'محتوى مميز جدا شكرا لك, سوف اعود لقراءة المزيد',
-      user_id: article.author_id,
-      article_id: article.id,
-      created_at: new Date(),
-      updated_at: new Date(),
+export const up = handleAsyncError(async ({ context: { sequelize } }) => {
+  const queryInterface = sequelize.getQueryInterface();
+  let commentSamples = await readFileAsync(fullPath);
+  commentSamples = JSON.parse(commentSamples);
+  await sequelize.transaction(async (transaction) => {
+    // Fetch articles
+    const articles = await queryInterface.select(null, 'Articles', {
+      attributes: ['id', 'authorId'],
     });
+
+    // Prepare comment data
+    const commentsData = articles.map((article, index) => ({
+      content: commentSamples.comments[index], // Sample comment
+      userId: article.authorId,
+      articleId: article.id,
+      status: 'Approved',
+    }));
+
+    // Insert comments in bulk
+    await queryInterface.bulkInsert('Comments', commentsData);
   });
-};
-export const down = ({ context: { sequelize } }) => {
+});
+export const down = handleAsyncError(async ({ context: { sequelize } }) => {
   // Delete all comments from db
-  sequelize.getQueryInterface().bulkDelete('comments', null, {});
-  // Set auto increment id to 0
-  return sequelize.query('ALTER TABLE comments AUTO_INCREMENT = 1;');
-};
+  await sequelize.getQueryInterface().bulkDelete('Comments', null, {});
+});

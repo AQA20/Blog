@@ -2,11 +2,12 @@ import Joi from 'joi';
 
 const updateArticleStatus = Joi.object({
   status: Joi.string()
+    .trim()
     .valid('Approved', 'Pending', 'Rejected', 'Trashed')
     .required(),
 });
 
-export default (req, res, next) => {
+const updateArticleRequestMiddleware = (req, res, next) => {
   try {
     const { error } = updateArticleStatus.validate(req.body);
     if (error) {
@@ -17,3 +18,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default updateArticleRequestMiddleware;

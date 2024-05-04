@@ -13,23 +13,30 @@ Tag.init(
       autoIncrement: true,
       allowNull: false,
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'Tag',
-    tableName: 'tags',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Tag.associate = (models) => {
   Tag.belongsToMany(models.Article, {
-    through: 'article_tags',
-    foreignKey: 'tag_id',
-    as: 'articles',
+    through: 'ArticleTag',
   });
 };
 

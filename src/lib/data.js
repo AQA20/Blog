@@ -1,17 +1,13 @@
 import apiClient from './apiClient';
 
-export const fetchImage = async (id) => {
+export const fetchArticle = async (slug) => {
   try {
-    const response = await apiClient.get(`/api/image/${id}`, {
-      responseType: 'arraybuffer',
-    });
-    const blob = new Blob([response.data], {
-      type: response.headers['content-type'],
-    });
-    const url = URL.createObjectURL(blob);
-    return url;
+    const {
+      data: { data },
+    } = await apiClient.get(`/api/article-by-slug/${slug}`);
+    return data;
   } catch (error) {
-    throw new Error(`Error fetching image: ${error.message}}`);
+    throw new Error(`${error.message} - ${error.statusCode}`);
   }
 };
 
@@ -20,9 +16,10 @@ export const fetchArticles = async () => {
     const {
       data: { data },
     } = await apiClient.get('/api/articles');
+
     return data;
   } catch (error) {
-    throw new Error(`Error fetching articles: ${error.message}}`);
+    throw new Error(`${error.message} - ${error.statusCode}`);
   }
 };
 
@@ -31,6 +28,7 @@ export const fetchSidebarData = async () => {
     const {
       data: { data },
     } = await apiClient.get('/api/sidebar/articles');
+
     return data;
   } catch (error) {
     throw new Error(`Error fetching sidebar data: ${error.message}}`);

@@ -20,13 +20,19 @@ const Footer = () => {
       <section>
         <ul className="flex gap-2 underline">
           <li>
-            <a href="/policy?index=1">شروط الخدمة</a>
+            <a className="hover:text-light-primary" href="/policy?index=1">
+              شروط الخدمة
+            </a>
           </li>
           <li>
-            <a href="/policy?index=2">سياسة الكوكيز</a>
+            <a className="hover:text-light-primary" href="/policy?index=2">
+              سياسة الكوكيز
+            </a>
           </li>
           <li>
-            <a href="/policy?index=3">سياسة الخصوصية</a>
+            <a className="hover:text-light-primary" href="/policy?index=3">
+              سياسة الخصوصية
+            </a>
           </li>
         </ul>
         <div>جميع الحقوق محفوظة &copy; 2024</div>

@@ -15,23 +15,11 @@ const createArticleRequest = Joi.object({
   title: Joi.string().trim().min(40).max(60).required(),
   description: Joi.string().trim().min(160).max(300).required(),
   content: Joi.string().custom(wordsCount).required(),
-  category: Joi.string()
-    .pattern(/^\w+(\s\w+)?$/)
-    .trim()
-    .lowercase()
-    .required(),
-  tags: Joi.array()
-    .items(
-      Joi.string()
-        .pattern(/^\w+(\s\w+)?$/)
-        .trim()
-        .lowercase(),
-    )
-    .min(1)
-    .max(5),
+  category: Joi.string().trim().lowercase().required(),
+  tags: Joi.array().items(Joi.string().trim().lowercase()).min(1).max(5),
 });
 
-export default (req, res, next) => {
+const createArticleRequestMiddleware = (req, res, next) => {
   try {
     const { error } = createArticleRequest.validate(req.body);
     if (error) {
@@ -42,3 +30,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default createArticleRequestMiddleware;

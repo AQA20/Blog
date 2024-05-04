@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
-import { ErrorHandler } from '../services/ErrorHandler.js';
+import ApiError from '../services/ApiError.js';
 
 // Route for user login
-export default async (req, res, next) => {
+const authenticate = async (req, res, next) => {
   try {
     // Find user by email
     const user = await User.findOne({
@@ -12,7 +12,7 @@ export default async (req, res, next) => {
     });
     // Check if user exists
     if (!user) {
-      throw new ErrorHandler(400, 'User not found');
+      throw new ApiError('User not found', 400);
     }
     // Verify password
     const isPasswordValid = bcrypt.compareSync(
@@ -22,7 +22,7 @@ export default async (req, res, next) => {
 
     // Handle invalid password
     if (!isPasswordValid) {
-      throw new ErrorHandler(400, 'Invalid email or password');
+      throw new ApiError('Invalid email or password', 400);
     }
 
     // Generate JWT token
@@ -39,3 +39,5 @@ export default async (req, res, next) => {
     next(error);
   }
 };
+
+export default authenticate;

@@ -1,12 +1,14 @@
-import { ErrorHandler } from '../../services/ErrorHandler.js';
+import ApiError from '../../services/ApiError.js';
 
-export default (req, res, next) => {
+const uploadFileRequestMiddleware = (req, res, next) => {
   try {
     if (!req.file) {
-      throw new ErrorHandler(400, 'No file was uploaded');
+      throw new ApiError('No file was uploaded', 400);
     }
     next();
   } catch (error) {
     next(error);
   }
 };
+
+export default uploadFileRequestMiddleware;

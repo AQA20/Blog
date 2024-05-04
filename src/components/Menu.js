@@ -25,17 +25,23 @@ const Menu = ({ onClose, menuItems, subMenuItems, footerItems = [] }) => {
     <div ref={menuRef} className="w-[280px]">
       <ul className="py-2 bg-light-surfaceContainer rounded-lg">
         {menuItems.map((item, index) => (
-          <li key={index} className="h-[48px] menu-link px-4 py-3 gap-2">
+          <li key={index} className="h-[48px] menu-link px-4 py-3">
             {item?.url ? (
-              <>
+              <Link href={item.url} className="flex gap-2 hover-pointer-light">
                 <div>{item?.icon}</div>
-                <Link href={item.url}>{item.name}</Link>
-              </>
+                <div>{item.name}</div>
+              </Link>
             ) : (
-              <>
+              <div
+                className="flex gap-2 hover-pointer-light"
+                role="button"
+                tabIndex={0}
+                onKeyDown={null}
+                onClick={item.onClick}
+              >
                 <div>{item?.icon}</div>
-                <button onClick={item.onClick}>{item.name}</button>
-              </>
+                <button>{item.name}</button>
+              </div>
             )}
           </li>
         ))}
@@ -51,7 +57,9 @@ const Menu = ({ onClose, menuItems, subMenuItems, footerItems = [] }) => {
               key={index}
               className="h-[40px] text-sm menu-link px-4 py-3 gap-2"
             >
-              <Link href={item.url}>{item.name}</Link>
+              <Link className="hover-pointer-light" href={item.url}>
+                {item.name}
+              </Link>
             </li>
           ))}
         </ul>

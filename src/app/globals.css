@@ -110,7 +110,10 @@ p {
   }
 
   .menu-link {
-    @apply flex items-center transition-colors duration-300 hover:cursor-pointer hover:text-light-primary;
+    @apply flex items-center transition-colors duration-300;
+  }
+  .hover-pointer-light {
+    @apply cursor-pointer hover:text-light-primary;
   }
 }
 

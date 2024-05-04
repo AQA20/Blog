@@ -9,26 +9,28 @@ export const metadata = {
 };
 
 export default async function Home() {
-  const data = await fetchArticles();
+  const articles = await fetchArticles();
 
   return (
     <article className="my-4">
-      <Hero article={data[0]} />
+      <Hero article={articles[0]} />
       <Badge title="الأحدث" />
       <Badge title="الأشهر" />
       <Badge title="الأقدم" />
       <div className="my-6"></div>
 
       <section id="#articles">
-        {data.map((article) => {
+        {articles.map((article) => {
           return (
             <Card
               key={article.id}
+              id={article.id}
               title={article.title}
-              tags={article.tags}
+              slug={article.slug}
+              tags={article.Tags}
               description={article.description}
-              imageId={article.thumbnail_id}
-              timeAgo={timeAgo(article.created_at)}
+              imgUrl={article.featuredImg}
+              timeAgo={timeAgo(article.createdAt)}
             />
           );
         })}

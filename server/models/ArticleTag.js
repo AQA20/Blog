@@ -13,27 +13,33 @@ ArticleTag.init(
       autoIncrement: true,
       allowNull: false,
     },
-    tag_id: DataTypes.INTEGER,
-    article_id: DataTypes.INTEGER,
+    tagId: DataTypes.INTEGER,
+    articleId: DataTypes.INTEGER,
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'ArticleTag',
-    tableName: 'article_tags',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 ArticleTag.associate = (models) => {
   // Define associations
   ArticleTag.belongsTo(models.Tag, {
-    foreignKey: 'tag_id',
+    foreignKey: 'tagId',
     onDelete: 'CASCADE',
   });
   ArticleTag.belongsTo(models.Article, {
-    foreignKey: 'article_id',
+    foreignKey: 'articleId',
     onDelete: 'CASCADE',
   });
 };

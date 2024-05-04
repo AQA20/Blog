@@ -1,14 +1,10 @@
 import Joi from 'joi';
 
 const createArticleCategoryRequest = Joi.object({
-  category: Joi.string()
-    .pattern(/^\w+(\s\w+)?$/)
-    .trim()
-    .lowercase()
-    .required(),
+  category: Joi.string().trim().lowercase().required(),
 });
 
-export default (req, res, next) => {
+const createArticleCategoryRequestMiddleware = (req, res, next) => {
   try {
     const { error } = createArticleCategoryRequest.validate(req.body);
     if (error) {
@@ -19,3 +15,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default createArticleCategoryRequestMiddleware;

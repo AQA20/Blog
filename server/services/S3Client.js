@@ -4,9 +4,10 @@ import {
   GetObjectCommand,
   DeleteObjectCommand,
 } from '@aws-sdk/client-s3';
-import fs from 'fs';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
+import { readFileAsync } from '../utils/fsUtils.js';
 import path from 'path';
 
 export default class S3Service {
@@ -20,24 +21,37 @@ export default class S3Service {
   // Create S3 client instance private property
   #s3Client = new S3Client(this.#credentials);
 
-  uploadFile(filePath) {
-    const uploadName = `${moment().valueOf()}_${uuidv4()}_${path.basename(filePath)}`;
-    fs.readFile(filePath, async (err, data) => {
+  async uploadImg(imgPath, imgFile) {
+    let imgBuffer;
+    if (imgPath) {
+      const data = await readFileAsync(imgPath, null);
       // Create a buffer from the image data
-      const fileBuffer = Buffer.from(data);
+      imgBuffer = Buffer.from(data);
+    } else {
+      imgBuffer = imgFile.buffer;
+    }
+    try {
+      const uploadName = `${moment().valueOf()}_${uuidv4()}`;
+
       // Define parameters for PutObjectCommand
       const params = {
         Bucket: process.env.AWS_FILE_BUCKET,
         Key: uploadName,
-        Body: fileBuffer,
+        Body: imgBuffer,
+        ContentType: imgFile
+          ? imgFile.mimetype
+          : `image/${path.extname(imgPath)}`,
       };
 
       // Create PutObjectCommand instance
       const putObjectCommand = new PutObjectCommand(params);
 
       await this.#s3Client.send(putObjectCommand);
-    });
-    return uploadName;
+      return uploadName;
+    } catch (error) {
+      console.error('Error uploading file to S3', error);
+      throw error;
+    }
   }
 
   async getFile(fileName) {
@@ -51,21 +65,28 @@ export default class S3Service {
       const getObjectCommand = new GetObjectCommand(params);
 
       // return the response
-      return await this.#s3Client.send(getObjectCommand);
+      return await getSignedUrl(this.#s3Client, getObjectCommand, {
+        expiresIn: 3600,
+      });
     } catch (error) {
-      console.error('heeeeeeeeeeeeeeeeeeeeeeeeeeeeer', error);
+      console.error('Error retrieving file from S3', error);
       throw error;
     }
   }
 
   async deleteFile(fileName) {
-    const params = {
-      Bucket: process.env.AWS_FILE_BUCKET,
-      Key: fileName,
-    };
+    try {
+      const params = {
+        Bucket: process.env.AWS_FILE_BUCKET,
+        Key: fileName,
+      };
 
-    // Create DeleteObjectCommand instance
-    const deleteObjectCommand = new DeleteObjectCommand(params);
-    return await this.#s3Client.send(deleteObjectCommand);
+      // Create DeleteObjectCommand instance
+      const deleteObjectCommand = new DeleteObjectCommand(params);
+      return await this.#s3Client.send(deleteObjectCommand);
+    } catch (error) {
+      console.error('Error delete file from S3', error);
+      throw error;
+    }
   }
 }

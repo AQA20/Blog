@@ -5,9 +5,9 @@ import db from '../config/databaseConnection.js';
 const sequelize = db.sequelize;
 
 class Image extends Model {
-  static USER = 'user';
-  static ARTICLE = 'article';
-  static COMMENT = 'comment';
+  static USER = 'User';
+  static ARTICLE = 'Article';
+  static COMMENT = 'Comment';
 }
 
 Image.init(
@@ -18,43 +18,47 @@ Image.init(
       autoIncrement: true,
       allowNull: false,
     },
-    imageable_id: {
+    imageableId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    imageable_type: {
+    imageableType: {
       type: DataTypes.ENUM('article', 'comment', 'user'),
       allowNull: false,
     },
-    image_url: {
+    name: {
       type: DataTypes.STRING(255),
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
     },
   },
   {
     sequelize,
-    modelName: 'Image',
-    tableName: 'images',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Image.associations = (models) => {
   Image.belongsTo(models.Article, {
-    foreignKey: 'imageable_id',
+    foreignKey: 'imageableId',
     constraints: false,
   });
   Image.belongsTo(models.User, {
-    foreignKey: 'imageable_id',
+    foreignKey: 'imageableId',
     constraints: false,
-    as: 'user',
   });
   Image.belongsTo(models.Comment, {
-    foreignKey: 'imageable_id',
+    foreignKey: 'imageableId',
     constraints: false,
-    as: 'comment',
   });
 };
 

@@ -22,7 +22,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     console.error('Response error:', error);
-    return Promise.reject(error);
+    return Promise.reject(error.response.data);
   },
 );
 

@@ -1,39 +1,45 @@
-export const up = async ({ context: { sequelize, DataTypes } }) => {
-  await sequelize.getQueryInterface().createTable('user_roles', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-    },
-    role_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'roles',
-        key: 'id',
+import { handleAsyncError } from '../utils/handleErrors.js';
+
+export const up = handleAsyncError(
+  async ({ context: { sequelize, DataTypes } }) => {
+    await sequelize.getQueryInterface().createTable('UserRoles', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
       },
-      onDelete: 'CASCADE',
-    },
-    user_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'users',
-        key: 'id',
+      roleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Roles',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
-      onDelete: 'CASCADE',
-    },
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-  });
-};
-export const down = async ({ context: { sequelize } }) => {
-  await sequelize.getQueryInterface().dropTable('user_roles');
-};
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      createdAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+    });
+  },
+);
+export const down = handleAsyncError(async ({ context: { sequelize } }) => {
+  await sequelize.getQueryInterface().dropTable('UserRoles');
+});

@@ -8,17 +8,6 @@ class Comment extends Model {
   static PENDING = 'Pending';
   static REJECTED = 'Rejected';
   static TRASHED = 'Trashed';
-
-  static associate(models) {
-    Comment.belongsTo(models.User, {
-      foreignKey: 'user_id',
-      as: 'user',
-    });
-    Comment.belongsTo(models.Article, {
-      foreignKey: 'article_id',
-      as: 'article',
-    });
-  }
 }
 
 Comment.init(
@@ -40,23 +29,34 @@ Comment.init(
         len: [45, 1000], // Validates length between 60 and 1000 characters
       },
     },
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    article_id: {
+    articleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
     },
   },
   {
     sequelize,
-    modelName: 'Comment',
-    tableName: 'comments', // Specify the table name if it differs from the model name
     timestamps: true, // Enable timestamps
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
+
+Comment.associate = (models) => {
+  Comment.belongsTo(models.User);
+  Comment.belongsTo(models.Article);
+};
 
 export default Comment;

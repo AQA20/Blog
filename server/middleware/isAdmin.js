@@ -1,11 +1,11 @@
-import { ErrorHandler } from '../services/ErrorHandler.js';
+import ApiError from '../services/ApiError.js';
 import User from '../models/User.js';
 
-export default async (req, res, next) => {
+const isAdmin = async (req, res, next) => {
   try {
     const user = await User.findByPk(req.user.id);
     if (!user.isAdmin()) {
-      throw new ErrorHandler(401, 'Unauthorized');
+      throw new ApiError('Unauthorized', 401);
     }
     // Attach is admin property to the user object
     // So we don't retrieve user from database again
@@ -16,3 +16,5 @@ export default async (req, res, next) => {
     next(error);
   }
 };
+
+export default isAdmin;

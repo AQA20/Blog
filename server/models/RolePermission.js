@@ -13,32 +13,36 @@ RulePermission.init(
       autoIncrement: true,
       allowNull: false,
     },
-    role_id: {
+    roleId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    permission_id: {
+    permissionId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
     },
   },
   {
     sequelize,
-    modelName: 'RolePermission',
-    tableName: 'role_permissions',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 RulePermission.associate = (models) => {
   RulePermission.belongsTo(models.Role, {
-    foreignKey: 'role_id',
     onDelete: 'CASCADE',
   });
   RulePermission.belongsTo(models.Permission, {
-    foreignKey: 'permission_id',
     onDelete: 'CASCADE',
   });
 };

@@ -1,35 +1,40 @@
-/** @type {import('sequelize-cli').Migration} */
-export const up = async ({ context: { sequelize, DataTypes } }) => {
-  await sequelize.getQueryInterface().createTable('images', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-    },
-    imageable_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    imageable_type: {
-      type: DataTypes.ENUM('article', 'comment', 'user'),
-      allowNull: false,
-    },
-    image_url: {
-      type: DataTypes.STRING(255),
-      allowNull: false,
-    },
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-  });
-};
+import { handleAsyncError } from '../utils/handleErrors.js';
 
-export const down = async ({ context: { sequelize } }) => {
-  await sequelize.getQueryInterface().dropTable('images');
-};
+export const up = handleAsyncError(
+  async ({ context: { sequelize, DataTypes } }) => {
+    await sequelize.getQueryInterface().createTable('Images', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
+      },
+      imageableId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      imageableType: {
+        type: DataTypes.ENUM('Article', 'Comment', 'User'),
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING(255),
+        allowNull: false,
+      },
+      createdAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+    });
+  },
+);
+
+export const down = handleAsyncError(async ({ context: { sequelize } }) => {
+  await sequelize.getQueryInterface().dropTable('Images');
+});

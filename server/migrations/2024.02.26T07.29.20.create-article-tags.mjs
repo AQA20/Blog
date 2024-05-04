@@ -1,39 +1,45 @@
-export const up = async ({ context: { sequelize, DataTypes } }) => {
-  await sequelize.getQueryInterface().createTable('article_tags', {
-    id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
-      type: DataTypes.INTEGER,
-    },
-    tag_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'tags',
-        key: 'id',
+import { handleAsyncError } from '../utils/handleErrors.js';
+
+export const up = handleAsyncError(
+  async ({ context: { sequelize, DataTypes } }) => {
+    await sequelize.getQueryInterface().createTable('ArticleTags', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER,
       },
-      onDelete: 'CASCADE',
-    },
-    article_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'articles',
-        key: 'id',
+      tagId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Tags',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
       },
-      onDelete: 'CASCADE',
-    },
-    created_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-    updated_at: {
-      allowNull: false,
-      type: DataTypes.DATE,
-    },
-  });
-};
-export const down = async ({ context: { sequelize } }) => {
-  await sequelize.getQueryInterface().dropTable('article_tags');
-};
+      articleId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Articles',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      createdAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+      updatedAt: {
+        allowNull: false,
+        defaultValue: new Date(),
+        type: DataTypes.DATE,
+      },
+    });
+  },
+);
+export const down = handleAsyncError(async ({ context: { sequelize } }) => {
+  await sequelize.getQueryInterface().dropTable('ArticleTags');
+});

@@ -76,7 +76,8 @@ const Navbar = () => {
           {/* If home page show logo and search is hidden */}
           {!showSearch && isHomePage && (
             <Link href="/" className="text-2xl">
-              لوجو
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/lightLogo.svg" alt="logo" />
             </Link>
           )}
           {/* Show back button instead of logo on other pages */}

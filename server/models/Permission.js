@@ -13,23 +13,30 @@ Permission.init(
       autoIncrement: true,
       allowNull: false,
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'Permission',
-    tableName: 'permissions',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Permission.associate = (models) => {
   Permission.belongsToMany(models.Role, {
-    through: 'role_permissions',
-    foreignKey: 'permission_id',
-    as: 'roles',
+    through: 'RolePermissions',
   });
 };
 

@@ -8,17 +8,33 @@ import updateArticleStatus from '../middleware/requests/articles/updateArticleSt
 import multerImageUpload from '../middleware/multerImageUpload.js';
 import uploadFileRequest from '../middleware/requests/uploadFileRequest.js';
 import createArticleCategoryRequest from '../middleware/requests/articles/createArticleCategoryRequest.js';
+import { handleAsyncApiError } from '../utils/handleErrors.js';
 
 const router = express.Router();
 
 // Get all articles
-router.get('/articles', ArticleController.getArticles);
+router.get('/articles', handleAsyncApiError(ArticleController.getArticles));
 
-// Get article
-router.get('/article/:id', ArticleController.getArticle);
+// Get article by id
+router.get(
+  '/article/:id',
+  handleAsyncApiError(ArticleController.getArticleById),
+);
+
+// Get article by title
+router.get(
+  '/article-by-slug/:slug',
+  handleAsyncApiError(ArticleController.getArticleBySlug),
+);
 
 // Get sidebar articles
-router.get('/sidebar/articles', ArticleController.getSidebarArticles);
+router.get(
+  '/sidebar/articles',
+  handleAsyncApiError(ArticleController.getSidebarArticles),
+);
+
+// Get tags
+router.get('/tags', handleAsyncApiError(ArticleController.getTags));
 
 // Create article
 router.post(
@@ -27,7 +43,7 @@ router.post(
   isAdmin,
   multerImageUpload.array('files', 5),
   createArticleRequest,
-  ArticleController.createArticle,
+  handleAsyncApiError(ArticleController.createArticle),
 );
 
 // Update article
@@ -35,9 +51,8 @@ router.put(
   '/article/:id/update',
   authorized,
   isAdmin,
-  multerImageUpload.array('files', 5),
   updateArticleRequest,
-  ArticleController.updateArticle,
+  handleAsyncApiError(ArticleController.updateArticle),
 );
 
 // Update article status
@@ -46,7 +61,7 @@ router.put(
   authorized,
   isAdmin,
   updateArticleStatus,
-  ArticleController.updateArticleStatus,
+  handleAsyncApiError(ArticleController.updateArticleStatus),
 );
 
 // Set article thumbnail
@@ -56,7 +71,7 @@ router.post(
   isAdmin,
   multerImageUpload.single('file'),
   uploadFileRequest,
-  ArticleController.setArticleThumbnail,
+  handleAsyncApiError(ArticleController.setArticleThumbnail),
 );
 
 // Create article category
@@ -65,7 +80,7 @@ router.post(
   authorized,
   isAdmin,
   createArticleCategoryRequest,
-  ArticleController.createArticleCategory,
+  handleAsyncApiError(ArticleController.createArticleCategory),
 );
 
 export default router;

@@ -13,28 +13,33 @@ Role.init(
       autoIncrement: true,
       allowNull: false,
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'Role',
-    tableName: 'roles',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Role.associate = (models) => {
   Role.belongsToMany(models.User, {
-    through: 'user_roles',
-    foreignKey: 'role_id',
-    as: 'users',
+    through: 'UserRoles',
   });
   Role.belongsToMany(models.Permission, {
-    through: 'role_permissions',
-    foreignKey: 'role_id',
-    as: 'permissions',
+    through: 'RolePermissions',
   });
 };
 

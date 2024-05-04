@@ -24,6 +24,11 @@ Article.init(
       unique: true,
       allowNull: false,
     },
+    slug: {
+      type: DataTypes.STRING(60),
+      unique: true,
+      allowNull: false,
+    },
     description: {
       type: DataTypes.STRING(300),
       allowNull: false,
@@ -32,15 +37,15 @@ Article.init(
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    author_id: {
+    authorId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    thumbnail_id: {
+    thumbnailId: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    category_id: {
+    categoryId: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -48,40 +53,45 @@ Article.init(
       type: DataTypes.ENUM('Approved', 'Pending', 'Rejected', 'Trashed'),
       allowNull: false,
     },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: new Date(),
+    },
   },
   {
     sequelize,
-    modelName: 'Article',
-    tableName: 'articles',
     timestamps: true,
-    createdAt: 'created_at',
-    updatedAt: 'updated_at',
   },
 );
 
 Article.associate = (models) => {
   Article.belongsTo(models.User, {
-    foreignKey: 'author_id',
+    through: 'authorId',
     as: 'author',
   });
   Article.belongsToMany(models.Tag, {
-    through: 'article_tags',
-    foreignKey: 'article_id',
-    as: 'tags',
+    through: 'ArticleTag',
     onDelete: 'CASCADE',
   });
   Article.belongsTo(models.Category, {
-    foreignKey: 'category_id',
-    as: 'category',
+    foreignKey: 'categoryId',
     onDelete: 'SET NULL',
   });
   Article.hasMany(models.Image, {
-    foreignKey: 'imageable_id',
+    foreignKey: 'imageableId',
     constraints: false,
     scope: {
-      imageable_type: 'article',
+      imageableType: 'article',
     },
   });
 };
+
+// Article.hasMany(ArticleTag, { foreignKey: 'article_id'});
 
 export default Article;

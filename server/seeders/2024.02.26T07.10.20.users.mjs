@@ -1,38 +1,26 @@
 import bcrypt from 'bcryptjs';
+import { readFileAsync } from '../utils/fsUtils.js';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { handleAsyncError } from '../utils/handleErrors.js';
 
-export const up = async ({ context: { sequelize } }) => {
-  return sequelize.getQueryInterface().bulkInsert('users', [
-    {
-      name: 'Admin',
-      email: 'admin@500words.com',
-      password: await bcrypt.hash('ggdsfg435d$%$#', 10),
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      name: 'John',
-      email: 'john@gmail.com',
-      password: await bcrypt.hash('34df2$#fds', 10),
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      name: 'Mike',
-      email: 'mike@gmail.com',
-      password: await bcrypt.hash('fsdaf23*2#$@', 10),
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-    {
-      name: 'Sara',
-      email: 'sara@gmail.com',
-      password: await bcrypt.hash('gfds342*2#$@', 10),
-      created_at: new Date(),
-      updated_at: new Date(),
-    },
-  ]);
-};
-export const down = ({ context: { sequelize } }) => {
-  sequelize.getQueryInterface().bulkDelete('users', null, {});
-  return sequelize.query('ALTER TABLE users AUTO_INCREMENT = 1;');
-};
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const fullPath = path.join(__dirname, '/samples/users.json');
+
+export const up = handleAsyncError(async ({ context: { sequelize } }) => {
+  const queryInterface = sequelize.getQueryInterface();
+  let userSamples = await readFileAsync(fullPath);
+  const usersData = JSON.parse(userSamples);
+  const processedUsersData = await Promise.all(
+    usersData.users.map(async (user) => {
+      user.password = await bcrypt.hash(user.password, 10);
+      return user;
+    }),
+  );
+  await queryInterface.bulkInsert('Users', processedUsersData);
+});
+export const down = handleAsyncError(async ({ context: { sequelize } }) => {
+  const queryInterface = sequelize.getQueryInterface();
+  await queryInterface.bulkDelete('Users', null, {});
+});

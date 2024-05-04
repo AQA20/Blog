@@ -5,7 +5,7 @@ const loginRequest = Joi.object({
   password: Joi.string().required(),
 });
 
-export default (req, res, next) => {
+const loginRequestMiddleware = (req, res, next) => {
   try {
     const { error } = loginRequest.validate(req.body);
     if (error) {
@@ -16,3 +16,5 @@ export default (req, res, next) => {
     next(error);
   }
 };
+
+export default loginRequestMiddleware;
