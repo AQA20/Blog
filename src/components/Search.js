@@ -8,15 +8,18 @@ import { useRouter } from 'next/navigation';
 import { RiSearchLine } from '@remixicon/react';
 import clsx from 'clsx';
 
-const Search = ({ isShow, tag = null }) => {
+const Search = ({ isShow, onHideSearch, tag = null }) => {
   const router = useRouter();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(tag || '');
+  const [timeoutId, setTimeoutId] = useState(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef(null);
 
   useEffect(() => {
-    tag && setQuery(tag);
     isShow && !tag && inputRef.current.focus();
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [tag, isShow]);
 
   const handleOnChange = (e) => {
@@ -25,6 +28,7 @@ const Search = ({ isShow, tag = null }) => {
   };
 
   const handleSuggestClick = (value) => {
+    clearTimeout(timeoutId);
     setQuery(value);
     setShowSuggestions(false);
   };
@@ -36,11 +40,13 @@ const Search = ({ isShow, tag = null }) => {
   };
 
   const onBlur = () => {
-    setTimeout(() => setShowSuggestions(false), 200);
-  };
-
-  const handleBackClick = () => {
-    router.back();
+    const timeout = setTimeout(() => {
+      setShowSuggestions(false);
+      if (!query) {
+        onHideSearch();
+      }
+    }, 200);
+    setTimeoutId(timeout);
   };
 
   return (
@@ -110,7 +116,7 @@ const Search = ({ isShow, tag = null }) => {
       )}
 
       <div className="absolute top-[16%] right-4">
-        <Hug onClick={handleBackClick}>
+        <Hug onClick={() => router.back()}>
           <RiArrowRightLine size={20} className="fill-light-onSurfaceVariant" />
         </Hug>
       </div>

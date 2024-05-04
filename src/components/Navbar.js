@@ -67,8 +67,10 @@ const Navbar = () => {
       setTag(`#${decodeURIComponent(params.tag)}`);
       setShowSearch(true);
     }
-    return () => setShowSearch(false);
-  }, [params.tag, path, showSearch]);
+    return () => {
+      setShowSearch(false);
+    };
+  }, [params.tag, path]);
 
   return (
     <div className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 z-10 py-2">
@@ -104,7 +106,7 @@ const Navbar = () => {
             </div>
           )}
           {/* Show search input when showSearch is true */}
-          {showSearch && <Search tag={tag} isShow={showSearch} />}
+          {showSearch && <Search tag={tag} isShow={showSearch} onHideSearch={() => setShowSearch(false) } />}
           <div className="relative">
             {/* Show menu ico when showMenu is true */}
             {!showMenu && (
@@ -114,23 +116,22 @@ const Navbar = () => {
             )}
 
             {showMenu && (
-              <button
-                onClick={() => setShowMenu(false)}
-                className="flex items-center justify-center h-[40px] w-[40px]  bg-light-surfaceContainer rounded-full hover:cursor-pointer"
-              >
-                <RiCloseLine size={24} className="text-light-onSurface" />
-              </button>
-            )}
-
-            {showMenu && (
-              <div className="absolute left-1 top-14">
-                <Menu
-                  onClose={() => setShowMenu(false)}
-                  menuItems={menuItems}
-                  subMenuItems={subMenuItems}
-                  footerItems={footerItems}
-                />
-              </div>
+              <>
+                <button
+                  onClick={() => setShowMenu(false)}
+                  className="flex items-center justify-center h-[40px] w-[40px]  bg-light-surfaceContainer rounded-full hover:cursor-pointer"
+                >
+                  <RiCloseLine size={24} className="text-light-onSurface" />
+                </button>
+                <div className="absolute left-1 top-14">
+                  <Menu
+                    onClose={() => setShowMenu(false)}
+                    menuItems={menuItems}
+                    subMenuItems={subMenuItems}
+                    footerItems={footerItems}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>
