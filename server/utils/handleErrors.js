@@ -10,7 +10,7 @@ const handleAsyncError = (func) => {
 const handleAsyncApiError = (func) => {
   return (req, res, next) => {
     return func(req, res, next).catch((error) => {
-      console.error(error);
+      console.error('here', error);
       next(error);
     });
   };

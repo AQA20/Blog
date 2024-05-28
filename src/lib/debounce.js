@@ -8,7 +8,7 @@ const debounce = (cb, timeout) => {
     clearTimeout(timeoutId);
     // Set a new timeout & call the cb function
     // with whatever args have been passed
-    timeoutId = setTimeout(() => cb(args), timeout);
+    timeoutId = setTimeout(() => cb(...args), timeout);
   };
 };
 

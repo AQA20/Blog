@@ -3,131 +3,203 @@
 import { RiArrowRightLine } from '@remixicon/react';
 import { RiCloseFill } from '@remixicon/react';
 import Hug from './Hug';
-import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState, useRef, useMemo, Suspense } from 'react';
 import { RiSearchLine } from '@remixicon/react';
 import clsx from 'clsx';
+import { fetchSuggestions, debounce } from '@/lib';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import '../app/styles/search.css';
 
-const Search = ({ isShow, onHideSearch, tag = null }) => {
-  const router = useRouter();
-  const [query, setQuery] = useState(tag || '');
-  const [timeoutId, setTimeoutId] = useState(null);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+const Search = ({ isShow, onHideSearch }) => {
   const inputRef = useRef(null);
+  const suggestionRef = useRef(null);
+  const section = useRef(null);
+  const path = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  // Memoizes the addHashtag value.
+  const addHashtag = useMemo(() => path.includes('tags'), [path]);
+  // Memoizes the search query value.
+  const searchQuery = useMemo(
+    () => searchParams.get('search')?.toString() || '',
+    [searchParams],
+  );
+  // Create a persistent reference across the renders to the debounce function
+  // to prevent recreation the debounce function on each render
+  const debounceFunction = useRef(
+    // Use the debounce function to prevent a request from being sent on every keystroke
+    debounce(async (value) => {
+      const data = await fetchSuggestions(value);
+      setSuggestions({ show: true, data });
+    }, 100),
+  ).current;
 
+  // Memoizes the URLSearchParams instance creation.
+  const params = useMemo(
+    () => new URLSearchParams(searchParams),
+    [searchParams],
+  );
+
+  const [inputValue, setInputValue] = useState(
+    addHashtag ? `#${searchQuery}` : searchQuery,
+  );
+  const [suggestions, setSuggestions] = useState({
+    show: false,
+    data: [],
+  });
+
+  const [timeoutId, setTimeoutId] = useState(null);
+
+  // Update inputValue when searchQuery changes.
   useEffect(() => {
-    isShow && !tag && inputRef.current.focus();
+    setInputValue(addHashtag ? `#${searchQuery}` : searchQuery);
+  }, [searchQuery, addHashtag]);
+
+  // Focus input when search is shown.
+  useEffect(() => {
+    if (isShow) {
+      inputRef.current.focus();
+    }
+
+    // Cleanup function to clear timeout on unmount
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [tag, isShow]);
+  }, [isShow, timeoutId]);
 
   const handleOnChange = (e) => {
-    e.preventDefault();
-    setQuery(e.target.value);
+    const value = e.target.value?.trim();
+    setInputValue(value);
+    debounceFunction(value);
+    if (value) {
+      params.set('search', value);
+    } else {
+      params.delete('search');
+    }
+  };
+
+  const onKeyDown = (e) => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      router.replace(`/search?${params.toString()}`);
+      setSuggestions((prev) => ({ ...prev, show: false }));
+    }
   };
 
   const handleSuggestClick = (value) => {
     clearTimeout(timeoutId);
-    setQuery(value);
-    setShowSuggestions(false);
+    params.set('search', value.trim());
+    router.replace(`/search?${params.toString()}`);
+    setSuggestions({ data: [], show: false });
+    setInputValue(value.trim());
   };
 
-  const handleRemoveClick = () => {
-    setQuery('');
-    setShowSuggestions(true);
-    inputRef.current.focus();
+  const onFocus = () => {
+    clearTimeout(timeoutId);
+    setSuggestions((prev) => ({ ...prev, show: false }));
   };
 
-  const onBlur = () => {
-    const timeout = setTimeout(() => {
-      setShowSuggestions(false);
-      if (!query) {
-        onHideSearch();
-      }
-    }, 200);
-    setTimeoutId(timeout);
+  const onBlur = (e) => {
+    // Check if the blur event is related to the suggestion list
+    if (suggestionRef.current && section.current.contains(e.relatedTarget)) {
+      return;
+    }
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      const timeout = setTimeout(() => {
+        setSuggestions({ data: [], show: false });
+        // Hide search if input is empty
+        if (!searchQuery) {
+          onHideSearch();
+        }
+      }, 200);
+      setTimeoutId(timeout);
+    }
+  };
+
+  // Add on mouse down event to the suggestion button, to make sure the click is triggered
+  // Before the onBlur event hides the component.
+  const onMouseDown = (e) => {
+    e.preventDefault();
+  };
+  const onTouchStart = (e) => {
+    e.preventDefault();
   };
 
   return (
-    <section>
-      <label htmlFor="term">
-        {''}
-        <input
-          className={clsx('search-input relative', {
-            'rounded-br-none rounded-bl-none transition-all duration-[800ms]':
-              showSuggestions,
-          })}
-          type="text"
-          name="term"
-          placeholder="ابحث عن اي شيء"
-          value={query}
-          onChange={handleOnChange}
-          onFocus={() => setShowSuggestions(true)}
-          onBlur={onBlur}
-          ref={inputRef}
-        />
-      </label>
+    <Suspense fallback="...loading">
+      <section ref={section}>
+        <label htmlFor="term">
+          {''}
+          <input
+            className={clsx(
+              `search-input relative focus:border-none
+              bg-light-surfaceContainerHigh
+              dark:bg-dark-surfaceContainerHigh
+              dark:text-dark-onSurfaceVariant`,
+              {
+                'rounded-br-none rounded-bl-none transition-all duration-[800ms]':
+                  suggestions.show && suggestions.data?.length > 0,
+              },
+            )}
+            type="text"
+            name="term"
+            placeholder="ابحث عن اي شيء"
+            aria-label="مربع البحث"
+            value={inputValue}
+            onChange={handleOnChange}
+            onKeyDown={onKeyDown}
+            onFocus={onFocus}
+            onBlur={onBlur}
+            ref={inputRef}
+            autoComplete="off"
+          />
+        </label>
 
-      {showSuggestions && (
-        <ul className="suggestions rounded-tr-none rounded-tl-none block">
-          <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
-          <button onClick={() => handleSuggestClick('عشوائي')}>
-            <li>
-              <Hug>
-                <RiSearchLine size={24} />
-              </Hug>
-              عشوائي
-            </li>
-          </button>
-          <button onClick={() => handleSuggestClick('عشوائي')}>
-            <li>
-              <Hug>
-                <RiSearchLine size={24} />
-              </Hug>
-              عشوائي
-            </li>
-          </button>
-          <button onClick={() => handleSuggestClick('عشوائي')}>
-            <li>
-              <Hug>
-                <RiSearchLine size={24} />
-              </Hug>
-              عشوائي
-            </li>
-          </button>
-          <button onClick={() => handleSuggestClick('عشوائي')}>
-            <li>
-              <Hug>
-                <RiSearchLine size={24} />
-              </Hug>
-              عشوائي
-            </li>
-          </button>
-          <button onClick={() => handleSuggestClick('عشوائي')}>
-            <li>
-              <Hug>
-                <RiSearchLine size={24} />
-              </Hug>
-              عشوائي
-            </li>
-          </button>
-        </ul>
-      )}
-
-      <div className="absolute top-[16%] right-4">
-        <Hug onClick={() => router.back()}>
-          <RiArrowRightLine size={20} className="fill-light-onSurfaceVariant" />
-        </Hug>
-      </div>
-      <div className="z-11 absolute top-[16%] left-14">
-        {query && (
-          <Hug onClick={handleRemoveClick}>
-            <RiCloseFill size={20} className="fill-light-onSurfaceVariant" />
-          </Hug>
+        {suggestions.show && suggestions.data?.length > 0 && (
+          <ul
+            className="suggestions rounded-tr-none rounded-tl-none block
+           bg-light-surfaceContainerHigh dark:bg-dark-surfaceContainerHigh
+            dark:text-dark-onSurfaceVariant"
+          >
+            <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
+            {suggestions.data?.map((suggestion) => (
+              <button
+                key={suggestion.title}
+                onClick={() => handleSuggestClick(suggestion.title)}
+                onMouseDown={onMouseDown}
+                onTouchStart={onTouchStart}
+                className="dark:hover:text-dark-primary truncate"
+              >
+                <li className="truncate">
+                  <Hug>
+                    <RiSearchLine size={24} />
+                  </Hug>
+                  {suggestion.title}
+                </li>
+              </button>
+            ))}
+          </ul>
         )}
-      </div>
-    </section>
+
+        <div className="absolute top-[16%] right-4">
+          <Hug onClick={router.back}>
+            <RiArrowRightLine
+              size={20}
+              className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+            />
+          </Hug>
+        </div>
+        <div className="z-11 absolute top-[16%] left-14">
+          {inputValue && (
+            <Hug onClick={onHideSearch}>
+              <RiCloseFill
+                size={20}
+                className="fill-light-onSurfaceVariant dark:fill-dark-onSurfaceVariant"
+              />
+            </Hug>
+          )}
+        </div>
+      </section>
+    </Suspense>
   );
 };
 

@@ -1,0 +1,17 @@
+@tailwind components;
+
+#articleContent p {
+  margin: 1rem auto;
+}
+
+#articleContent ul {
+  margin: 1rem auto;
+}
+
+
+@layer components {
+
+  #articleContent, p{
+    @apply dark:text-dark-onSurface;
+  }
+}

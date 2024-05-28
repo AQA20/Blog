@@ -6,8 +6,6 @@ import {
 import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 import moment from 'moment';
 import { v4 as uuidv4 } from 'uuid';
-import { readFileAsync } from '../utils/fsUtils.js';
-import path from 'path';
 
 export default class S3Service {
   // Set up AWS credentials as private property
@@ -20,26 +18,16 @@ export default class S3Service {
   // Create S3 client instance private property
   #s3Client = new S3Client(this.#credentials);
 
-  async uploadImg(imgPath, imgFile) {
-    let imgBuffer;
-    if (imgPath) {
-      const data = await readFileAsync(imgPath, null);
-      // Create a buffer from the image data
-      imgBuffer = Buffer.from(data);
-    } else {
-      imgBuffer = imgFile.buffer;
-    }
+  async uploadFile(bufferData, mimetype) {
     try {
+      // Create unique name (Because if the image name was exist before it will be overbidden by the new one)
       const uploadName = `${moment().valueOf()}_${uuidv4()}`;
-
       // Define parameters for PutObjectCommand
       const params = {
-        Bucket: process.env.AWS_FILE_BUCKET,
-        Key: uploadName,
-        Body: imgBuffer,
-        ContentType: imgFile
-          ? imgFile.mimetype
-          : `image/${path.extname(imgPath).replace('.', '')}`,
+        Bucket: process.env.AWS_FILE_BUCKET, // Bucket name
+        Key: uploadName, // File name
+        Body: bufferData, // File Buffer data
+        ContentType: mimetype, // File type
       };
 
       // Create PutObjectCommand instance
@@ -56,7 +44,7 @@ export default class S3Service {
   getFile(fileName) {
     return getSignedUrl({
       url: `${process.env.CLOUDFRONT_BASE_URL}/${fileName}`,
-      dateLessThan: moment().add('24', 'hours'),
+      dateLessThan: moment().add('24', 'hours').toDate(),
       privateKey: process.env.CLOUDFRONT_PRIVATE_KEY,
       keyPairId: process.env.CLOUDFRONT_KEY_PAIR_ID,
     });

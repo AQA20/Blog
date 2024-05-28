@@ -1,3 +1,5 @@
+'use client';
+
 import { RiArrowLeftSLine } from '@remixicon/react';
 import { useReducer, useMemo } from 'react';
 import clsx from 'clsx';
@@ -39,11 +41,12 @@ const SubMenu = ({ items }) => {
         <ul key={name}>
           <button
             onClick={() => handleSubMenuClick(name)}
-            className="h-[48px] w-full flex justify-between items-center py-3 pr-6 pl-4 transition-colors duration-300 hover:cursor-pointer hover:text-light-primary"
+            className="h-[48px] w-full flex justify-between items-center py-3 pr-6 pl-4 transition-colors
+            duration-300 hover:cursor-pointer hover:text-light-primary hover:dark:first:text-dark-primary"
           >
             {name}
             <div
-              className={clsx('', {
+              className={clsx('transition-transform duration-300', {
                 'transform -rotate-90': subMenus[name] === true,
               })}
             >
@@ -60,7 +63,7 @@ const SubMenu = ({ items }) => {
                 {item?.onClick ? (
                   <button
                     onClick={item.onClick}
-                    className="menu-link px-4 py-3 gap-2 hover-pointer-light"
+                    className={`menu-link px-4 py-3 gap-2 hover-pointer ${item.style}`}
                   >
                     <div>{item?.icon}</div>
                     <div>{item.name}</div>
@@ -70,7 +73,7 @@ const SubMenu = ({ items }) => {
                     <div>{item?.icon}</div>
                     <Link
                       href={item.url}
-                      className="text-2xl hover-pointer-light"
+                      className={`text-2xl hover-pointer ${item.style}`}
                     >
                       {item.name}
                     </Link>

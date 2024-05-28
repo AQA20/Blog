@@ -12,7 +12,7 @@ const Hero = ({ article }) => {
   const router = useRouter();
 
   return (
-    <article className="mt-4 mb-6">
+    <article className="mt-4 mb-6 group">
       <Suspense fallback={<p>...loading</p>}>
         <Image
           onClick={() => router.push(`/${article.slug}`)}
@@ -28,7 +28,7 @@ const Hero = ({ article }) => {
         <header>
           <h1>
             <Link
-              className="hover:text-light-primary"
+              className="group-hover:text-light-primary group-hover:dark:text-dark-primary"
               href={`/${article.slug}`}
             >
               {article.title}
@@ -38,7 +38,7 @@ const Hero = ({ article }) => {
         <section>
           <p>
             <Link
-              className="hover:text-light-primary"
+              className="dark:text-dark-onSurfaceVariant"
               href={`/${article.slug}`}
             >
               {article.description}
@@ -54,7 +54,10 @@ const Hero = ({ article }) => {
             componentRef.current.scrollIntoView({ behavior: 'smooth' })
           }
         >
-          <RiArrowDownLine size="20px" className="fill-white" />
+          <RiArrowDownLine
+            size="20px"
+            className="fill-white dark:fill-dark-onPrimary"
+          />
         </Button>
       </footer>
     </article>

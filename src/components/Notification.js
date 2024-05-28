@@ -59,7 +59,7 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
           'bg-light-inverseSurface': type === 'copy',
           'visible translate-y-0': isShow,
           'invisible translate-y-[200px]': !isShow,
-        }
+        },
       )}
     >
       <div className="flex justify-between">

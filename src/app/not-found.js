@@ -6,7 +6,10 @@ export default function NotFound() {
   return (
     <section className="mt-52">
       <figure>
-        <RiRadarLine size="40" className="fill-black" />
+        <RiRadarLine
+          size="40"
+          className="fill-black dark:fill-dark-onSurface"
+        />
       </figure>
       <section className="my-4">
         <header>

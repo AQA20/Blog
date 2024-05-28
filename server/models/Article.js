@@ -63,10 +63,14 @@ Article.init(
       allowNull: false,
       defaultValue: new Date(),
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     timestamps: true,
+    paranoid: true,
   },
 );
 
@@ -76,22 +80,24 @@ Article.associate = (models) => {
     as: 'author',
   });
   Article.belongsToMany(models.Tag, {
-    through: 'ArticleTag',
-    onDelete: 'CASCADE',
+    through: 'ArticleTags',
   });
   Article.belongsTo(models.Category, {
     foreignKey: 'categoryId',
-    onDelete: 'SET NULL',
   });
   Article.hasMany(models.Image, {
     foreignKey: 'imageableId',
     constraints: false,
     scope: {
-      imageableType: 'article',
+      imageableType: 'ARTICLE',
     },
   });
+  Article.hasMany(models.View, {
+    foreignKey: 'articleId',
+  });
+  Article.hasMany(models.Share, {
+    foreignKey: 'articleId',
+  });
 };
-
-// Article.hasMany(ArticleTag, { foreignKey: 'article_id'});
 
 export default Article;

@@ -13,6 +13,7 @@ const Card = ({
   description,
   tags,
   slug,
+  id,
   isSmall = false,
   isXSmall = false,
   timeAgo = null,
@@ -20,56 +21,66 @@ const Card = ({
   footer = true,
 }) => {
   const router = useRouter();
+  const articleUri = `/${slug}`;
 
   return (
-    <section className="group">
+    <section>
       <article
-        className={clsx('my-1 max-w-2xl cursor-pointer', {
+        className={clsx('group my-1 max-w-2xl cursor-pointer', {
           'flex justify-between gap-4 sm:gap-6': imgUrl,
         })}
       >
         <section>
           <time>
-            <p>{timeAgo ? timeAgo : 'منذ شهرين'}</p>
+            <p className="dark:text-dark-onSurfaceVariant">
+              {timeAgo ? timeAgo : 'منذ شهرين'}
+            </p>
           </time>
 
           <header>
             <h2
-              className={clsx('mb-1 max-2-line', {
-                'text-lg': isSmall || isXSmall,
+              className={clsx('mb-1 line-clamp-2', {
+                'text-lg': isSmall,
+                'text-sm': isXSmall,
               })}
             >
               <Link
-                className="group-hover:text-light-primary"
-                href={`/${slug}`}
+                className="group-hover:text-light-primary group-hover:dark:text-dark-primary"
+                href={articleUri}
               >
                 {title}
               </Link>
             </h2>
           </header>
           <section
-            className={clsx('long-text', {
+            className={clsx('line-clamp-2', {
               'max-w-lg': !largeTitle,
-              'max-2-lines': isSmall,
-              'max-1-line ': isXSmall,
             })}
           >
             <p>
-              <Link href={`/${slug}`}>{description}</Link>
+              <Link
+                className="dark:text-dark-onSurfaceVariant"
+                href={articleUri}
+              >
+                {description}
+              </Link>
             </p>
           </section>
         </section>
 
         <figure
-          className={clsx('flex mt-2 min-w-[120px] h-[80px]', {
-            'sm:min-w-[108px] sm:min-h-[72px]': isXSmall,
-            'sm:min-w-[120px] sm:min-h-[80px]': isSmall,
-            'sm:min-w-[180px] sm:min-h-[120px]': !isSmall && !isXSmall,
-          })}
+          className={clsx(
+            'flex mt-2 min-w-[120px] h-[80px] translate-all duration-200 group-hover:scale-105',
+            {
+              'sm:min-w-[108px] sm:min-h-[72px]': isXSmall,
+              'sm:min-w-[120px] sm:min-h-[80px]': isSmall,
+              'sm:min-w-[180px] sm:min-h-[120px]': !isSmall && !isXSmall,
+            },
+          )}
         >
           <Suspense fallback={<p>Loading image...</p>}>
             <RoundedImage
-              onClick={() => router.push(`/${slug}`)}
+              onClick={() => router.push(articleUri)}
               src={imgUrl}
               width="180"
               height="120"
@@ -81,7 +92,8 @@ const Card = ({
       <div className="w-full">
         {footer && (
           <CardFooter
-            clipboardContent={`${slug}`}
+            clipboardContent={slug}
+            id={id}
             tags={tags}
             shareText={!isSmall}
           />

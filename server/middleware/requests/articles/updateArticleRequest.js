@@ -15,8 +15,8 @@ const updateArticleRequest = Joi.object({
   title: Joi.string().trim().min(40).max(60),
   description: Joi.string().trim().min(160).max(300),
   content: Joi.string().custom(wordsCount),
-  category: Joi.string().trim().lowercase(),
-  tags: Joi.array().items(Joi.string().trim().lowercase()).min(1).max(5),
+  categoryId: Joi.number(),
+  thumbnailId: Joi.number(),
 });
 
 const updateArticleRequestMiddleware = (req, res, next) => {

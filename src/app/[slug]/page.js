@@ -1,38 +1,59 @@
 import RoundedImage from '@/components/RoundedImage';
 import Tag from '@/components/Tag';
-import Button from '@/components/Button';
-import { fetchArticle } from '@/lib';
 import { notFound } from 'next/navigation';
 import DOMPurify from 'isomorphic-dompurify';
+import ShareButton from '@/components/ShareButton';
+import ArticleLayout from './ArticleLayout';
+import { fetchArticle } from '@/lib';
+import { cookies } from 'next/headers';
 
 export default async function Page({ params }) {
-  const article = await fetchArticle(params.slug);
-  !article && notFound();
-  const cleanHtml = DOMPurify.sanitize(article.content);
+  const existingCookies =
+    cookies()
+      .getAll()
+      .map((cookie) => `${cookie.name}=${cookie.value}`)
+      .join('; ') || '';
 
+  const article = await fetchArticle(params.slug, existingCookies);
+  !article && notFound();
+  const cleanHtml = DOMPurify.sanitize(article.content, {
+    FORBID_TAGS: ['h1'], // Remove h1 tags
+    KEEP_CONTENT: false, // Remove tags content when they're removed
+  });
   return (
-    <article>
-      <header>
-        <h1>{article.title}</h1>
-      </header>
-      <figure>
-        <RoundedImage
-          onClick={null}
-          src={article.featuredImg}
-          alt={article.title}
-          width={680}
-          height={510}
-        />
-      </figure>
-      <section className="truncate my-4">
-        {article.Tags.map((tag) => (
-          <Tag key={tag.name} name={tag.name} />
-        ))}
-      </section>
-      <section>
-        <Button title="مشاركة" icon="/share-white.svg" />
-      </section>
-      <section dangerouslySetInnerHTML={{ __html: cleanHtml }}></section>
-    </article>
+    <ArticleLayout article={article}>
+      <article>
+        <section className="truncate my-2">
+          {article.Tags.map((tag) => (
+            <Tag key={tag.name} name={tag.name} />
+          ))}
+        </section>
+        <header>
+          <h1 className="mb-2">{article.title}</h1>
+        </header>
+        <figure>
+          <RoundedImage
+            onClick={null}
+            src={article.featuredImg}
+            alt={article.title}
+            width={680}
+            height={510}
+          />
+        </figure>
+        <section className="mt-4 mb-2">
+          <ShareButton
+            buttonStyle="bg-light-primary dark:bg-dark-primary dark:text-dark-onPrimary"
+            textColor="text-light-onPrimary dark:text-dark-onPrimary"
+            iconColor="fill-light-onPrimary dark:fill-dark-onPrimary"
+            id={article.id}
+            clipboardContent={article.slug}
+          />
+        </section>
+        <section
+          id="articleContent"
+          dangerouslySetInnerHTML={{ __html: cleanHtml }}
+        ></section>
+      </article>
+    </ArticleLayout>
   );
 }

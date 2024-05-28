@@ -24,6 +24,9 @@ export const up = handleAsyncError(
         defaultValue: new Date(),
         type: DataTypes.DATE,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
   },
 );

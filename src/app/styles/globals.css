@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: var(--font-noto-sans-arabic);
+  max-width: 1080px;
+  margin: 0 auto;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+@layer components {
+  .search-input,
+  .suggestions {
+    @apply w-[calc(100vw-64px)]
+      md:w-[616px] h-[40px]
+      border
+    bg-light-surfaceContainer 
+    bg-dark-surfaceContainer
+      outline-0 
+      rounded-3xl px-12 ml-0;
+  }
+  .suggestions {
+    @apply px-0 h-0 border-none;
+  }
+
+  .menu-link {
+    @apply flex items-center transition-colors duration-300;
+  }
+  .hover-pointer {
+    @apply cursor-pointer hover:text-light-primary dark:hover:text-dark-primary;
+  }
+  .active-filter {
+    @apply bg-light-primary text-light-onPrimary;
+  }
+  .active {
+    @apply text-light-primary dark:!text-dark-primary;
+  }
+}
+
+/* default text tags default font size */
+h1 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 2.625rem;
+}
+
+@media (max-width: 640px) {
+  h1 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.7rem;
+  }
+}
+
+h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 2rem;
+}
+
+@media (max-width: 640px) {
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.5rem;
+  }
+}
+
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  h2 {
+    font-size: 1.08rem;
+    font-weight: 700;
+    line-height: 1.3rem;
+  }
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 400;
+  color: theme('textColor.light.onSurfaceVariant');
+}
+/* End of  text tags default font size */
+
+/* Keep footer at the bottom of the page */
+/* The footer height including padding is 80px */
+.min-height {
+  min-height: calc(100dvh - 120px);
+}
+@media (max-width: 768px) {
+  .min-height {
+    min-height: calc(100dvh - 80px);
+  }
+}

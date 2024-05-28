@@ -31,7 +31,14 @@ export const up = handleAsyncError(
         defaultValue: new Date(),
         type: DataTypes.DATE,
       },
+      deletedAt: {
+        type: DataTypes.DATE,
+      },
     });
+
+    // Adding indexes
+    await sequelize.getQueryInterface().addIndex('Images', ['imageableId']);
+    await sequelize.getQueryInterface().addIndex('Images', ['imageableType']);
   },
 );
 

@@ -14,7 +14,7 @@ const noto_sans_arabic = Noto_Sans_Arabic({
 export default function Error({ error, reset }) {
   useEffect(() => {
     console.error(error);
-  }, [error]);
+  }, []);
   return (
     <html className={`pt-4 ${noto_sans_arabic.variable}`} lang="en">
       <body className="md:w-[680px] font-noto">

@@ -27,16 +27,20 @@ Tag.init(
       allowNull: false,
       defaultValue: new Date(),
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     timestamps: true,
+    paranoid: true,
   },
 );
 
 Tag.associate = (models) => {
   Tag.belongsToMany(models.Article, {
-    through: 'ArticleTag',
+    through: 'ArticleTags',
   });
 };
 

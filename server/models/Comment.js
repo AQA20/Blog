@@ -47,10 +47,14 @@ Comment.init(
       allowNull: false,
       defaultValue: new Date(),
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     timestamps: true, // Enable timestamps
+    paranoid: true,
   },
 );
 

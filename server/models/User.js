@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import UserRole from './UserRole.js';
 import Role from './Role.js';
 import Permission from './Permission.js';
+import jwt from 'jsonwebtoken';
 
 const sequelize = db.sequelize;
 
@@ -71,12 +72,26 @@ User.associate = (models) => {
     through: 'UserRoles',
     onDelete: 'CASCADE',
   });
+  User.hasMany(models.Image, {
+    foreignKey: 'imageableId',
+    constraints: false,
+    scope: {
+      imageableType: 'USER',
+    },
+  });
 };
 
 // Hash the password before saving
 User.beforeCreate((user) => {
   const hashedPassword = bcrypt.hashSync(user.password, 10);
   user.setDataValue('password', hashedPassword);
+  // Generate JWT token
+  const token = jwt.sign(
+    { user: { id: user.id, email: user.email } },
+    process.env.JWT_SECRET,
+    { expiresIn: '24h' },
+  );
+  user.setDataValue('token', token);
 });
 
 // Set password to null after saving

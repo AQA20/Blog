@@ -1,0 +1,89 @@
+/* On viewPort 768px and greater */
+@media (min-width: 768px) {
+  .search-input {
+    width: 0;
+    animation: expandWidth 0.3s forwards;
+  }
+}
+
+/* On viewPort 640px and smaller */
+@media (max-width: 640px) {
+  .search-input {
+    width: 0;
+    animation: expandWidthSm 0.3s forwards;
+  }
+}
+
+@keyframes expandWidth {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 616px;
+  }
+}
+
+@keyframes expandWidthSm {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: calc(100vw - 64px);
+  }
+}
+
+@keyframes expandHeight {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: fit-content;
+  }
+}
+
+@keyframes opacityAnimation {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* End of search component styles & animations */
+
+/* Search component suggestions styles & animations */
+.suggestions {
+  animation: expandHeight 0.3s 0.4s forwards;
+  position: absolute;
+}
+
+.suggestions li {
+  padding: 0 0.5rem 0 0.5rem;
+  cursor: pointer;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  animation: opacityAnimation 0.3s 0.5s forwards;
+}
+
+.suggestions li:first-child {
+  padding-right: 1.1rem;
+}
+.suggestions li:last-child {
+  padding-bottom: 0.6rem;
+}
+
+.suggestions li:first-child:hover {
+  color: unset;
+}
+
+.suggestions button {
+  display: block;
+}
+
+.suggestions button:hover {
+  color: theme('colors.light.primary');
+}
+
+/* End of search component suggestions styles & animations */

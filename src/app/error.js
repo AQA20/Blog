@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 export default function Error({ error, reset }) {
   useEffect(() => {
     console.error(error);
-  }, [error]);
+  }, []);
   return (
     <section className="mt-52">
       <figure>

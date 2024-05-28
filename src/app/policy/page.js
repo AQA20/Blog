@@ -16,6 +16,5 @@ export default function Page() {
   const searchParams = useSearchParams();
   const params = new URLSearchParams(searchParams);
   const index = parseInt(params.get('index'));
-
   return <Tabs tabs={tabs} index={index} />;
 }

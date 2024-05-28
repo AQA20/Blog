@@ -3,6 +3,8 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import S3Service from '../services/S3Client.js';
 import { handleAsyncError } from '../utils/handleErrors.js';
+import { readFileAsync } from '../utils/fsUtils.js';
+import { Buffer } from 'buffer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,8 +23,12 @@ const getImageRemoteUrls = handleAsyncError(async () => {
       if (image !== 'profile-picture.jpeg') {
         // Get the image full path
         const imgPath = path.join(imagesDir, image);
+        // read the file data
+        const data = await readFileAsync(imgPath, null);
+        // create mimetype using the imgPath and remove the .
+        const mimetype = `image/${path.extname(imgPath).replace('.', '')}`;
         // Upload image to aws s3
-        const name = await s3Service.uploadImg(imgPath);
+        const name = await s3Service.uploadFile(Buffer.from(data), mimetype);
         return name;
       }
     }),
@@ -52,17 +58,17 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
       // Insert new image raw in images table
       return {
         imageableId: article.id,
-        imageableType: 'Article',
+        imageableType: 'ARTICLE',
         name: name,
       };
     });
 
     await queryInterface.bulkInsert('Images', newImages, {
-      where: { imageableType: 'Article' },
+      where: { imageableType: 'ARTICLE' },
     });
 
     const createdImages = await queryInterface.select(null, 'Images', {
-      where: { imageableType: 'Article' },
+      where: { imageableType: 'ARTICLE' },
     });
 
     await Promise.all(
@@ -80,7 +86,7 @@ export const down = handleAsyncError(async ({ context: { sequelize } }) => {
   await sequelize.transaction(async (transaction) => {
     // Fetch all Article images
     const articleImages = await queryInterface.select(null, 'Images', {
-      where: { imageableType: 'Article' },
+      where: { imageableType: 'ARTICLE' },
       attributes: ['name'],
     });
 
@@ -93,7 +99,7 @@ export const down = handleAsyncError(async ({ context: { sequelize } }) => {
     );
     // Bulk Delete article images from database
     await queryInterface.bulkDelete('Images', {
-      imageableType: 'Article',
+      imageableType: 'ARTICLE',
     });
   });
 });

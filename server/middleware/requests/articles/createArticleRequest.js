@@ -15,8 +15,7 @@ const createArticleRequest = Joi.object({
   title: Joi.string().trim().min(40).max(60).required(),
   description: Joi.string().trim().min(160).max(300).required(),
   content: Joi.string().custom(wordsCount).required(),
-  category: Joi.string().trim().lowercase().required(),
-  tags: Joi.array().items(Joi.string().trim().lowercase()).min(1).max(5),
+  categoryId: Joi.number().required(),
 });
 
 const createArticleRequestMiddleware = (req, res, next) => {

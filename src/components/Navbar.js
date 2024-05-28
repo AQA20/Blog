@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Hug from './Hug';
 import Link from 'next/link';
 import Search from './Search';
 import Menu from './Menu';
-import { useRouter, usePathname, useParams } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import {
   RiMenuLine,
   RiCloseLine,
@@ -17,31 +17,36 @@ import {
   RiMoonLine,
   RiSunLine,
 } from '@remixicon/react';
+import { useTheme } from 'next-themes';
+import Logo from './Logo';
 
 const menuItems = [
   { name: 'الرئيسية', url: '/', icon: <RiHome2Line size={24} /> },
   { name: 'الهاشتاقات', url: '/tags', icon: <RiHashtag size={24} /> },
 ];
 
-const subMenuItems = {
+const subMenuItems = (setTheme, resolvedTheme) => ({
   'طابع الواجهة': [
     {
       name: 'تلقائي',
-      onClick: () => null,
+      onClick: () => setTheme('auto'),
       icon: <RiContrastFill size={24} />,
+      style: resolvedTheme === 'auto' ? 'active' : '',
     },
     {
       name: 'وضع الليل',
-      onClick: () => null,
+      onClick: () => setTheme('dark'),
       icon: <RiMoonLine size={24} />,
+      style: resolvedTheme === 'dark' && resolvedTheme ? 'active' : '',
     },
     {
       name: 'وضع النهار',
-      onClick: () => null,
+      onClick: () => setTheme('light'),
       icon: <RiSunLine size={24} />,
+      style: resolvedTheme === 'light' ? 'active' : '',
     },
   ],
-};
+});
 
 const footerItems = [
   { name: 'شروط الخدمة', url: '/policy?index=1' },
@@ -50,38 +55,44 @@ const footerItems = [
 ];
 
 const Navbar = () => {
+  const searchParams = useSearchParams();
   const [showSearch, setShowSearch] = useState(false);
-  const [tag, setTag] = useState(null);
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
   const path = usePathname();
-  const params = useParams();
+  const { setTheme, resolvedTheme } = useTheme();
   const isHomePage = path === '/';
+  const subMenuItemsMemo = useMemo(
+    () => subMenuItems(setTheme, resolvedTheme),
+    [resolvedTheme],
+  );
 
   const handleBackClick = () => {
     router.back();
   };
 
+  //Memoizes the search query value.
+  const searchQuery = useMemo(
+    () => searchParams.get('search')?.toString(),
+    [searchParams],
+  );
+
   useEffect(() => {
-    if (path.includes('tags') && params.tag) {
-      setTag(`#${decodeURIComponent(params.tag)}`);
-      setShowSearch(true);
-    }
+    searchQuery && setShowSearch(true);
     return () => {
       setShowSearch(false);
       setShowMenu(false);
     };
-  }, [params.tag, path]);
+  }, [searchQuery, path]);
 
   return (
-    <div className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 z-10 py-2">
+    <div className="w-full md:w-[680px] h-14 px-3 bg-white dark:bg-dark-surface sticky top-0 z-10 py-2">
       <nav className="flex justify-between items-center">
         <div>
           {/* If home page show logo and search is hidden */}
-          {!showSearch && isHomePage && (
+          {isHomePage && !showSearch && (
             <Link href="/" className="text-2xl">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/lightLogo.svg" alt="logo" />
+              <Logo fill={resolvedTheme === 'light' ? 'black' : 'white'} />
             </Link>
           )}
           {/* Show back button instead of logo on other pages */}
@@ -89,7 +100,7 @@ const Navbar = () => {
             <Hug onClick={handleBackClick}>
               <RiArrowRightLine
                 size={24}
-                className="fill-light-onSurfaceVariant"
+                className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
               />
             </Hug>
           )}
@@ -101,7 +112,7 @@ const Navbar = () => {
               <Hug onClick={() => setShowSearch(true)}>
                 <RiSearchLine
                   size="24"
-                  className="fill-light-onSurfaceVariant"
+                  className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                 />
               </Hug>
             </div>
@@ -109,7 +120,6 @@ const Navbar = () => {
           {/* Show search input when showSearch is true */}
           {showSearch && (
             <Search
-              tag={tag}
               isShow={showSearch}
               onHideSearch={() => setShowSearch(false)}
             />
@@ -118,7 +128,10 @@ const Navbar = () => {
             {/* Show menu ico when showMenu is true */}
             {!showMenu && (
               <Hug onClick={() => setShowMenu(true)}>
-                <RiMenuLine size="24" className="fill-light-onSurfaceVariant" />
+                <RiMenuLine
+                  size="24"
+                  className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                />
               </Hug>
             )}
 
@@ -126,15 +139,20 @@ const Navbar = () => {
               <>
                 <button
                   onClick={() => setShowMenu(false)}
-                  className="flex items-center justify-center h-[40px] w-[40px]  bg-light-surfaceContainer rounded-full hover:cursor-pointer"
+                  className="flex items-center justify-center h-[40px] w-[40px]
+                     bg-light-surfaceContainer dark:bg-dark-surfaceContainerLow 
+                     rounded-full hover:cursor-pointer"
                 >
-                  <RiCloseLine size={24} className="text-light-onSurface" />
+                  <RiCloseLine
+                    size={24}
+                    className="text-light-onSurface dark:text-dark-onSurface"
+                  />
                 </button>
                 <div className="absolute left-1 top-14">
                   <Menu
                     onClose={() => setShowMenu(false)}
                     menuItems={menuItems}
-                    subMenuItems={subMenuItems}
+                    subMenuItems={subMenuItemsMemo}
                     footerItems={footerItems}
                   />
                 </div>

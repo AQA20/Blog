@@ -25,10 +25,14 @@ ArticleTag.init(
       allowNull: false,
       defaultValue: new Date(),
     },
+    deletedAt: {
+      type: DataTypes.DATE,
+    },
   },
   {
     sequelize,
     timestamps: true,
+    paranoid: true,
   },
 );
 

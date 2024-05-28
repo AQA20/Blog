@@ -1,18 +1,24 @@
 'use client';
 
 import { Children, cloneElement } from 'react';
-import { register } from 'swiper/element/bundle';
-
-register();
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/swiper-bundle.css';
 
 const SwapIt = ({ slidesPerView, children }) => {
   const swiperChildren = Children.map(children, (child, index) => {
-    return cloneElement(<swiper-slide>{child}</swiper-slide>, { key: index });
+    return cloneElement(<SwiperSlide className="!w-fit">{child}</SwiperSlide>, {
+      key: index,
+    });
   });
   return (
-    <swiper-container slides-per-view={slidesPerView}>
-      {swiperChildren}
-    </swiper-container>
+    <div>
+      <Swiper
+        className="flex justify-center items-center"
+        slidesPerView={slidesPerView}
+      >
+        {swiperChildren}
+      </Swiper>
+    </div>
   );
 };
 
