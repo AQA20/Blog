@@ -42,11 +42,7 @@ export default async function RootLayout({ children }) {
                   <Navbar />
                 </Suspense>
                 <div className="px-3 md:w-[680px]">
-                  <section className="mb-6">
-                    <Suspense fallback="...loading articles">
-                      {children}
-                    </Suspense>
-                  </section>
+                  <section className="mb-6">{children}</section>
                 </div>
               </section>
               <aside className="hidden md:block">

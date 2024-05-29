@@ -44,7 +44,7 @@ const Footer = () => {
               className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=2')}`}
               href="/policy?index=2"
             >
-              سياسة الكوكيز
+              سياسة الخصوصية
             </a>
           </li>
           <li>
@@ -52,7 +52,7 @@ const Footer = () => {
               className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=3')}`}
               href="/policy?index=3"
             >
-              سياسة الخصوصية
+              سياسة الكوكيز
             </a>
           </li>
         </ul>

@@ -25,25 +25,25 @@ const menuItems = [
   { name: 'الهاشتاقات', url: '/tags', icon: <RiHashtag size={24} /> },
 ];
 
-const subMenuItems = (setTheme, resolvedTheme) => ({
+const subMenuItems = (setTheme, theme) => ({
   'طابع الواجهة': [
     {
       name: 'تلقائي',
-      onClick: () => setTheme('auto'),
+      onClick: () => setTheme('system'),
       icon: <RiContrastFill size={24} />,
-      style: resolvedTheme === 'auto' ? 'active' : '',
+      style: theme === 'system' ? 'active' : '',
     },
     {
       name: 'وضع الليل',
       onClick: () => setTheme('dark'),
       icon: <RiMoonLine size={24} />,
-      style: resolvedTheme === 'dark' && resolvedTheme ? 'active' : '',
+      style: theme === 'dark' ? 'active' : '',
     },
     {
       name: 'وضع النهار',
       onClick: () => setTheme('light'),
       icon: <RiSunLine size={24} />,
-      style: resolvedTheme === 'light' ? 'active' : '',
+      style: theme === 'light' ? 'active' : '',
     },
   ],
 });
@@ -60,11 +60,11 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
   const path = usePathname();
-  const { setTheme, resolvedTheme } = useTheme();
+  const { setTheme, theme } = useTheme();
   const isHomePage = path === '/';
   const subMenuItemsMemo = useMemo(
-    () => subMenuItems(setTheme, resolvedTheme),
-    [resolvedTheme],
+    () => subMenuItems(setTheme, theme),
+    [theme],
   );
 
   const handleBackClick = () => {
@@ -92,7 +92,7 @@ const Navbar = () => {
           {/* If home page show logo and search is hidden */}
           {isHomePage && !showSearch && (
             <Link href="/" className="text-2xl">
-              <Logo fill={resolvedTheme === 'light' ? 'black' : 'white'} />
+              <Logo fill={theme === 'light' ? 'black' : 'white'} />
             </Link>
           )}
           {/* Show back button instead of logo on other pages */}
