@@ -18,7 +18,8 @@
     "seed:rollback:all": "node --env-file .env umzug/seed down --to 0",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "dev": "nodemon --watch . --exec 'node --env-file .env server.js'"
+    "dev": "nodemon --watch . --exec 'node --env-file .env server.js'",
+    "start": "node server.js"
   },
   "author": "Ahmad AbuDawaba",
   "license": "ISC",
