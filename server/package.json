@@ -4,6 +4,9 @@
   "description": "Blog API",
   "type": "module",
   "main": "server.js",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "migration:create": "node --env-file .env umzug/migrate create --name",
     "migrate": "node --env-file .env umzug/migrate up",
