@@ -13,7 +13,7 @@ jobs:
       mysql:
         image: mysql:latest
         ports:
-          - ${{ secrets.DB_PORT }}:${{ secrets.DB_PORT }}
+          - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.DB_NAME }}
