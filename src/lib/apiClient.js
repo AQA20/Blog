@@ -2,10 +2,7 @@ import axios from 'axios';
 
 // Create Axios instance with default base URL
 const apiClient = axios.create({
-  baseURL:
-    process.env.NODE_ENV === 'development'
-      ? process.env.DEV_API_URL
-      : process.env.PROD_API_URL,
+  baseURL: process.env.API_URL,
 });
 
 // Add a request interceptor for error handling
