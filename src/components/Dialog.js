@@ -38,8 +38,11 @@ const Dialog = ({
       p-6 
       border 
       border-solid 
-      border-light-outlineVariant 
-      bg-light-surfaceContainerHigh rounded-lg
+      border-light-outlineVariant
+      dark:border-dark-outlineVariant
+      bg-light-surfaceContainerHigh
+      dark:bg-dark-surfaceContainerHigh 
+      rounded-lg
       "
       ref={dialogRef}
     >
