@@ -20,18 +20,23 @@ const FilterBadges = ({ searchParams }) => {
           link={`?${filter('shares', 'DESC', params)}`}
         />
       </span>
-      <SwapIt className="sm:hidden" slidesPerView={2}>
-        <Badge
-          title="الأحدث"
-          link={`?${filter('createdAt', 'DESC', params)}`}
-        />
-        <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
-        <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
-        <Badge
-          title="الأكثر مشاركة"
-          link={`?${filter('shares', 'DESC', params)}`}
-        />
-      </SwapIt>
+      <section className="-ml-[.75rem]">
+        <SwapIt className="sm:hidden " slidesPerView={2}>
+          <Badge
+            title="الأحدث"
+            link={`?${filter('createdAt', 'DESC', params)}`}
+          />
+          <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
+          <Badge
+            title="الأقدم"
+            link={`?${filter('createdAt', 'ASC', params)}`}
+          />
+          <Badge
+            title="الأكثر مشاركة"
+            link={`?${filter('shares', 'DESC', params)}`}
+          />
+        </SwapIt>
+      </section>
     </>
   );
 };
