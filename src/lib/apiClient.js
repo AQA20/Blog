@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+console.log(process.env);
 // Create Axios instance with default base URL
 const apiClient = axios.create({
-  baseURL: process.env.API_URL || 'http://localhost:8080/',
+  baseURL: process.env.API_URL,
 });
 
 // Add a request interceptor for error handling
