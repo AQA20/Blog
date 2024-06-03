@@ -79,12 +79,7 @@ app.use(helmet());
 
 // Todo configure cors settings for better security
 // Use cors middleware
-app.use(
-  cors({
-    origin: '*', // Allow requests from all origins
-    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
-  }),
-);
+app.use(cors());
 
 // A middleware to parse JSON payloads
 app.use(express.json());
