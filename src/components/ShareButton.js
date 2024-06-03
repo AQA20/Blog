@@ -16,7 +16,7 @@ const ShareButton = ({
   const [copyNotification, setCopyNotification] = useState(false);
   const onShare = async () => {
     const slug = decodeURIComponent(clipboardContent);
-    await navigator.clipboard.writeText(`${window.location.host}/${slug}`);
+    await navigator.clipboard.writeText(`${window.location.origin}/${slug}`);
     setCopyNotification(true);
   };
 
