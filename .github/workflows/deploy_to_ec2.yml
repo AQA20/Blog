@@ -28,7 +28,7 @@ jobs:
             cd server && /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm i && cd .. &&
             rm -rf .next && sudo rm -rf /var/www/.next &&
             npm run build &&
-            sudo cp -rp /home/***/blog/.next /var/www/.next &&
+            sudo cp -rp /home/ubuntu/blog/.next /var/www/.next &&
             pm2 restart 1 && pm2 restart 2 &&
             sudo systemctl reload nginx &&
             sudo systemctl restart nginx
