@@ -23,8 +23,10 @@ jobs:
             eval "$(ssh-agent -s)" &&
             ssh-add ~/.ssh/github_AI_Blog &&
             cd blog && git pull &&
-            npm i &&
-            cd server && npm i && cd .. &&
+            /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm i &&
+            cd server &&
+            /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm i
+            && cd .. &&
             rm -rf .next && sudo rm -rf /var/www/.next &&
             npm run build &&
             sudo cp -rp /home/ubuntu/blog/.next /var/www/.next &&
