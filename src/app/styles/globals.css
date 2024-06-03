@@ -18,6 +18,7 @@ html {
       border
     bg-light-surfaceContainer 
     bg-dark-surfaceContainer
+      outline-0 
       rounded-3xl px-12 ml-0;
   }
   .suggestions {

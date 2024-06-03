@@ -33,10 +33,9 @@
     opacity: 1;
   }
 }
-.search-input:focus, .search-input::-moz-focus-outer {
+.search-input:focus {
+  border: none;
   outline: none;
-  -moz-outline: none;
-  -webkit-outline: none;
 }
 
 /* On viewPort 768px and greater */
