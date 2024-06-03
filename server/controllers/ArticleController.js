@@ -211,7 +211,6 @@ export default class ArticleController {
   // Get search article suggestions
   static async getSearchSuggestions(req, res, next) {
     const search = req.query.search;
-
     const articles = await Article.findAll({
       where: {
         status: Article.APPROVED,
@@ -221,10 +220,9 @@ export default class ArticleController {
         },
       },
       limit: 5,
-      attributes: ['title'],
+      attributes: ['title', 'slug'],
       order: [['createdAt', 'DESC']],
     });
-
     return resHandler(200, articles, res);
   }
 

@@ -25,7 +25,7 @@ export default async function Home({ searchParams }) {
   return (
     <Suspense fallback="...loading articles">
       <article className="my-4">
-        <Hero article={data.articles[0]} />
+        {!searchParams?.page && <Hero article={data.articles[0]} />}
         <Badge
           title="الأحدث"
           link={`?${filter('createdAt', 'DESC', params)}`}

@@ -85,14 +85,6 @@ const Search = ({ isShow, onHideSearch }) => {
     }
   };
 
-  const handleSuggestClick = (value) => {
-    clearTimeout(timeoutId);
-    params.set('search', value.trim());
-    router.replace(`/search?${params.toString()}`);
-    setSuggestions({ data: [], show: false });
-    setInputValue(value.trim());
-  };
-
   const onFocus = () => {
     clearTimeout(timeoutId);
     setSuggestions((prev) => ({ ...prev, show: false }));
@@ -115,18 +107,9 @@ const Search = ({ isShow, onHideSearch }) => {
     }
   };
 
-  // Add on mouse down event to the suggestion button, to make sure the click is triggered
-  // Before the onBlur event hides the component.
-  const onMouseDown = (e) => {
-    e.preventDefault();
-  };
-  const onTouchStart = (e) => {
-    e.preventDefault();
-  };
-
   return (
     <Suspense fallback="...loading">
-      <section ref={section}>
+      <section ref={section} className="w-full">
         <label htmlFor="term">
           {''}
           <input
@@ -156,26 +139,25 @@ const Search = ({ isShow, onHideSearch }) => {
 
         {suggestions.show && suggestions.data?.length > 0 && (
           <ul
+            ref={suggestionRef}
             className="suggestions rounded-tr-none rounded-tl-none block
            bg-light-surfaceContainerHigh dark:bg-dark-surfaceContainerHigh
             dark:text-dark-onSurfaceVariant"
           >
             <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
             {suggestions.data?.map((suggestion) => (
-              <button
+              <a
                 key={suggestion.title}
-                onClick={() => handleSuggestClick(suggestion.title)}
-                onMouseDown={onMouseDown}
-                onTouchStart={onTouchStart}
-                className="dark:hover:text-dark-primary truncate"
+                href={`/${suggestion.slug}`}
+                className="transition-color duration-100 hover:text-light-primary dark:hover:text-dark-primary w-full"
               >
-                <li className="truncate">
+                <li>
                   <Hug>
                     <RiSearchLine size={24} />
                   </Hug>
-                  {suggestion.title}
+                  <div className="truncate">{suggestion.title}</div>
                 </li>
-              </button>
+              </a>
             ))}
           </ul>
         )}
@@ -188,7 +170,7 @@ const Search = ({ isShow, onHideSearch }) => {
             />
           </Hug>
         </div>
-        <div className="z-11 absolute top-[16%] left-14">
+        <div className="z-11 absolute top-[16%] left-16">
           {inputValue && (
             <Hug onClick={onHideSearch}>
               <RiCloseFill

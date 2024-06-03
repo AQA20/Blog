@@ -24,46 +24,39 @@ export default async function RootLayout({ children }) {
   });
 
   return (
-    <>
-      <Head>
-        <link rel="icon" href="/favicon.svg?v=2" type="image/svg+xml" />
-      </Head>
-      <html
-        className={`pt-4 scroll-smooth ${noto_sans_arabic.variable} dark:bg-dark-surface`}
-        lang="ar"
-        dir="rtl"
-        suppressHydrationWarning
-      >
-        <Providers>
-          <body className="md:w-[680px] font-noto">
-            <main className="md:flex min-height">
-              <section>
-                <Suspense fallback="...loading">
-                  <Navbar />
-                </Suspense>
-                <div className="px-3 md:w-[680px]">
-                  <section className="mb-6">
-                    {' '}
-                    <Suspense fallback="...loading articles">
-                      {children}
-                    </Suspense>
-                  </section>
-                </div>
-              </section>
-              <aside className="hidden md:block">
-                <Suspense fallback="...loading sidebar content">
-                  <Sidebar articles={articles} />
-                </Suspense>
-              </aside>
-            </main>
-            <div className="px-3">
+    <html
+      className={`pt-4 scroll-smooth ${noto_sans_arabic.variable} dark:bg-dark-surface`}
+      lang="ar"
+      dir="rtl"
+      suppressHydrationWarning
+    >
+      <Providers>
+        <body className="md:w-[680px] font-noto">
+          <main className="md:flex min-height">
+            <section>
               <Suspense fallback="...loading">
-                <Footer />
+                <Navbar />
               </Suspense>
-            </div>
-          </body>
-        </Providers>
-      </html>
-    </>
+              <div className="px-3 md:w-[680px]">
+                <section className="mb-6">
+                  {' '}
+                  <Suspense fallback="...loading articles">{children}</Suspense>
+                </section>
+              </div>
+            </section>
+            <aside className="hidden md:block">
+              <Suspense fallback="...loading sidebar content">
+                <Sidebar articles={articles} />
+              </Suspense>
+            </aside>
+          </main>
+          <div className="px-3">
+            <Suspense fallback="...loading">
+              <Footer />
+            </Suspense>
+          </div>
+        </body>
+      </Providers>
+    </html>
   );
 }

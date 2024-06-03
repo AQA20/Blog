@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { RiShareLine } from '@remixicon/react';
+import { RiReplyLine } from '@remixicon/react';
 import Notification from './Notification';
 import Hug from './Hug';
 import { updateArticleShare } from '@/lib';
@@ -37,11 +37,11 @@ const ShareButton = ({
           className={`${buttonStyle} flex rounded-full gap-2 py-[5px] pr-4 pl-3 justify-between items-center`}
         >
           <p className={`${textColor}`}>مشاركة</p>
-          <RiShareLine size="20" className={`${iconColor}`} />
+          <RiReplyLine size="20" className={`${iconColor}`} />
         </button>
       ) : (
         <Hug onClick={onShare}>
-          <RiShareLine
+          <RiReplyLine
             size="20"
             className="fill-light-primary dark:fill-dark-primary"
           />

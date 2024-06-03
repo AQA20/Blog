@@ -1,7 +1,7 @@
 import Joi from 'joi';
 
 const getSearchSuggestionsRequest = Joi.object({
-  search: Joi.string().trim().lowercase().required(),
+  search: Joi.string().trim().allow(''),
 });
 
 const getSearchSuggestionsRequestMiddleware = (req, res, next) => {

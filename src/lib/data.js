@@ -7,11 +7,14 @@ const handleAsyncError = (func) => {
     try {
       return await func(...args);
     } catch (error) {
-      console.error(error);
+      console.error('error', error);
       if (error?.message === 'Article is not found') {
         return notFound();
       }
-      // throw new Error(`${error.message} - ${error.statusCode}`);
+      if (error?.message && error?.statusCode) {
+        throw new Error(`${error?.message} - ${error?.statusCode}`);
+      }
+      throw new Error(error);
     }
   };
 };
@@ -43,15 +46,13 @@ export const fetchArticles = handleAsyncError(async (options) => {
   return data;
 });
 
-export const fetchSuggestions = handleAsyncError(async (search = 'ا') => {
-  if (search) {
-    const {
-      data: { data },
-    } = await apiClient.get(`/api/articles/suggestions?search=${search}`);
+export const fetchSuggestions = handleAsyncError(async (search) => {
+  const term = search || '';
 
-    return data;
-  }
-  return [];
+  const {
+    data: { data },
+  } = await apiClient.get(`/api/articles/suggestions?search=${term}`);
+  return data;
 });
 
 export const fetchTags = handleAsyncError(async (limit = 7) => {

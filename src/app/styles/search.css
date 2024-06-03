@@ -1,25 +1,9 @@
-/* On viewPort 768px and greater */
-@media (min-width: 768px) {
-  .search-input {
-    width: 0;
-    animation: expandWidth 0.3s forwards;
-  }
-}
-
-/* On viewPort 640px and smaller */
-@media (max-width: 640px) {
-  .search-input {
-    width: 0;
-    animation: expandWidthSm 0.3s forwards;
-  }
-}
-
 @keyframes expandWidth {
   0% {
     width: 0;
   }
   100% {
-    width: 616px;
+    width: 608px;
   }
 }
 
@@ -28,7 +12,7 @@
     width: 0;
   }
   100% {
-    width: calc(100vw - 64px);
+    width: calc(100vw - 72px);
   }
 }
 
@@ -49,12 +33,36 @@
     opacity: 1;
   }
 }
+
+/* On viewPort 768px and greater */
+@media (min-width: 768px) {
+  .search-input {
+    width: 0;
+    animation: expandWidth 0.3s forwards;
+  }
+}
+
+/* On viewPort 640px and smaller */
+@media (max-width: 640px) {
+  .search-input {
+    width: 0;
+    animation: expandWidthSm 0.3s forwards;
+  }
+}
+
 /* End of search component styles & animations */
 
 /* Search component suggestions styles & animations */
 .suggestions {
   animation: expandHeight 0.3s 0.4s forwards;
   position: absolute;
+  width: 608px;
+}
+
+@media (max-width: 640px) {
+  .suggestions {
+    width: calc(100vw - 72px);
+  }
 }
 
 .suggestions li {
