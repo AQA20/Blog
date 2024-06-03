@@ -62,7 +62,7 @@ export default async function ArticleLayout({ article, children }) {
       <div className="my-4">
         <h3 className="text-lg">اقرأ أيضا</h3>
         <section className="sm:hidden -ml-[.75rem]">
-          <SwapIt slidesPerView={4.2}>
+          <SwapIt slidesPerView={3}>
             {tags.map((tag) => (
               <Badge
                 key={tag.id}
@@ -72,14 +72,16 @@ export default async function ArticleLayout({ article, children }) {
             ))}
           </SwapIt>
         </section>
-        <section className="hidden sm:flex">
-          {tags.map((tag) => (
-            <Badge
-              key={tag.id}
-              title={tag.name}
-              link={`/tags/${tag.name}?search=${tag.name}`}
-            />
-          ))}
+        <section className="hidden sm:flex w-full">
+          <div>
+            {tags.map((tag) => (
+              <Badge
+                key={tag.id}
+                title={tag.name}
+                link={`/tags/${tag.name}?search=${tag.name}`}
+              />
+            ))}
+          </div>
         </section>
       </div>
 
