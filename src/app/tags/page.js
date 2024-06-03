@@ -8,7 +8,7 @@ export default async function Page({ params, searchParams }) {
     page: searchParams?.page,
   });
   return (
-    <div className="mx-auto grid grid-cols-2 sm:grid-cols-4  gap-2">
+    <div className="mx-auto mt-2 grid grid-cols-2 sm:grid-cols-4 gap-2">
       {tags.map((tag) => (
         <Tag key={tag.name} name={tag.name} />
       ))}

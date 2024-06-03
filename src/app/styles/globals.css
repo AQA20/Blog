@@ -18,7 +18,6 @@ html {
       border
     bg-light-surfaceContainer 
     bg-dark-surfaceContainer
-      outline-0 
       rounded-3xl px-12 ml-0;
   }
   .suggestions {
@@ -97,6 +96,6 @@ p {
 }
 @media (max-width: 768px) {
   .min-height {
-    min-height: calc(100dvh - 80px);
+    min-height: calc(100dvh - 65px);
   }
 }

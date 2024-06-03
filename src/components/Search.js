@@ -155,7 +155,7 @@ const Search = ({ isShow, onHideSearch }) => {
                   <Hug>
                     <RiSearchLine size={24} />
                   </Hug>
-                  <div className="truncate">{suggestion.title}</div>
+                  <div className="truncate w-full">{suggestion.title}</div>
                 </li>
               </a>
             ))}

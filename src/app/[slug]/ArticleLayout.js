@@ -62,7 +62,7 @@ export default async function ArticleLayout({ article, children }) {
       <div className="my-4">
         <h3 className="text-lg">اقرأ أيضا</h3>
         <section className="sm:hidden -ml-[.75rem]">
-          <SwapIt slidesPerView={3}>
+          <SwapIt slidesPerView={3.8}>
             {tags.map((tag) => (
               <Badge
                 key={tag.id}

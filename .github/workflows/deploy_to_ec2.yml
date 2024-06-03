@@ -26,6 +26,7 @@ jobs:
             source ~/.nvm/nvm.sh && nvm use v22.2.0 &&
             ~/.nvm/versions/node/v22.2.0/bin/npm i &&
             cd server && ~/.nvm/versions/node/v22.2.0/bin/npm i && cd .. &&
+            ~/.nvm/versions/node/v22.2.0/bin/npm run migrate &&
             rm -rf .next && sudo rm -rf /var/www/.next &&
             npm run build &&
             sudo cp -rp ~/blog/.next /var/www/.next &&

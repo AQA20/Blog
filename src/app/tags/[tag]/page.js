@@ -1,8 +1,7 @@
 import Card from '@/components/Card';
-import Badge from '@/components/Badge';
 import { fetchTagArticles, timeAgo } from '@/lib';
-import filter from '@/lib/filter';
 import Paginate from '@/components/Paginate';
+import FilterBadges from '@/components/FilterBadge';
 
 export default async function Page({ searchParams, params }) {
   const tag = params?.tag.replace(/-/g, ' ').replace('#', '').trim();
@@ -12,24 +11,11 @@ export default async function Page({ searchParams, params }) {
     page: searchParams?.page,
     search: searchParams?.search,
   });
-  const urlParams = new URLSearchParams(searchParams);
   return (
     <div>
-      <p className="my-4">تم العثور على 250 نتيجة</p>
+      {/* <p className="my-4">تم العثور على 250 نتيجة</p> */}
       <div className="my-2">
-        <Badge
-          title="الأحدث"
-          link={`?${filter('createdAt', 'DESC', urlParams)}`}
-        />
-        <Badge title="الأشهر" link={`?${filter('views', 'DESC', urlParams)}`} />
-        <Badge
-          title="الأقدم"
-          link={`?${filter('createdAt', 'ASC', urlParams)}`}
-        />
-        <Badge
-          title="الأكثر مشاركة"
-          link={`?${filter('shares', 'DESC', urlParams)}`}
-        />
+        <FilterBadges params={searchParams} />
       </div>
       {articles.map((article) => (
         <Card

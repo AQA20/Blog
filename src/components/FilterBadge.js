@@ -1,27 +1,39 @@
 'use client';
 
 import Badge from './Badge';
+import filter from '@/lib/filter';
+import SwapIt from './SwapIt';
 
-const FilterBadge = ({ title, link }) => {
+const FilterBadges = ({ searchParams }) => {
+  const params = new URLSearchParams(searchParams);
   return (
     <>
-      <Badge
-        title={title}
-        link={link}
-        isActive={link.includes('orderBy=createdAt&order=DESC') || !link}
-      />
-      <Badge
-        title={title}
-        link={link}
-        isActive={link.includes('orderBy=createdAt&order=DESC') || !link}
-      />
-      <Badge
-        title={title}
-        link={link}
-        isActive={link.includes('orderBy=createdAt&order=DESC') || !link}
-      />
+      <span className="hidden sm:block">
+        <Badge
+          title="الأحدث"
+          link={`?${filter('createdAt', 'DESC', params)}`}
+        />
+        <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
+        <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
+        <Badge
+          title="الأكثر مشاركة"
+          link={`?${filter('shares', 'DESC', params)}`}
+        />
+      </span>
+      <SwapIt className="sm:hidden" slidesPerView={2}>
+        <Badge
+          title="الأحدث"
+          link={`?${filter('createdAt', 'DESC', params)}`}
+        />
+        <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
+        <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
+        <Badge
+          title="الأكثر مشاركة"
+          link={`?${filter('shares', 'DESC', params)}`}
+        />
+      </SwapIt>
     </>
   );
 };
 
-export default FilterBadge;
+export default FilterBadges;

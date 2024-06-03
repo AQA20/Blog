@@ -33,6 +33,11 @@
     opacity: 1;
   }
 }
+.search-input:focus, .search-input::-moz-focus-outer {
+  outline: none;
+  -moz-outline: none;
+  -webkit-outline: none;
+}
 
 /* On viewPort 768px and greater */
 @media (min-width: 768px) {

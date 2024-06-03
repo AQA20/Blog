@@ -86,7 +86,7 @@ const Navbar = () => {
   }, [searchQuery, path]);
 
   return (
-    <div className="w-full md:w-[680px] h-14 px-3 bg-white dark:bg-dark-surface sticky top-0 z-10 py-2">
+    <div className="w-full md:w-[680px] h-14 px-3 bg-white sticky top-0 z-10 py-2 dark:!bg-dark-surface">
       <nav className="flex justify-between items-center">
         <div>
           {/* If home page show logo and search is hidden */}

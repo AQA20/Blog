@@ -1,10 +1,9 @@
 import Hero from '@/components/Hero';
-import Badge from '@/components/Badge';
 import Card from '@/components/Card';
 import { fetchArticles, timeAgo } from '@/lib';
-import filter from '@/lib/filter';
 import { Suspense } from 'react';
 import Paginate from '@/components/Paginate';
+import FilterBadges from '@/components/FilterBadge';
 
 // Todo implement unit & integration tests
 
@@ -20,24 +19,14 @@ export default async function Home({ searchParams }) {
     page: searchParams?.page,
   });
 
-  const params = new URLSearchParams(searchParams);
-
   return (
     <Suspense fallback="...loading articles">
       <article className="my-4">
-        {!searchParams?.page && <Hero article={data.articles[0]} />}
-        <Badge
-          title="الأحدث"
-          link={`?${filter('createdAt', 'DESC', params)}`}
-        />
-        <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
-        <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
-        <Badge
-          title="الأكثر مشاركة"
-          link={`?${filter('shares', 'DESC', params)}`}
-        />
+        {!searchParams?.page && !searchParams?.orderBy && (
+          <Hero article={data.articles[0]} />
+        )}
+        <FilterBadges params={searchParams} />
         <div className="my-6"></div>
-
         <section id="#articles">
           {data.articles.map((article) => {
             return (

@@ -1,8 +1,7 @@
-import Badge from '@/components/Badge';
 import Card from '@/components/Card';
 import { fetchArticles, timeAgo } from '@/lib';
-import filter from '@/lib/filter';
 import Paginate from '@/components/Paginate';
+import FilterBadges from '@/components/FilterBadge';
 
 export const metadata = {
   title: 'Blog',
@@ -17,16 +16,9 @@ export default async function Home({ searchParams }) {
     search: searchParams?.search,
   });
 
-  const params = new URLSearchParams(searchParams);
   return (
     <article className="my-4">
-      <Badge title="الأحدث" link={`?${filter('createdAt', 'DESC', params)}`} />
-      <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
-      <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
-      <Badge
-        title="الأكثر مشاركة"
-        link={`?${filter('shares', 'DESC', params)}`}
-      />
+      <FilterBadges params={searchParams} />
       <div className="my-6"></div>
 
       <section id="#articles">
