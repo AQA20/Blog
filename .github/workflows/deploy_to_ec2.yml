@@ -24,7 +24,7 @@ jobs:
             ssh-add ~/.ssh/github_AI_Blog &&
             cd blog && git pull &&
             source ~/.nvm/nvm.sh && nvm use v22.2.0 &&
-            ~/nvm/versions/node/v22.2.0/bin/npm i &&
+            ~/.nvm/versions/node/v22.2.0/bin/npm i &&
             cd server && ~/.nvm/versions/node/v22.2.0/bin/npm i && cd .. &&
             rm -rf .next && sudo rm -rf /var/www/.next &&
             npm run build &&
