@@ -25,11 +25,10 @@ jobs:
             cd blog && git pull &&
             source ~/.nvm/nvm.sh && nvm use v22.2.0 &&
             ~/.nvm/versions/node/v22.2.0/bin/npm i &&
-            cd server && ~/.nvm/versions/node/v22.2.0/bin/npm i && cd .. &&
+            cd server && ~/.nvm/versions/node/v22.2.0/bin/npm i &&
             ~/.nvm/versions/node/v22.2.0/bin/npm run migrate &&
-            rm -rf .next && sudo rm -rf /var/www/.next &&
-            npm run build &&
-            sudo cp -rp ~/blog/.next /var/www/.next &&
+            cd .. && rm -rf .next && sudo rm -rf /var/www/.next &&
+            npm run build && sudo cp -rp ~/blog/.next /var/www/.next &&
             pm2 restart 1 && pm2 restart 2 &&
             sudo systemctl reload nginx &&
             sudo systemctl restart nginx
