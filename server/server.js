@@ -79,7 +79,12 @@ app.use(helmet());
 
 // Todo configure cors settings for better security
 // Use cors middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://34.201.174.231', 'http://localhost:3000'], // Allow requests from these origins
+    credentials: true, // Allow credentials (e.g., cookies, authorization headers)
+  }),
+);
 
 // A middleware to parse JSON payloads
 app.use(express.json());
