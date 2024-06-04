@@ -8,6 +8,10 @@
   margin: 1rem auto;
 }
 
+#articleContent img {
+  border-radius: 1rem;
+}
+
 
 @layer components {
 

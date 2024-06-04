@@ -5,6 +5,7 @@ import SwapIt from '@/components/SwapIt';
 import { fetchTags, fetchArticles } from '@/lib';
 import timeAgo from '@/lib/timeAgo';
 import '../styles/article.css';
+import { Suspense } from 'react';
 
 export default async function ArticleLayout({ article, children }) {
   const { tags } = await fetchTags();
@@ -22,7 +23,7 @@ export default async function ArticleLayout({ article, children }) {
         slug={article.slug}
         id={article.id}
         description={article.description}
-        tags={article.tags}
+        tags={article.Tags}
         imgUrl={article.featuredImg}
         timeAgo={timeAgo(article.createdAt)}
         isSmall={true}
@@ -32,7 +33,7 @@ export default async function ArticleLayout({ article, children }) {
   };
 
   return (
-    <div>
+    <Suspense fallback={<h3>...loading article content</h3>}>
       <section>{children}</section>
       <section
         className="rounded-xl bg-light-surfaceContainerHigh 
@@ -101,6 +102,6 @@ export default async function ArticleLayout({ article, children }) {
           </section>
         </SwapIt>
       </section>
-    </div>
+    </Suspense>
   );
 }

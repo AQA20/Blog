@@ -5,7 +5,7 @@ import Sidebar from '@/components/Sidebar';
 import { fetchArticles } from '@/lib';
 import { Noto_Sans_Arabic } from 'next/font/google';
 import { Suspense } from 'react';
-import { Providers } from './providers';
+import { ThemeProvider } from 'next-themes';
 import CookiesDialog from '@/components/CookiesDialog';
 
 // If loading a variable font, you don't need to specify the font weight
@@ -30,34 +30,35 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
-      <Providers>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <body className="md:w-[680px] font-noto">
           <main className="md:flex min-height">
             <section>
-              <Suspense fallback="...loading">
+              <Suspense fallback={<h3>...loading navbar content</h3>}>
                 <Navbar />
               </Suspense>
               <div className="px-3 md:w-[680px]">
                 <section className="mb-6">
-                  {' '}
-                  <Suspense fallback="...loading articles">{children}</Suspense>
+                  <Suspense fallback={<h3>...loading articles</h3>}>
+                    {children}
+                  </Suspense>
                 </section>
               </div>
             </section>
             <aside className="hidden md:block">
-              <Suspense fallback="...loading sidebar content">
+              <Suspense fallback={<h3>...loading sidebar content</h3>}>
                 <Sidebar articles={articles} />
               </Suspense>
             </aside>
           </main>
           <div className="px-3">
-            <Suspense fallback="...loading">
+            <Suspense fallback={<h3>...loading footer content</h3>}>
               <Footer />
             </Suspense>
           </div>
           <CookiesDialog />
         </body>
-      </Providers>
+      </ThemeProvider>
     </html>
   );
 }
