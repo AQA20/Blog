@@ -4,7 +4,7 @@ import { Children, cloneElement } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 
-const SwapIt = ({ slidesPerView, children }) => {
+const SwapIt = ({ slidesPerView = 1, children }) => {
   const swiperChildren = Children.map(children, (child, index) => {
     return cloneElement(<SwiperSlide className="!w-fit">{child}</SwiperSlide>, {
       key: index,

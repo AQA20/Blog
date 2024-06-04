@@ -1,7 +1,7 @@
 import Card from '@/components/Card';
 import { fetchTagArticles, timeAgo } from '@/lib';
 import Paginate from '@/components/Paginate';
-import FilterBadges from '@/components/FilterBadge';
+import FilterBadges from '@/components/FilterBadges';
 
 export default async function Page({ searchParams, params }) {
   const tag = params?.tag.replace(/-/g, ' ').replace('#', '').trim();

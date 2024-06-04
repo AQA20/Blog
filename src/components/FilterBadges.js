@@ -20,8 +20,8 @@ const FilterBadges = ({ searchParams }) => {
           link={`?${filter('shares', 'DESC', params)}`}
         />
       </span>
-      <section className="-ml-[.75rem]">
-        <SwapIt className="sm:hidden " slidesPerView={2}>
+      <section className="sm:hidden -ml-[.75rem]">
+        <SwapIt>
           <Badge
             title="الأحدث"
             link={`?${filter('createdAt', 'DESC', params)}`}

@@ -1,7 +1,7 @@
 import Card from '@/components/Card';
 import { fetchArticles, timeAgo } from '@/lib';
 import Paginate from '@/components/Paginate';
-import FilterBadges from '@/components/FilterBadge';
+import FilterBadges from '@/components/FilterBadges';
 
 export const metadata = {
   title: 'Blog',
