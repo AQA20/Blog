@@ -93,7 +93,7 @@ p {
 /* Keep footer at the bottom of the page */
 /* The footer height including padding is 80px */
 .min-height {
-  min-height: calc(100dvh - 120px);
+  min-height: calc(100dvh - 140px);
 }
 @media (max-width: 768px) {
   .min-height {
