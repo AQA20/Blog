@@ -163,7 +163,7 @@ const Search = ({ isShow, onHideSearch }) => {
         )}
 
         <div className="absolute top-[16%] right-4">
-          <Hug onClick={router.back}>
+          <Hug onClick={onHideSearch}>
             <RiArrowRightLine
               size={20}
               className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"

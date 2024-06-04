@@ -97,6 +97,6 @@ p {
 }
 @media (max-width: 768px) {
   .min-height {
-    min-height: calc(100dvh - 104px);
+    min-height: calc(100dvh - 110px);
   }
 }
