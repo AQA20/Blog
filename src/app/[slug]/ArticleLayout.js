@@ -25,7 +25,7 @@ export default async function ArticleLayout({ article, children }) {
         tags={article.tags}
         imgUrl={article.featuredImg}
         timeAgo={timeAgo(article.createdAt)}
-        isXSmall={true}
+        isSmall={true}
         footer={true}
       />
     );
