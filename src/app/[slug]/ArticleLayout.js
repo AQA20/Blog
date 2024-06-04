@@ -32,7 +32,7 @@ export default async function ArticleLayout({ article, children }) {
   };
 
   return (
-    <>
+    <div>
       <section>{children}</section>
       <section
         className="rounded-xl bg-light-surfaceContainerHigh 
@@ -59,7 +59,7 @@ export default async function ArticleLayout({ article, children }) {
           />
         </footer>
       </section>
-      <div className="my-4">
+      <section className="my-4">
         <h3 className="text-lg">اقرأ أيضا</h3>
         <section className="sm:hidden -ml-[.75rem]">
           <SwapIt slidesPerView={3.8}>
@@ -83,22 +83,24 @@ export default async function ArticleLayout({ article, children }) {
             ))}
           </div>
         </section>
-      </div>
+      </section>
 
       <section className="hidden sm:flex mt-4 items-center gap-6">
         <section>
-          {articles.slice(0, 3).map((article) => card(article))}
+          {articles?.slice(0, 3).map((article) => card(article))}
         </section>
-        <section>{articles.slice(3).map((article) => card(article))}</section>
+        <section>{articles?.slice(3).map((article) => card(article))}</section>
       </section>
       <section className="sm:hidden mt-4 items-center p-0">
         <SwapIt slidesPerView={1}>
           <section className="ml-3">
-            {articles.slice(0, 3).map((article) => card(article))}
+            {articles?.slice(0, 3).map((article) => card(article))}
           </section>
-          <section>{articles.slice(3).map((article) => card(article))}</section>
+          <section>
+            {articles?.slice(3).map((article) => card(article))}
+          </section>
         </SwapIt>
       </section>
-    </>
+    </div>
   );
 }

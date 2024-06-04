@@ -6,6 +6,7 @@ import { fetchArticles } from '@/lib';
 import { Noto_Sans_Arabic } from 'next/font/google';
 import { Suspense } from 'react';
 import { Providers } from './providers';
+import CookiesDialog from '@/components/CookiesDialog';
 
 // If loading a variable font, you don't need to specify the font weight
 const noto_sans_arabic = Noto_Sans_Arabic({
@@ -54,6 +55,7 @@ export default async function RootLayout({ children }) {
               <Footer />
             </Suspense>
           </div>
+          <CookiesDialog />
         </body>
       </Providers>
     </html>
