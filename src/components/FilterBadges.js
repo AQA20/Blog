@@ -6,7 +6,7 @@ import filter from '@/lib/filter';
 const FilterBadges = ({ searchParams }) => {
   const params = new URLSearchParams(searchParams);
   return (
-    <span>
+    <div className="flex flex-wrap">
       <Badge title="الأحدث" link={`?${filter('createdAt', 'DESC', params)}`} />
       <Badge title="الأشهر" link={`?${filter('views', 'DESC', params)}`} />
       <Badge title="الأقدم" link={`?${filter('createdAt', 'ASC', params)}`} />
@@ -14,7 +14,7 @@ const FilterBadges = ({ searchParams }) => {
         title="الأكثر مشاركة"
         link={`?${filter('shares', 'DESC', params)}`}
       />
-    </span>
+    </div>
   );
 };
 
