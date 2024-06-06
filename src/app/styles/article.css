@@ -14,8 +14,11 @@
 
 
 @layer components {
-
-  #articleContent, p{
-    @apply dark:text-dark-onSurface;
+  #articleContent a {
+    @apply text-light-primary dark:!text-dark-primary;
+  }
+  #articleContent p, #articleContent h1, #articleContent h2, #articleContent h3 {
+    @apply text-light-onSurface dark:text-dark-onSurface py-2;
   }
 }
+
