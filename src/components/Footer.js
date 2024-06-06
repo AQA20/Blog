@@ -15,7 +15,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="py-8 text-light-black text-sm">
+    <footer className="my-8 text-light-black text-sm">
       <section>
         <ul className="flex gap-2 underline dark:decoration-dark-outlineVariant">
           <li>
