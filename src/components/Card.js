@@ -26,7 +26,7 @@ const Card = ({
   return (
     <section>
       <article
-        className={clsx('group my-1 max-w-2xl cursor-pointer', {
+        className={clsx('group my-1 w-full cursor-pointer', {
           'flex justify-between gap-4 sm:gap-6': imgUrl,
         })}
       >

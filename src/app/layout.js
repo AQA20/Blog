@@ -25,19 +25,19 @@ export default async function RootLayout({ children }) {
 
   return (
     <html
-      className={`pt-4 scroll-smooth ${noto_sans_arabic.variable} dark:bg-dark-surface`}
+      className={`pt-4 scroll-smooth ${noto_sans_arabic.variable}`}
       lang="ar"
       dir="rtl"
       suppressHydrationWarning
     >
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className="md:w-[680px] font-noto">
+        <body className="xl:w-[680px] font-noto dark:bg-dark-surface">
           <main className="md:flex min-height">
             <section>
               <Suspense fallback={<h3>...loading navbar content</h3>}>
                 <Navbar />
               </Suspense>
-              <div className="px-3 md:w-[680px]">
+              <div className="px-3 xl:w-[680px]">
                 <section className="mb-6">
                   <Suspense fallback={<h3>...loading articles</h3>}>
                     {children}
@@ -45,7 +45,7 @@ export default async function RootLayout({ children }) {
                 </section>
               </div>
             </section>
-            <aside className="hidden md:block">
+            <aside className="hidden xl:block">
               <Suspense fallback={<h3>...loading sidebar content</h3>}>
                 <Sidebar articles={articles} />
               </Suspense>
