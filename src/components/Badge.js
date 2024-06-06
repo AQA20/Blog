@@ -28,7 +28,7 @@ const Badge = ({ title, link }) => {
       <button
         className={clsx(
           'border-2 my-2 border-outline dark:border-dark-outlineVariant h-8 px-4 rounded-lg ml-2',
-          { 'active-filter': isActive },
+          { 'active-filter': isActive || '' },
         )}
       >
         {title}

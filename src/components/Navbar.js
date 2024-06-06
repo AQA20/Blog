@@ -93,6 +93,7 @@ const Navbar = () => {
           {isHomePage && !showSearch && (
             <Link href="/" className="text-2xl">
               <Logo fill={theme === 'light' ? 'black' : 'white'} />
+              {''}
             </Link>
           )}
           {/* Show back button instead of logo on other pages */}
@@ -102,6 +103,7 @@ const Navbar = () => {
                 size={24}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
               />
+              {''}
             </Hug>
           )}
         </div>
@@ -114,6 +116,7 @@ const Navbar = () => {
                   size="24"
                   className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                 />
+                {''}
               </Hug>
             </div>
           )}
@@ -132,6 +135,7 @@ const Navbar = () => {
                   size="24"
                   className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                 />
+                {''}
               </Hug>
             )}
 

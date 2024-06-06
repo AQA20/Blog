@@ -49,6 +49,7 @@ const ShareButton = ({
             size="20"
             className="fill-light-primary dark:fill-dark-primary"
           />
+          {''}
         </Hug>
       )}
 
