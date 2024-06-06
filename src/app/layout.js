@@ -31,9 +31,9 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className="xl:w-[680px] font-noto dark:bg-dark-surface">
+        <body className="w-full xl:w-[680px] font-noto dark:bg-dark-surface">
           <main className="md:flex min-height">
-            <section>
+            <section className="w-full">
               <Suspense fallback={<h3>...loading navbar content</h3>}>
                 <Navbar />
               </Suspense>
