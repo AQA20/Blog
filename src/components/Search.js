@@ -154,6 +154,7 @@ const Search = ({ isShow, onHideSearch }) => {
                 <li>
                   <Hug>
                     <RiSearchLine size={24} />
+                    {''}
                   </Hug>
                   <div className="truncate w-full">{suggestion.title}</div>
                 </li>
@@ -168,6 +169,7 @@ const Search = ({ isShow, onHideSearch }) => {
               size={20}
               className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
             />
+            {''}
           </Hug>
         </div>
         <div className="z-11 absolute top-[16%] left-16">
@@ -177,6 +179,7 @@ const Search = ({ isShow, onHideSearch }) => {
                 size={20}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurfaceVariant"
               />
+              {''}
             </Hug>
           )}
         </div>
