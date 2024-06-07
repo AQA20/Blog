@@ -36,6 +36,7 @@ const limiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
   legacyHeaders: false, // Disable the `X-RateLimit-*` headers to ensure that only the newer, standardized headers are used.
   message: 'Too many requests, please try again later', // Custom message
+  skip: (req) => req.ip === process.env.SERVER_IP, // Skip rate limiting for the whitelisted IP (the server ip)
 });
 
 if (process.env.NODE_ENV !== 'development') {

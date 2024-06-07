@@ -25,7 +25,7 @@ export default async function Home({ searchParams }) {
         {!searchParams?.page && !searchParams?.orderBy && (
           <Hero article={data.articles[0]} />
         )}
-        <FilterBadges params={searchParams} />
+        <FilterBadges urlSearchParams={searchParams} />
         <div className="my-6"></div>
         <section id="#articles">
           {data.articles.map((article) => {

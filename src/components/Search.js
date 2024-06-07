@@ -91,20 +91,21 @@ const Search = ({ isShow, onHideSearch }) => {
   };
 
   const onBlur = (e) => {
-    // Check if the blur event is related to the suggestion list
-    if (suggestionRef.current && section.current.contains(e.relatedTarget)) {
+    // Check if the active element is the current element
+    if (section.current.contains(e.relatedTarget)) {
       return;
     }
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      const timeout = setTimeout(() => {
-        setSuggestions({ data: [], show: false });
-        // Hide search if input is empty
-        if (!searchQuery) {
-          onHideSearch();
-        }
-      }, 200);
-      setTimeoutId(timeout);
-    }
+
+    // Close suggestions after a specific time
+    const timeout = setTimeout(() => {
+      setSuggestions({ data: [], show: false });
+      // Hide search if input is empty
+      if (!searchQuery) {
+        onHideSearch();
+      }
+    }, 200);
+    // Set timeout id to clear it on component unmount
+    setTimeoutId(timeout);
   };
 
   return (

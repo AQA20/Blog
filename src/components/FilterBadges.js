@@ -3,8 +3,8 @@
 import Badge from './Badge';
 import filter from '@/lib/filter';
 
-const FilterBadges = ({ searchParams }) => {
-  const params = new URLSearchParams(searchParams);
+const FilterBadges = ({ urlSearchParams }) => {
+  const params = new URLSearchParams(urlSearchParams);
   return (
     <div className="flex flex-wrap">
       <Badge title="الأحدث" link={`?${filter('createdAt', 'DESC', params)}`} />

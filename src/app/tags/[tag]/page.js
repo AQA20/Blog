@@ -15,7 +15,7 @@ export default async function Page({ searchParams, params }) {
     <div>
       {/* <p className="my-4">تم العثور على 250 نتيجة</p> */}
       <div className="my-2">
-        <FilterBadges params={searchParams} />
+        <FilterBadges urlSearchParams={searchParams} />
       </div>
       {articles.map((article) => (
         <Card

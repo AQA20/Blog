@@ -18,7 +18,7 @@ export default async function Home({ searchParams }) {
 
   return (
     <article className="my-4">
-      <FilterBadges params={searchParams} />
+      <FilterBadges urlSearchParams={searchParams} />
       <div className="my-6"></div>
 
       <section id="#articles">
