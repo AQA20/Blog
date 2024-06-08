@@ -28,6 +28,7 @@ jobs:
             cd server && ~/.nvm/versions/node/v22.2.0/bin/npm i &&
             ~/.nvm/versions/node/v22.2.0/bin/npm run migrate &&
             cd .. && rm -rf .next && npm run build &&
+            sudo rm -rf /var/www/.next &&
             sudo cp -rp ~/blog/.next /var/www/.next &&
             pm2 restart all &&
             sudo systemctl reload nginx &&
