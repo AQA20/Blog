@@ -32,12 +32,23 @@ export default async function RootLayout({ children }) {
   const metadata = {
     title: '500Kalima موقع',
     description: webDesc,
-    // Open Graph (OG) tags
-    ogTitle: '500Kalima موقع',
-    ogDescription: webDesc,
-    ogImage: article.featuredImg,
-    ogUrl: `https://500kalima.com/`,
-    canonicalUrl: `https://500kalima.com/`,
+    openGraph: {
+      // Open Graph (OG) tags
+      title: article.title,
+      description: webDesc,
+      url: 'https://500kalima.com/',
+      siteName: '500kalima',
+      images: [
+        {
+          url: article.featuredImg, // Must be an absolute URL
+          width: 680,
+          height: 510,
+        },
+      ],
+      locale: 'ar_AR',
+      type: 'website',
+    },
+    canonicalUrl: 'https://500kalima.com/',
     keywords: 'صحة,لياقة,تمارين,غذاء صحي',
     language: 'ar',
   };
@@ -69,25 +80,23 @@ export default async function RootLayout({ children }) {
           <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
             <main className="md:flex min-height">
               <section className="w-full">
-                <Suspense fallback={<p>...loading navbar content</p>}>
+                <Suspense>
                   <Navbar />
                 </Suspense>
                 <div className="px-3 xl:w-[680px]">
                   <section className="mb-6">
-                    <Suspense fallback={<h3>...loading articles</h3>}>
-                      {children}
-                    </Suspense>
+                    <Suspense>{children}</Suspense>
                   </section>
                 </div>
               </section>
               <aside className="hidden xl:block">
-                <Suspense fallback={<p>...loading sidebar content</p>}>
+                <Suspense>
                   <Sidebar articles={articles} />
                 </Suspense>
               </aside>
             </main>
             <div className="px-3">
-              <Suspense fallback={<p>...loading footer content</p>}>
+              <Suspense>
                 <Footer />
               </Suspense>
             </div>

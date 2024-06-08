@@ -91,9 +91,9 @@ const Navbar = () => {
         <div>
           {/* If home page show logo and search is hidden */}
           {isHomePage && !showSearch && (
-            <Link href="/" className="text-2xl" ariaLabel="Home Page Link">
+            <a href="/" className="text-2xl" aria-label="Home Page Link">
               <Logo fill={theme === 'light' ? 'black' : 'white'} />
-            </Link>
+            </a>
           )}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (

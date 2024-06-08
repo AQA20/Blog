@@ -7,27 +7,42 @@ import ArticleLayout from './ArticleLayout';
 import { fetchArticle } from '@/lib';
 import { cookies } from 'next/headers';
 import moment from 'moment';
-import Head from 'next/head';
 
-export default async function Page({ params }) {
-  const existingCookies =
+const existingCookies = () => {
+  return (
     cookies()
       .getAll()
       .map((cookie) => `${cookie.name}=${cookie.value}`)
-      .join('; ') || '';
+      .join('; ') || ''
+  );
+};
 
-  const article = await fetchArticle(params.slug, existingCookies);
+export async function generateMetadata({ params }) {
+  // Even though we're calling fetchArticle twice once here and once
+  // In the page component the request will be sent once, as we're
+  // using react cache
+  const article = await fetchArticle(params.slug, existingCookies());
   !article && notFound();
 
-  // Generate metadata dynamically based on fetched article data
-  const metadata = {
+  return {
     title: article.title,
     description: article.description,
-    // Open Graph (OG) tags
-    ogTitle: article.title,
-    ogDescription: article.description,
-    ogImage: article.featuredImg,
-    ogUrl: `https://500kalima.com/${article.slug}`,
+    openGraph: {
+      // Open Graph (OG) tags
+      title: article.title,
+      description: article.description,
+      url: `https://500kalima.com/${article.slug}`,
+      siteName: '500kalima',
+      images: [
+        {
+          url: article.featuredImg, // Must be an absolute URL
+          width: 680,
+          height: 510,
+        },
+      ],
+      locale: 'ar_AR',
+      type: 'website',
+    },
     // Other metadata
     canonicalUrl: `https://500kalima.com/${article.slug}`,
     author: article.author.name,
@@ -37,6 +52,11 @@ export default async function Page({ params }) {
     keywords: article.Tags.map((tag) => tag.name).join(', '),
     language: 'ar',
   };
+}
+
+export default async function Page({ params }) {
+  const article = await fetchArticle(params.slug, existingCookies());
+  !article && notFound();
 
   const cleanHtml = DOMPurify.sanitize(article.content, {
     FORBID_TAGS: ['h1'], // Remove h1 tags
@@ -45,21 +65,6 @@ export default async function Page({ params }) {
 
   return (
     <ArticleLayout article={article}>
-      <Head>
-        {/* Metadata */}
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        {/* Open Graph (OG) tags */}
-        <meta property="og:title" content={metadata.ogTitle} />
-        <meta property="og:description" content={metadata.ogDescription} />
-        <meta property="og:image" content={metadata.ogImage} />
-        <meta property="og:url" content={metadata.ogUrl} />
-        {/* Other metadata */}
-        <link rel="canonical" href={metadata.canonicalUrl} />
-        <meta name="author" content={metadata.author} />
-        <meta name="keywords" content={metadata.keywords} />
-        <meta name="language" content={metadata.language} />
-      </Head>
       <article>
         <section className="truncate my-2">
           {article.Tags.map((tag) => (
