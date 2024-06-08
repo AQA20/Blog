@@ -91,13 +91,13 @@ const Navbar = () => {
         <div>
           {/* If home page show logo and search is hidden */}
           {isHomePage && !showSearch && (
-            <Link href="/" className="text-2xl" aria-label="Home Page Link">
+            <Link href="/" className="text-2xl" ariaLabel="Home Page Link">
               <Logo fill={theme === 'light' ? 'black' : 'white'} />
             </Link>
           )}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
-            <Hug onClick={handleBackClick} aria-label="Back Button">
+            <Hug onClick={handleBackClick} ariaLabel="Back Button">
               <RiArrowRightLine
                 size={24}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
@@ -111,7 +111,7 @@ const Navbar = () => {
             <div className="rounded-full">
               <Hug
                 onClick={() => setShowSearch(true)}
-                aria-label="Show Search Button"
+                ariaLabel="Show Search Button"
               >
                 <RiSearchLine
                   size="24"
@@ -132,7 +132,7 @@ const Navbar = () => {
             {!showMenu && (
               <Hug
                 onClick={() => setShowMenu(true)}
-                aria-label="Show Menu Button"
+                ariaLabel="Show Menu Button"
               >
                 <RiMenuLine
                   size="24"
@@ -148,7 +148,7 @@ const Navbar = () => {
                   className="flex items-center justify-center h-[40px] w-[40px]
                      bg-light-surfaceContainer dark:bg-dark-surfaceContainerLow 
                      rounded-full hover:cursor-pointer"
-                  aria-label="Close Menu Button"
+                  ariaLabel="Close Menu Button"
                 >
                   <RiCloseLine
                     size={24}

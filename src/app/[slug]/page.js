@@ -6,6 +6,7 @@ import ShareButton from '@/components/ShareButton';
 import ArticleLayout from './ArticleLayout';
 import { fetchArticle } from '@/lib';
 import { cookies } from 'next/headers';
+import moment from 'moment';
 
 export default async function Page({ params }) {
   const existingCookies =
@@ -16,12 +17,33 @@ export default async function Page({ params }) {
 
   const article = await fetchArticle(params.slug, existingCookies);
   !article && notFound();
+
+  // Generate metadata dynamically based on fetched article data
+  const metadata = {
+    title: article.title,
+    description: article.description,
+    // Open Graph (OG) tags
+    ogTitle: article.title,
+    ogDescription: article.description,
+    ogImage: article.featuredImg,
+    ogUrl: `https://500kalima.com/${article.slug}`,
+    // Other metadata
+    canonicalUrl: `https://500kalima.com/${article.slug}`,
+    author: article.author.name,
+    publicationDate: moment(article.createdAt).format(
+      'MMMM Do YYYY, h:mm:ss a',
+    ),
+    keywords: article.Tags.map((tag) => tag.name).join(', '),
+    language: 'ar',
+  };
+
   const cleanHtml = DOMPurify.sanitize(article.content, {
     FORBID_TAGS: ['h1'], // Remove h1 tags
     KEEP_CONTENT: false, // Remove tags content when they're removed
   });
+
   return (
-    <ArticleLayout article={article}>
+    <ArticleLayout article={article} metadata={metadata}>
       <article>
         <section className="truncate my-2">
           {article.Tags.map((tag) => (

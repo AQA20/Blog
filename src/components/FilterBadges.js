@@ -12,7 +12,7 @@ const FilterBadge = ({ title, link }) => {
 const FilterBadges = ({ urlSearchParams }) => {
   const params = new URLSearchParams(urlSearchParams);
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap gap-2">
       <FilterBadge
         title="الأحدث"
         link={`?${filter('createdAt', 'DESC', params)}`}

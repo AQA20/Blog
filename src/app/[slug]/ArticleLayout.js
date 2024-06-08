@@ -5,9 +5,9 @@ import SwapIt from '@/components/SwapIt';
 import { fetchTags, fetchArticles } from '@/lib';
 import timeAgo from '@/lib/timeAgo';
 import '../styles/article.css';
-import { Suspense } from 'react';
+import Head from 'next/head';
 
-export default async function ArticleLayout({ article, children }) {
+export default async function ArticleLayout({ article, metadata, children }) {
   const { tags } = await fetchTags();
   const { articles } = await fetchArticles({
     limit: 6,
@@ -33,7 +33,23 @@ export default async function ArticleLayout({ article, children }) {
   };
 
   return (
-    <Suspense fallback={<h3>...loading article content</h3>}>
+    <>
+      <Head>
+        {/* Metadata */}
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        {/* Open Graph (OG) tags */}
+        <meta property="og:title" content={metadata.ogTitle} />
+        <meta property="og:description" content={metadata.ogDescription} />
+        <meta property="og:image" content={metadata.ogImage} />
+        <meta property="og:url" content={metadata.ogUrl} />
+        {/* Other metadata */}
+        <link rel="canonical" href={metadata.canonicalUrl} />
+        <meta name="author" content={metadata.author} />
+        <meta name="keywords" content={metadata.keywords} />
+        <meta name="language" content={metadata.language} />
+      </Head>
+      {/* Article content */}
       <section>{children}</section>
       <section
         className="rounded-xl bg-light-surfaceContainerHigh 
@@ -102,6 +118,6 @@ export default async function ArticleLayout({ article, children }) {
           </section>
         </SwapIt>
       </section>
-    </Suspense>
+    </>
   );
 }
