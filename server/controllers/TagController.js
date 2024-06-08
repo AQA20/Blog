@@ -39,12 +39,13 @@ export default class TagController {
       ) AS articleCounts ON Tags.id = articleCounts.tagId
       WHERE Tags.deletedAt IS NULL
       ORDER BY articleCounts.totalCount DESC
-      LIMIT ${pageSize} OFFSET ${offset}
-      `,
+      LIMIT :pageSize OFFSET :offset
+    `,
       {
         type: sequelize.QueryTypes.SELECT,
         raw: true,
         nest: true,
+        replacements: { pageSize, offset },
       },
     );
 
