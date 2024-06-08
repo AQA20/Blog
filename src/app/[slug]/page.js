@@ -7,6 +7,7 @@ import ArticleLayout from './ArticleLayout';
 import { fetchArticle } from '@/lib';
 import { cookies } from 'next/headers';
 import moment from 'moment';
+import Head from 'next/head';
 
 export default async function Page({ params }) {
   const existingCookies =
@@ -43,7 +44,22 @@ export default async function Page({ params }) {
   });
 
   return (
-    <ArticleLayout article={article} metadata={metadata}>
+    <ArticleLayout article={article}>
+      <Head>
+        {/* Metadata */}
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        {/* Open Graph (OG) tags */}
+        <meta property="og:title" content={metadata.ogTitle} />
+        <meta property="og:description" content={metadata.ogDescription} />
+        <meta property="og:image" content={metadata.ogImage} />
+        <meta property="og:url" content={metadata.ogUrl} />
+        {/* Other metadata */}
+        <link rel="canonical" href={metadata.canonicalUrl} />
+        <meta name="author" content={metadata.author} />
+        <meta name="keywords" content={metadata.keywords} />
+        <meta name="language" content={metadata.language} />
+      </Head>
       <article>
         <section className="truncate my-2">
           {article.Tags.map((tag) => (
