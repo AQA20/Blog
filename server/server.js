@@ -29,7 +29,6 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 
 // Security middlewares
-
 process.env === 'production' && app.use(rateLimitConfig);
 app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-known web vulnerabilities.
 app.use(cors(corsOptions)); // Use the configured CORS middleware
