@@ -34,7 +34,7 @@ export default async function RootLayout({ children }) {
         <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
           <main className="md:flex min-height">
             <section className="w-full">
-              <Suspense fallback={<h3>...loading navbar content</h3>}>
+              <Suspense fallback={<p>...loading navbar content</p>}>
                 <Navbar />
               </Suspense>
               <div className="px-3 xl:w-[680px]">
@@ -46,13 +46,13 @@ export default async function RootLayout({ children }) {
               </div>
             </section>
             <aside className="hidden xl:block">
-              <Suspense fallback={<h3>...loading sidebar content</h3>}>
+              <Suspense fallback={<p>...loading sidebar content</p>}>
                 <Sidebar articles={articles} />
               </Suspense>
             </aside>
           </main>
           <div className="px-3">
-            <Suspense fallback={<h3>...loading footer content</h3>}>
+            <Suspense fallback={<p>...loading footer content</p>}>
               <Footer />
             </Suspense>
           </div>
