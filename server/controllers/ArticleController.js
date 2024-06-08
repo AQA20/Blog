@@ -70,7 +70,7 @@ export default class ArticleController {
 
     // Default cookie
     const cookie = {
-      secure: process.env.NODE_ENV === 'development' ? false : true, // Cookie will only be sent over HTTPS
+      secure: process.env.NODE_ENV === 'production', // Cookie will only be sent over HTTPS
       httpOnly: true, // Cookie cannot be accessed by client-side JavaScript
       origin: 'strict', // Restricts cookie to same-site requests
       maxAge: 86400000, // One day In ms

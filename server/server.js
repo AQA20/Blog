@@ -9,12 +9,11 @@ import globalErrorHandler from './middleware/globalErrorHandler.js';
 import ApiError from './services/ApiError.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import rateLimit from 'express-rate-limit';
-import crypto from 'crypto';
 import helmet from 'helmet';
+import corsOptions from './config/corsConfig.js';
+import helmetConfig from './config/helmetConfig.js';
+import rateLimitConfig from './config/rateLimitConfig.js';
 
-// Todo finish adding security headers and middlewares
-// Todo handle security in a separate file
 // Todo implement unit & integration tests
 
 // Handle uncaughtException Exceptions
@@ -29,65 +28,23 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-// Define the rate limit rule
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 70, // Limit each IP to 70 requests per `window` (here, per 15 minutes)
-  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false, // Disable the `X-RateLimit-*` headers to ensure that only the newer, standardized headers are used.
-  message: 'Too many requests, please try again later', // Custom message
-  skip: (req) => req.ip === process.env.SERVER_IP, // Skip rate limiting for the whitelisted IP (the server ip)
-});
-
 if (process.env.NODE_ENV !== 'development') {
   // Use the limiter middleware
-  app.use(limiter);
+  app.use(rateLimitConfig);
 }
 
-// Generate a random nonce value for each request
-// const generateNonce = crypto.randomBytes(16).toString('base64');
-
 // Use helmet middleware to prevent some well-known web vulnerabilities
-app.use(helmet());
-//Helps prevent a variety of attacks like Cross-Site Scripting (XSS) and data injection attacks.
-// app.use(
-//   helmet.contentSecurityPolicy({
-//     directives: {
-//       defaultSrc: [
-//         "'self'",
-//         'http://localhost:3000/',
-//         'http://localhost:8080/',
-//       ], // Only allow resources from the same origin
-//       scriptSrc: [
-//         "'self'",
-//         'http://localhost:3000/',
-//         'http://localhost:8080/',
-//         `'nonce-${generateNonce}'`,
-//       ], // Allow only scripts with the correct nonce to be executed,
-//       styleSrc: ["'self'", 'http://localhost:3000/', 'http://localhost:8080/'],
-//       imgSrc: ["'self'", 'http://localhost:3000/', 'http://localhost:8080/'],
-//       connectSrc: [
-//         "'self'",
-//         'http://localhost:3000/',
-//         'http://localhost:8080/',
-//       ],
-//       fontSrc: ["'self'", 'http://localhost:3000/', 'http://localhost:8080/'],
-//       objectSrc: ["'none'"],
-//       upgradeInsecureRequests: [],
-//     },
-//   }),
-// );
+// Such as Cross-Site Scripting (XSS) and data injection attacks.
+app.use(helmet(helmetConfig));
 
-// Todo configure cors settings for better security
-// Use cors middleware
-app.use(cors());
+// Use the configured CORS middleware
+app.use(cors(corsOptions));
 
 // A middleware to parse JSON payloads
 app.use(express.json());
 
-// Todo configure cookieParser settings for better security
 // Use cookie-parser middleware
-app.use(cookieParser());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // Register routers
 app.use('/api', userRoutes);
