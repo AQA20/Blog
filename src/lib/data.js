@@ -33,34 +33,30 @@ export const fetchArticle = cache(
   }),
 );
 
-export const fetchArticles = cache(
-  handleAsyncError(async (options) => {
-    const { orderBy, order, search, limit, page } = options;
-    const normalizedPage = page ? page : 1;
-    const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
-    const normalizedOrder = order ? order : 'DESC';
-    const normalizedLimit = limit ? limit : 5;
-    const normalizedSearch = search ? search : '';
-    const {
-      data: { data },
-    } = await apiClient.get(
-      `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
-    );
+export const fetchArticles = handleAsyncError(async (options) => {
+  const { orderBy, order, search, limit, page } = options;
+  const normalizedPage = page ? page : 1;
+  const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
+  const normalizedOrder = order ? order : 'DESC';
+  const normalizedLimit = limit ? limit : 5;
+  const normalizedSearch = search ? search : '';
+  const {
+    data: { data },
+  } = await apiClient.get(
+    `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
+  );
 
-    return data;
-  }),
-);
+  return data;
+});
 
-export const fetchSuggestions = cache(
-  handleAsyncError(async (search) => {
-    const term = search || '';
+export const fetchSuggestions = handleAsyncError(async (search) => {
+  const term = search || '';
 
-    const {
-      data: { data },
-    } = await apiClient.get(`/api/articles/suggestions?search=${term}`);
-    return data;
-  }),
-);
+  const {
+    data: { data },
+  } = await apiClient.get(`/api/articles/suggestions?search=${term}`);
+  return data;
+});
 
 export const fetchTags = cache(
   handleAsyncError(async (limit = 7) => {
@@ -72,23 +68,19 @@ export const fetchTags = cache(
   }),
 );
 
-export const fetchTagArticles = cache(
-  handleAsyncError(async (tag, options) => {
-    const { orderBy, order, page } = options;
-    const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
-    const normalizedOrder = order ? order : 'DESC';
-    const normalizedPage = page ? page : 1;
-    const {
-      data: { data },
-    } = await apiClient.get(
-      `/api/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
-    );
-    return data;
-  }),
-);
+export const fetchTagArticles = handleAsyncError(async (tag, options) => {
+  const { orderBy, order, page } = options;
+  const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
+  const normalizedOrder = order ? order : 'DESC';
+  const normalizedPage = page ? page : 1;
+  const {
+    data: { data },
+  } = await apiClient.get(
+    `/api/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
+  );
+  return data;
+});
 
-export const updateArticleShare = cache(
-  handleAsyncError(async (id) => {
-    await apiClient.put(`/api/article/share/${id}`);
-  }),
-);
+export const updateArticleShare = handleAsyncError(async (id) => {
+  await apiClient.put(`/api/article/share/${id}`);
+});
