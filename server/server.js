@@ -28,23 +28,14 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-if (process.env.NODE_ENV !== 'development') {
-  // Use the limiter middleware
-  app.use(rateLimitConfig);
-}
+// Security middlewares
+app.use(rateLimitConfig);
+app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-known web vulnerabilities.
+app.use(cors(corsOptions)); // Use the configured CORS middleware
 
-// Use helmet middleware to prevent some well-known web vulnerabilities
-// Such as Cross-Site Scripting (XSS) and data injection attacks.
-app.use(helmet(helmetConfig));
-
-// Use the configured CORS middleware
-app.use(cors(corsOptions));
-
-// A middleware to parse JSON payloads
-app.use(express.json());
-
-// Use cookie-parser middleware
-app.use(cookieParser(process.env.COOKIE_SECRET));
+// Other middlewares
+app.use(express.json()); // A middleware to parse JSON payloads
+app.use(cookieParser(process.env.COOKIE_SECRET)); // Use cookie-parser middleware
 
 // Register routers
 app.use('/api', userRoutes);
