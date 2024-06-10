@@ -24,7 +24,7 @@ export const metadata = {
   description: webDesc,
   openGraph: {
     // Open Graph (OG) tags
-    title: 'تصفح اخر المقالات',
+    title: 'تصفح اخر المقالات على موقع 500 كلمة',
     description: webDesc,
     url: 'https://500kalima.com/',
     siteName: '500kalima',
