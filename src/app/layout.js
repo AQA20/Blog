@@ -31,8 +31,8 @@ export const metadata = {
     images: [
       {
         url: 'https://500kalima.com/default-featured-img.png', // Must be an absolute URL
-        width: 680,
-        height: 510,
+        width: 940,
+        height: 788,
       },
     ],
     locale: 'ar_AR',
