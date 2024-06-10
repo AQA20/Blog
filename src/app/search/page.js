@@ -3,11 +3,6 @@ import { fetchArticles, timeAgo } from '@/lib';
 import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
 
-export const metadata = {
-  title: 'Blog',
-  description: 'AI blog posts',
-};
-
 export default async function Home({ searchParams }) {
   const { articles, totalPages } = await fetchArticles({
     orderBy: searchParams?.orderBy,

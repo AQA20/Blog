@@ -7,11 +7,6 @@ import FilterBadges from '@/components/FilterBadges';
 
 // Todo implement unit & integration tests
 
-export const metadata = {
-  title: 'Blog',
-  description: 'AI blog posts',
-};
-
 export default async function Home({ searchParams }) {
   const data = await fetchArticles({
     orderBy: searchParams?.orderBy,
