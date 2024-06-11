@@ -120,7 +120,17 @@ export default class ArticleController {
             attributes: ['id', 'name'],
           },
           { model: Category, attributes: ['id', 'name'] },
-          { model: Tag, attributes: ['id', 'name'] },
+          {
+            model: Tag,
+            through: {
+              attributes: [],
+              where: {
+                deletedAt: null,
+              },
+            },
+            attributes: ['id', 'name'],
+            where: { deletedAt: null },
+          },
           { model: Image, attributes: ['id', 'name'] },
         ],
       });
@@ -195,8 +205,21 @@ export default class ArticleController {
       },
 
       include: [
-        { model: Category, attributes: ['id', 'name'] },
-        { model: Tag, attributes: ['id', 'name'] },
+        {
+          model: Category,
+          attributes: ['id', 'name'],
+        },
+        {
+          model: Tag,
+          through: {
+            attributes: [],
+            where: {
+              deletedAt: null,
+            },
+          },
+          attributes: ['id', 'name'],
+          where: { deletedAt: null },
+        },
         { model: Image, attributes: ['id', 'name'] },
       ],
       offset,

@@ -16,16 +16,9 @@ export default class ArticleTagController {
   }
   static async updateArticleTag(req, res, next) {
     const id = req.params.id;
-    const tagId = req.body?.articleId;
-    const articleId = req.body?.tagId;
-    await ArticleTag.update(
-      { articleId, tagId },
-      {
-        where: {
-          id,
-        },
-      },
-    );
+    const tagId = req.body?.tagId;
+    const articleId = req.body?.articleId;
+    await ArticleTag.update({ tagId, articleId }, { where: { id } });
     return resHandler(201, 'Tag updated successfully!', res);
   }
 
@@ -36,6 +29,6 @@ export default class ArticleTagController {
       throw new ApiError('Article tag was not found', 404);
     }
     await articleTag.destroy();
-    return resHandler(201, 'Article tag deleted successfully!', res);
+    return resHandler(204, '', res);
   }
 }

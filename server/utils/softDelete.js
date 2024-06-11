@@ -18,18 +18,18 @@ const softDelete = async (id, model, relationModels) => {
 
   // Check if a relationModel belongs to other models
   const hasRelatedData = relationModels.some(
-    // modelData[`${relationModel}s`]? make it plural and ? to safely access the
+    // modelData[relationModel.name]? ? to safely access the
     // property so if it was null or undefined, no error will be thrown
     (relationModel) => modelData[relationModel.name]?.length > 1,
   );
 
   // If model has related data or note
-  if (!hasRelatedData) {
-    await modelData.destroy();
-    return true;
+  if (hasRelatedData) {
+    return false;
   }
 
-  return false;
+  await modelData.destroy();
+  return true;
 };
 
 export default softDelete;

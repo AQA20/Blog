@@ -28,8 +28,8 @@ export default class TagController {
       SELECT Tags.id, Tags.name, articleCounts.totalCount AS articleCounts,
       (SELECT COUNT(DISTINCT Tags.id) 
         FROM Tags 
-        RIGHT JOIN ArticleTags ON Tags.id = ArticleTags.tagId 
-        WHERE Tags.deletedAt IS NULL
+        INNER JOIN ArticleTags ON Tags.id = ArticleTags.tagId 
+        WHERE Tags.deletedAt IS NULL AND ArticleTags.deletedAt IS NULL
       ) AS totalTagsCount
       FROM Tags
       RIGHT JOIN (
@@ -220,7 +220,7 @@ export default class TagController {
     return resHandler(201, 'Tag updated successfully!', res);
   }
 
-  static async deletedTag(req, res, next) {
+  static async deleteTag(req, res, next) {
     // Get the passed tagId from req.params object
     const tagId = req.params.id;
     // Soft delete tag
@@ -230,12 +230,12 @@ export default class TagController {
 
     // Check if tag was successfully deleted
     if (isDeleted) {
-      return resHandler(204, 'Category was successfully deleted!', res);
+      return resHandler(204, '', res);
     }
 
     // Otherwise throw an error
     throw new ApiError(
-      'Category cannot be deleted, it has one or more articles!',
+      'Tag cannot be deleted, it has one or more articles!',
       400,
     );
   }

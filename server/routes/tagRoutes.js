@@ -5,6 +5,8 @@ import isAdmin from '../middleware/isAdmin.js';
 import createTagRequest from '../middleware/requests/tags/createTagRequest.js';
 import getTagsRequest from '../middleware/requests/tags/getTagsRequest.js';
 import getTagArticlesRequest from '../middleware/requests/tags/getTagArticlesRequest.js';
+import deleteTagRequest from '../middleware/requests/tags/deleteTagRequest.js';
+import updateTagRequest from '../middleware/requests/tags/updateTagRequest.js';
 import { handleAsyncApiError } from '../utils/handleErrors.js';
 
 const router = express.Router();
@@ -31,12 +33,21 @@ router.post(
   handleAsyncApiError(TagController.createTag),
 );
 
-// Delete a Tag
-router.delete(
-  '/tag/:id/:name',
+// Update a Tag
+router.put(
+  '/tag/:tagId/:name',
   authorized,
   isAdmin,
-  createTagRequest,
+  updateTagRequest,
+  handleAsyncApiError(TagController.createTag),
+);
+
+// Delete a Tag
+router.delete(
+  '/tag/:id',
+  authorized,
+  isAdmin,
+  deleteTagRequest,
   handleAsyncApiError(TagController.deleteTag),
 );
 
