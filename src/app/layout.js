@@ -37,7 +37,11 @@ export const metadata = {
     ],
     locale: 'ar_AR',
     type: 'website',
-    appId: '759672193042879',
+  },
+  facebook: {
+    app: {
+      id: '759672193042879',
+    },
   },
   canonicalUrl: 'https://500kalima.com/',
   keywords: 'صحة,لياقة,تمارين,غذاء صحي',

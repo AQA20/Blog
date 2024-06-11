@@ -14,7 +14,7 @@ const FilterBadges = ({ urlSearchParams }) => {
   const params = new URLSearchParams(urlSearchParams);
   return (
     <>
-      <div className="hidden md:flex flex-wrap gap-2">
+      <div className="hidden md:flex flex-wrap">
         <FilterBadge
           title="الأحدث"
           link={`?${filter('createdAt', 'DESC', params)}`}
@@ -33,8 +33,8 @@ const FilterBadges = ({ urlSearchParams }) => {
           link={`?${filter('shares', 'DESC', params)}`}
         />
       </div>
-      <div className="md:hidden  gap-2">
-        <SwapIt slidesPerView={1.5}>
+      <div className="md:hidden">
+        <SwapIt slidesPerView={3.5}>
           <FilterBadge
             title="الأحدث"
             link={`?${filter('createdAt', 'DESC', params)}`}

@@ -21,6 +21,7 @@ const Hero = ({ article }) => {
           width="680"
           height="510"
           alt={article.title}
+          priority
         />
       </Suspense>
 
