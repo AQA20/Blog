@@ -4,6 +4,7 @@ const RoundedImage = ({
   src,
   width,
   height,
+  priority = false,
   alt = '',
   onClick = () => null,
 }) => {
@@ -15,6 +16,7 @@ const RoundedImage = ({
       src={src}
       alt={alt}
       className="rounded-2xl object-cover shrink-0 cursor-pointer"
+      priority={priority}
     />
   );
 };

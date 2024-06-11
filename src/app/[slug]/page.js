@@ -81,6 +81,7 @@ export default async function Page({ params }) {
             alt={article.title}
             width={680}
             height={510}
+            priority={true}
           />
         </figure>
         <section className="mt-4 mb-2">
