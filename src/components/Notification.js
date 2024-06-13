@@ -51,7 +51,7 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
     <div
       ref={notificationRef}
       className={clsx(
-        'fixed w-[80%] sm:w-fit bottom-[50px] md:bottom-[30px]  pr-4 pl-1 py-[4px] rounded-lg transition-all duration-500 ease-in-out left-1/2 transform -translate-x-1/2',
+        'fixed z-20 w-[80%] sm:w-fit bottom-[50px] md:bottom-[30px]  pr-4 pl-1 py-[4px] rounded-lg transition-all duration-500 ease-in-out left-1/2 transform -translate-x-1/2',
         {
           'bg-[#c7ad6b]': type === 'warning',
           'bg-[#dc2626]': type === 'error',
