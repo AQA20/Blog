@@ -26,6 +26,10 @@ Image.init(
       type: DataTypes.ENUM('article', 'comment', 'user'),
       allowNull: false,
     },
+    capture: {
+      type: DataTypes.STRING(255),
+      unique: true,
+    },
     name: {
       type: DataTypes.STRING(255),
       allowNull: false,

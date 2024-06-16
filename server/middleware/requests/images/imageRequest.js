@@ -2,6 +2,7 @@ import Joi from 'joi';
 
 const imageRequest = Joi.object({
   type: Joi.string().trim().valid('USER', 'ARTICLE').required(),
+  capture: Joi.string().trim(),
 });
 
 const imageRequestMiddleware = (req, res, next) => {

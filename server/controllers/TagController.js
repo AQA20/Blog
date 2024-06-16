@@ -30,8 +30,7 @@ export default class TagController {
         FROM Tags 
         INNER JOIN ArticleTags ON Tags.id = ArticleTags.tagId 
         WHERE Tags.deletedAt IS NULL AND ArticleTags.deletedAt IS NULL
-      ) AS totalTagsCount
-      FROM Tags
+      ) AS totalTagsCount FROM Tags
       RIGHT JOIN (
         SELECT tagId, COUNT(tagId) AS totalCount
         FROM ArticleTags

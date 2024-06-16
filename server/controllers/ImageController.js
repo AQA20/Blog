@@ -17,10 +17,11 @@ export default class ImageController {
     const file = req.file;
     const imageableId = req.params.imageableId;
     const type = req.query.type;
+    const capture = req.query?.capture;
     const image = await ImageController.#imageService.createImageable(
       imageableId,
       type,
-      { file },
+      { file, capture },
     );
     return resHandler(201, image, res);
   }

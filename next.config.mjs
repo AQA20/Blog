@@ -4,7 +4,13 @@ const nextConfig = {
     API_URL: process.env.API_URL,
   },
   images: {
-    domains: ['d279et700s7bw3.cloudfront.net'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'd279et700s7bw3.cloudfront.net',
+        pathname: '**',
+      },
+    ],
   },
 };
 

@@ -42,7 +42,7 @@ router.post(
 
 // Delete category
 router.delete(
-  '/category/:id/',
+  '/category/:id',
   authorized,
   isAdmin,
   createCategoryRequest,

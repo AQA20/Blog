@@ -29,7 +29,7 @@ export default class ImageService {
 
   // Create new imageable/image
   async createImageable(imageableId, type, options) {
-    const { file, imgLinkProperty = 'imgUrl' } = options;
+    const { file, imgLinkProperty = 'imgUrl', capture = '' } = options;
 
     // Throw an error if the file wasn't provided
     if (!file) {
@@ -50,6 +50,7 @@ export default class ImageService {
     const imageableModel = await Image.create({
       imageableId,
       imageableType: type,
+      capture,
       name,
     });
     // Fetch the actual image url from s3

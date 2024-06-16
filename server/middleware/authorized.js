@@ -5,7 +5,6 @@ const authorized = (req, res, next) => {
   try {
     // Extract token from request headers
     const authorization = req.headers.authorization;
-
     if (!authorization) {
       throw new ApiError('Unauthorized', 401);
     }

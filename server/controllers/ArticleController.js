@@ -129,7 +129,6 @@ export default class ArticleController {
               },
             },
             attributes: ['id', 'name'],
-            where: { deletedAt: null },
           },
           { model: Image, attributes: ['id', 'name'] },
         ],
@@ -162,7 +161,7 @@ export default class ArticleController {
     });
   }
 
-  // Find all of the articles with the necessary relations sorted by data in descending order
+  // Find all of the articles with the necessary relations sorted by data in specific order
   static async #getAllArticles(options) {
     const { search, orderBy, order, pageSize, offset } = options;
     let searchQuery;
@@ -176,10 +175,9 @@ export default class ArticleController {
       searchQuery = {};
     }
 
-    const { count, rows } = await Article.findAndCountAll({
+    const { rows, count } = await Article.findAndCountAll({
       where: {
         status: Article.APPROVED,
-        deletedAt: null,
         ...searchQuery,
         thumbnailId: {
           [Op.ne]: null,
@@ -218,14 +216,19 @@ export default class ArticleController {
             },
           },
           attributes: ['id', 'name'],
-          where: { deletedAt: null },
         },
-        { model: Image, attributes: ['id', 'name'] },
+        {
+          model: Image,
+          where: { imageableType: Image.ARTICLE },
+          attributes: ['id', 'name'],
+        },
       ],
       offset,
       limit: pageSize,
       order: [[db.sequelize.literal(orderBy), order]],
+      distinct: true,
     });
+
     // Fetch article images
     const articlesWithImgs = ArticleController.#addArticleImgUrls(rows);
     return { articles: articlesWithImgs, count };
@@ -253,7 +256,6 @@ export default class ArticleController {
     const query = req.query;
     const badValues = ['undefined', 'null'];
     if (Object.values(query).some((value) => badValues.indexOf(value) !== -1)) {
-      console.warn(query);
       throw new ApiError('Bad request unexpected value', 400);
     }
     // Get optional queries
@@ -276,7 +278,7 @@ export default class ArticleController {
 
     const data = {
       currentPage: page,
-      totalPages: Math.ceil((count || 0) / ArticleController.#pageSize),
+      totalPages: Math.ceil((count || 0) / pageSize),
       articles,
     };
     return resHandler(200, data, res);

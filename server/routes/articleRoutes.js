@@ -43,13 +43,13 @@ router.post(
 
 // Update article share
 router.put(
-  '/article/share/:id/',
+  '/article/share/:id',
   handleAsyncApiError(ArticleController.updateShareArticle),
 );
 
 // Update article
 router.put(
-  '/article/:id/',
+  '/article/:id',
   authorized,
   isAdmin,
   updateArticleRequest,
