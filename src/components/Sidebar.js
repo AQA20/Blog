@@ -1,27 +1,9 @@
-'use client';
-
 import Card from './Card';
 import Badge from './Badge';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { timeAgo } from '@/lib';
-import { fetchArticles } from '@/lib';
 
 const Sidebar = ({ articles }) => {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    console.log('articles', articles);
-    const fetchArticlesData = async () => {
-      const { articles } = await fetchArticles({
-        orderBy: 'views',
-        order: 'DESC',
-        limit: 3,
-      });
-      return articles;
-    };
-    if (!articles) {
-      fetchArticlesData().then((res) => setData(res));
-    }
-  }, [articles]);
   return (
     <article className="w-[344px] mr-12 pr-2 sticky top-0 py-2">
       <header>
