@@ -1,5 +1,3 @@
-import fs from 'fs';
-
 const config = {
   development: {
     username: process.env.DB_USERNAME,
