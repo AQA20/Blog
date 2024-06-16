@@ -33,15 +33,6 @@ const config = {
       acquire: 30000,
       idle: 10000,
     },
-    ...(process.env.NODE_ENV === 'production' && {
-      dialectOptions: {
-        ssl: {
-          ca: fs.readFileSync(process.env.MYSQL_SSL_CA),
-          cert: fs.readFileSync(process.env.MYSQL_SSL_CERT),
-          key: fs.readFileSync(process.env.MYSQL_SSL_KEY),
-        },
-      },
-    }),
   },
 };
 
