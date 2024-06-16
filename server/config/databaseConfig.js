@@ -36,9 +36,9 @@ const config = {
     ...(process.env.NODE_ENV === 'production' && {
       dialectOptions: {
         ssl: {
-          ca: fs.readFileSync('/etc/mysql/ssl/ca-cert.pem'),
-          cert: fs.readFileSync('/etc/mysql/ssl/server-cert.pem'),
-          key: fs.readFileSync('/etc/mysql/ssl/server-key.pem'),
+          ca: fs.readFileSync(process.env.MYSQL_SSL_CA),
+          cert: fs.readFileSync(process.env.MYSQL_SSL_CERT),
+          key: fs.readFileSync(process.env.MYSQL_SSL_KEY),
         },
       },
     }),
