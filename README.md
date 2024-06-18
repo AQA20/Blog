@@ -5,7 +5,11 @@ Welcome to our blog repository! This document provides an overview of the availa
 
 ## Important
 
-Make sure to have all of the necessary environment variables set up. Please refer to the .env.example file for guidance.
+First you need to setup mysql database, AWS s3 bucket as well as AWS cloudfront 
+Then ensure to have all of the necessary environment variables set up. 
+Please refer to the .env.example file for guidance.
+
+#### Setup Client
 
 ## To install dependencies, run:
 
@@ -19,9 +23,50 @@ npm run install
 npm install -D
 ```
 
-## Available Commands
+## Format Code
+To format code using eslint:
+```bash
+npm run lint
+```
 
-### Format Code
+### Auto Fix ESLint Issues
+To automatically fix eslint issues:
+```bash
+npm run lint:fix
+```
+
+### Start app in dev mode
+```bash
+npm run dev
+```
+
+### Build the app
+To build the next app run:
+```bash
+npm run build
+```
+
+### Start the built app
+```bash
+npm run start
+```
+
+#### Setup Server
+
+
+## To install dependencies, run:
+
+```bash
+npm run install
+```
+
+## To install dev dependencies, run:
+
+```bash
+npm install -D
+```
+
+## Format Code
 To format code using eslint:
 ```bash
 npm run lint
