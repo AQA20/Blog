@@ -8,9 +8,13 @@ const devError = (res, err) => {
 };
 
 const prodError = (res, err) => {
-  // Check if the error is related application operation
+  // Check if the error is related to application operation
   // such as invalid user input, database connection errors, file system errors, etc
-  if (err?.isOperational) {
+  if (
+    err?.isOperational ||
+    err?.name === 'ValidationError' ||
+    err?.name === 'JsonWebTokenError'
+  ) {
     return res.status(err.statusCode).json({
       status: err.status,
       statusCode: err.statusCode,

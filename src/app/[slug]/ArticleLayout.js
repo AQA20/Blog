@@ -61,7 +61,7 @@ export default async function ArticleLayout({ article, children }) {
         </footer>
       </section>
       <section className="my-4">
-        <h3 className="text-lg">اقرأ أيضا</h3>
+        <div className="read-more text-lg">اقرأ أيضا</div>
         <section className="sm:hidden -ml-[.75rem]">
           <SwapIt slidesPerView={3.8}>
             {tags.map((tag) => (

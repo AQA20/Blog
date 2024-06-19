@@ -71,7 +71,7 @@ h2 {
   }
 }
 
-h3 {
+h3, .read-more {
   font-size: 1rem;
   font-weight: 700;
   line-height: 1.5rem;
