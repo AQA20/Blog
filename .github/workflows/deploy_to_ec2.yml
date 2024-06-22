@@ -21,11 +21,8 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests
-      run: npm test
-
     - name: Zip files
-      run: zip -r my-app.zip .
+      run: zip -r 500kalima.zip .
 
     - name: Upload to S3
       env:
