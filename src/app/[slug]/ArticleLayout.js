@@ -62,10 +62,11 @@ export default async function ArticleLayout({ article, children }) {
       </section>
       <section className="my-4">
         <div className="read-more text-lg">اقرأ أيضا</div>
-        <section className="sm:hidden -ml-[.75rem]">
-          <SwapIt slidesPerView={3.8}>
+        <section className="sm:hidden -ml-[.75rem] ">
+          <SwapIt slidesPerView={3.8} spaceBetween={10} childStyle="!w-fit">
             {tags.map((tag) => (
               <Badge
+                className="w-full"
                 key={tag.id}
                 title={tag.name}
                 link={`/tags/${tag.name}?search=${tag.name}`}
@@ -92,12 +93,12 @@ export default async function ArticleLayout({ article, children }) {
         </section>
         <section>{articles?.slice(3).map((article) => card(article))}</section>
       </section>
-      <section className="sm:hidden mt-4 items-center p-0">
-        <SwapIt slidesPerView={1}>
-          <section className="ml-3">
+      <section className="sm:hidden mt-4 items-center">
+        <SwapIt slidesPerView={1.3} spaceBetween="40">
+          <section className="w-full">
             {articles?.slice(0, 3).map((article) => card(article))}
           </section>
-          <section>
+          <section className="w-full">
             {articles?.slice(3).map((article) => card(article))}
           </section>
         </SwapIt>

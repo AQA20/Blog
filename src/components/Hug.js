@@ -10,7 +10,10 @@ const Hug = ({
   return (
     <button
       onClick={onClick}
-      className={`w-[40px] h-[40px] flex justify-center items-center disabled:bg-light-outlineVariant ${style}`}
+      className={`w-[40px] 
+      h-[40px] flex justify-center 
+      items-center disabled:text-light-outlineVariant 
+      disabled:dark:text-dark-outlineVariant ${style}`}
       disabled={disabled}
       aria-label={ariaLabel}
     >

@@ -34,7 +34,7 @@ const FilterBadges = ({ urlSearchParams }) => {
         />
       </div>
       <div className="md:hidden">
-        <SwapIt slidesPerView={3.5}>
+        <SwapIt slidesPerView={3.5} spaceBetween={10} childStyle="!w-fit">
           <FilterBadge
             title="الأحدث"
             link={`?${filter('createdAt', 'DESC', params)}`}

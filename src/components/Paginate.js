@@ -65,17 +65,17 @@ const Paginate = ({ pages }) => {
       <div className="flex justify-center items-center gap-2">
         <Hug
           onClick={() => handleArrowClick(false)}
-          style="rounded-full bg-dark-surfaceContainer"
+          style="rounded-full"
           disabled={pageQuery === 1}
         >
-          <RiArrowRightSLine size={24} className="fill-white" />
+          <RiArrowRightSLine size={24} />
         </Hug>
         <Hug
           onClick={handleArrowClick}
-          style="rounded-full bg-dark-surfaceContainer"
+          style="rounded-full"
           disabled={pageQuery === pages}
         >
-          <RiArrowLeftSLine size={24} className="fill-white" />
+          <RiArrowLeftSLine size={24} />
         </Hug>
       </div>
     </nav>
