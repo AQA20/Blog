@@ -51,7 +51,7 @@ jobs:
         run: |
           aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip
           rm -rf /home/ubuntu/500kalima
-          unzip /tmp/500kalima.zip -d /home/ubuntu/500kalima
+          unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima
           rm -rf /home/ubuntu/500kalima.zip
 
       - name: Run migrations
