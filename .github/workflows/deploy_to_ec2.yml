@@ -43,24 +43,16 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy to AWS CodeDeploy
+      - name: Deploy to EC2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
-          deployment_id=$(aws deploy create-deployment \
-                          --application-name ${{ secrets.CODEDEPLOY_APPLICATION_NAME }} \
-                          --deployment-group-name ${{ secrets.CODEDEPLOY_DEPLOYMENT_GROUP_NAME }} \
-                          --s3-location bucket=${{ secrets.S3_BUCKET }},key=500kalima.zip,bundleType=zip \
-                          --query "deploymentId" --output text)
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /tmp/500kalima.zip \
+          unzip /tmp/500kalima.zip -d /home/ubuntu/500kalima \
+          rm -rf /tmp
 
-      - name: Wait for deployment to complete
-        run: |
-          aws deploy wait deployment-successful \
-            --deployment-id $deployment_id \
-            --region ${{ secrets.AWS_REGION }}
-      
       - name: CD into the project server directory
         run: |
           cd home/ubuntu/500kalima/server
@@ -116,6 +108,10 @@ jobs:
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
         run: |
           pm2 start npm --name "server" -- start
+
+      - name: CD into the project root
+        run: |
+          cd ..
 
       - name: Build client app (Next.js)
         env:
