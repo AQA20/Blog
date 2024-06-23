@@ -49,15 +49,15 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
-          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /tmp/500kalima.zip \
-          unzip /tmp/500kalima.zip -d /home/ubuntu/500kalima \
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /tmp/500kalima.zip
+          rm -rf /home/ubuntu/500kalima
+          unzip /tmp/500kalima.zip -d /home/ubuntu/500kalima
           rm -rf /tmp
 
-      - name: CD into the project server directory
+      - name: Run migrations
         run: |
-          cd home/ubuntu/500kalima/server
-
-      - name: Run database migrations
+          cd /home/ubuntu/500kalima/server
+          npm run migrate:prod
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -80,10 +80,10 @@ jobs:
           CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL }}
           CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-        run: |
-          npm run migrate:prod
 
       - name: Start server
+        run: |
+          pm2 start npm --name "server" -- start
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -106,24 +106,14 @@ jobs:
           CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL }}
           CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-        run: |
-          pm2 start npm --name "server" -- start
 
-      - name: CD into the project root
+      - name: Build and start client app (Next.js)
         run: |
-          cd ..
-
-      - name: Build client app (Next.js)
-        env:
-          API_URL: ${{ secrets.API_URL }}
-        run: |
-          npm run build
-
-      - name: Start client app
-        env:
-          API_URL: ${{ secrets.API_URL }}
-        run: |
+          cd /home/ubuntu/500kalima
+          ~/.nvm/versions/node/v22.2.0/bin/npm run build
           pm2 start npm --name "client" -- start
+        env:
+          API_URL: ${{ secrets.API_URL }}
 
       - name: Save PM2 processes
         run: |
