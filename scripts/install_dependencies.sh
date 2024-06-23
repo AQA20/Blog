@@ -8,9 +8,6 @@ source ~/.nvm/nvm.sh
 nvm use v22.2.0
 
 
-# Create the directory if it does not exist
-mkdir -p /home/ubuntu/500kalima
-
 # Navigate to the application directory
 cd /home/ubuntu/500kalima
 
