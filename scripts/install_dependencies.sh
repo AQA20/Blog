@@ -7,6 +7,10 @@ set -e
 source ~/.nvm/nvm.sh
 nvm use v22.2.0
 
+
+# Navigate to the application directory
+cd /home/ubuntu/500kalima
+
 # Install project dependencies
 ~/.nvm/versions/node/v22.2.0/bin/npm install
 
