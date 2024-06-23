@@ -49,10 +49,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
-          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /tmp/500kalima.zip
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip
           rm -rf /home/ubuntu/500kalima
           unzip /tmp/500kalima.zip -d /home/ubuntu/500kalima
-          rm -rf /tmp
+          rm -rf /home/ubuntu/500kalima.zip
 
       - name: Run migrations
         run: |
