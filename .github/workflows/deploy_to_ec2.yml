@@ -52,7 +52,6 @@ jobs:
                         --filters "Name=tag:Name,Values=500Kalima-server" \
                         --query "Reservations[*].Instances[*].InstanceId" \
                         --output text)
-          echo "::set-output name=instance_id::$INSTANCE_ID"
 
       - name: Retrieve S3 Bucket Name from Secrets
         run: echo "S3_BUCKET=$S3_BUCKET" >> $GITHUB_ENV
@@ -90,18 +89,18 @@ jobs:
             --instance-ids $INSTANCE_ID \
             --document-name "AWS-RunShellScript" \
             --comment "Deploy 500kalima application" \
-            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip; \
-              sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima; \
-              sudo rm -rf /home/ubuntu/500kalima.zip; \
-              cd /home/ubuntu/500kalima/server; \
-              /usr/local/bin/node /usr/local/bin/npm run migrate:prod; \
-              /usr/local/bin/node /usr/local/bin/pm2 start npm --name server -- start; \
-              cd /home/ubuntu/500kalima; \
-              /usr/local/bin/node /usr/local/bin/npm run build; \
-              /usr/local/bin/node /usr/local/bin/pm2 start npm --name client -- start; \
-              /usr/local/bin/node /usr/local/bin/pm2 save; \
-              /usr/local/bin/node /usr/local/bin/pm2 startup; \
-              sudo systemctl reload nginx; \
-              sudo systemctl restart nginx" \
+            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip && \
+                                  sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima && \
+                                  sudo rm -rf /home/ubuntu/500kalima.zip && \
+                                  cd /home/ubuntu/500kalima/server && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run migrate:prod && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start /home/ubuntu/500kalima/server/app.js --name 'server' && \
+                                  cd /home/ubuntu/500kalima && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run build && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start /home/ubuntu/500kalima/app.js --name 'client' && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 save && \
+                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 startup && \
+                                  sudo systemctl reload nginx && \
+                                  sudo systemctl restart nginx" \
             --output-s3-bucket-name $S3_BUCKET \
             --output-s3-key-prefix "ssm-output/"
