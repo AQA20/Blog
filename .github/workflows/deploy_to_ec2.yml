@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: Checkout code
@@ -37,7 +37,7 @@ jobs:
         run: aws s3 cp 500kalima.zip s3://${{ secrets.S3_BUCKET }}/500kalima.zip
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
 
     steps:
