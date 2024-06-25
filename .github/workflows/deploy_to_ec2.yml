@@ -41,7 +41,16 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy to EC2 via AWS SSM
+      - name: Get EC2 Instance ID
+        id: ec2_instance
+        run: |
+          INSTANCE_ID=$(aws ec2 describe-instances \
+                        --filters "Name=tag:Name,Values=your-instance-name" \
+                        --query "Reservations[*].Instances[*].InstanceId" \
+                        --output text)
+          echo "::set-output name=instance_id::$INSTANCE_ID"
+
+      - name: Deploy to EC2 via AWS System Manager (AWS SSM)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -67,28 +76,21 @@ jobs:
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
           API_URL: ${{ secrets.API_URL }}
         run: |
-          INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=your-instance-name" --query "Reservations[*].Instances[*].InstanceId" --output text)
+          INSTANCE_ID="${{ steps.ec2_instance.outputs.instance_id }}"
           aws ssm send-command \
             --instance-ids $INSTANCE_ID \
             --document-name "AWS-RunShellScript" \
             --comment "Deploy 500kalima application" \
-            --parameters commands='
-              aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip;
-              sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima;
-              sudo rm -rf /home/ubuntu/500kalima.zip;
-
-              cd /home/ubuntu/500kalima/server;
-              npm run migrate:prod;
-
-              pm2 start npm --name "server" -- start;
-
-              cd /home/ubuntu/500kalima;
-              ~/.nvm/versions/node/v22.2.0/bin/npm run build;
-              pm2 start npm --name "client" -- start;
-
-              pm2 save;
-              pm2 startup;
-
-              sudo systemctl reload nginx;
-              sudo systemctl restart nginx;
-            '
+            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip; \
+              sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima; \
+              sudo rm -rf /home/ubuntu/500kalima.zip; \
+              cd /home/ubuntu/500kalima/server; \
+              npm run migrate:prod; \
+              pm2 start npm --name server -- start; \
+              cd /home/ubuntu/500kalima; \
+              ~/.nvm/versions/node/v22.2.0/bin/npm run build; \
+              pm2 start npm --name client -- start; \
+              pm2 save; \
+              pm2 startup; \
+              sudo systemctl reload nginx; \
+              sudo systemctl restart nginx"
