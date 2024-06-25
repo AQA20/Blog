@@ -59,25 +59,13 @@ jobs:
         run: |
           cd server && \
           npm run migrate:prod && \
+          pm2 start npm --name "server" -- start && \
           cd .. && \
-          pm2 list | grep -w "server" | grep -q "online"
-          if [ $? -eq 0 ]; then
-            echo "PM2 process 'server' is running. Restarting..."
-            pm2 restart server
-          else
-            echo "PM2 process 'server' is not running. Starting..."
-            pm2 start npm --name "server" -- start
-          fi && \
           npm run build && \
-          pm2 list | grep -w "client" | grep -q "online"
-          if [ $? -eq 0 ]; then
-            echo "PM2 process 'client' is running. Restarting..."
-            pm2 restart client
-          else
-            echo "PM2 process 'client' is not running. Starting..."
-            pm2 start npm --name "client" -- start
-          fi && \
+          pm2 start npm --name "client" -- start && \
+          pm2 restart all && \
           pm2 save && \
+          pm2 startup && \
           sudo cp -rp /home/ubuntu/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/.next && \
           sudo systemctl reload nginx && \
           sudo systemctl restart nginx
