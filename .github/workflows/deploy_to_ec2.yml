@@ -60,7 +60,6 @@ jobs:
           cd server && \
           npm run migrate:prod && \
           cd .. && \
-          # Check if PM2 process 'server' is running
           pm2 list | grep -w "server" | grep -q "online"
           if [ $? -eq 0 ]; then
             echo "PM2 process 'server' is running. Restarting..."
@@ -70,7 +69,6 @@ jobs:
             pm2 start npm --name "server" -- start
           fi && \
           npm run build && \
-          # Check if PM2 process 'client' is running
           pm2 list | grep -w "client" | grep -q "online"
           if [ $? -eq 0 ]; then
             echo "PM2 process 'client' is running. Restarting..."
