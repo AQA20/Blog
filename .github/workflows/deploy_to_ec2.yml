@@ -59,10 +59,8 @@ jobs:
         run: |
           cd server && \
           npm run migrate:prod && \
-          pm2 start npm --name "server" -- start && \
           cd .. && \
           npm run build && \
-          pm2 start npm --name "client" -- start && \
           pm2 restart all && \
           pm2 save && \
           pm2 startup && \
