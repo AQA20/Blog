@@ -59,9 +59,6 @@ jobs:
         env:
           S3_BUCKET: ${{ secrets.S3_BUCKET }}
 
-      - name: Print Node.js Path
-        run: which node
-
       - name: Deploy to EC2 via AWS System Manager (AWS SSM)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -97,13 +94,13 @@ jobs:
               sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima; \
               sudo rm -rf /home/ubuntu/500kalima.zip; \
               cd /home/ubuntu/500kalima/server; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run migrate:prod; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name server -- start; \
+              /usr/local/bin/node /usr/local/bin/npm run migrate:prod; \
+              /usr/local/bin/node /usr/local/bin/pm2 start npm --name 'server' -- start; \
               cd /home/ubuntu/500kalima; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run build; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name client -- start; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 save; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 startup; \
+              /usr/local/bin/node /usr/local/bin/npm run build; \
+              /usr/local/bin/node /usr/local/bin/pm2 start npm --name 'client' -- start; \
+              /usr/local/bin/node /usr/local/bin/pm2 save; \
+              /usr/local/bin/node /usr/local/bin/pm2 startup; \
               sudo systemctl reload nginx; \
               sudo systemctl restart nginx" \
             --output-s3-bucket-name $S3_BUCKET \
