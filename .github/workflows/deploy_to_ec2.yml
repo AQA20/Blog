@@ -59,10 +59,10 @@ jobs:
         run: |
           cd server && \
           npm run migrate:prod && \
-          pm2 start npm --name "server" -- start && \
+          pm2 restart all && \
           cd .. && \
           npm run build && \
-          pm2 start npm --name "server" -- start && \
+          pm2 restart all && \
           pm2 save && \
           pm2 startup && \
           sudo cp -rp /home/ubuntu/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/.next && \
