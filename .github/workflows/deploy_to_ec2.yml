@@ -47,8 +47,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
         run: |
-          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip
-          sudo rm -rf /home/ubuntu/500kalima
+          sudo aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip
           sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima
           sudo rm -rf /home/ubuntu/500kalima.zip
 
