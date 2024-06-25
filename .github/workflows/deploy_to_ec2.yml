@@ -59,10 +59,9 @@ jobs:
         run: |
           cd server && \
           npm run migrate:prod && \
-          pm2 start npm --name "server" -- start && \
           cd .. && \
           npm run build && \
-          pm2 start npm --name "client" -- start && \
+          pm2 restart all \
           sudo cp -rp /home/ubuntu/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/.next && \
           sudo systemctl reload nginx && \
           sudo systemctl restart nginx
