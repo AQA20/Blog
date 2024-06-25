@@ -58,10 +58,13 @@ jobs:
           API_URL: ${{ secrets.API_URL }}
         run: |
           cd server && \
+          pm2 delete server && \
           npm run migrate:prod && \
+          pm2 start npm --name "server" -- start && \
           cd .. && \
+          pm2 delete client && \
           npm run build && \
-          pm2 restart all && \
+          pm2 start npm --name "server" -- start && \
           pm2 save && \
           pm2 startup && \
           sudo cp -rp /home/ubuntu/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/.next && \
