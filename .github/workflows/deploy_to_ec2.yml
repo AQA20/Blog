@@ -95,10 +95,10 @@ jobs:
               sudo rm -rf /home/ubuntu/500kalima.zip; \
               cd /home/ubuntu/500kalima/server; \
               /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run migrate:prod; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name 'server' -- start; \
+              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name server -- start; \
               cd /home/ubuntu/500kalima; \
               /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run build; \
-              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name 'client' -- start; \
+              /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start npm --name client -- start; \
               /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 save; \
               /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 startup; \
               sudo systemctl reload nginx; \
