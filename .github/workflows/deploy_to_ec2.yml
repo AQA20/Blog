@@ -89,6 +89,6 @@ jobs:
               pm2 save;
               pm2 startup;
 
-              sudo systemctl reload nginx
-              sudo systemctl restart nginx
+              sudo systemctl reload nginx;
+              sudo systemctl restart nginx;
             '
