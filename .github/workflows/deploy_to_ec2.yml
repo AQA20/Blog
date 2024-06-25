@@ -41,24 +41,7 @@ jobs:
     needs: build
 
     steps:
-      - name: Get EC2 Instance ID
-        id: ec2_instance
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-        run: |
-          INSTANCE_ID=$(aws ec2 describe-instances \
-                        --filters "Name=tag:Name,Values=500Kalima-server" \
-                        --query "Reservations[*].Instances[*].InstanceId" \
-                        --output text)
-
-      - name: Retrieve S3 Bucket Name from Secrets
-        run: echo "S3_BUCKET=$S3_BUCKET" >> $GITHUB_ENV
-        env:
-          S3_BUCKET: ${{ secrets.S3_BUCKET }}
-
-      - name: Deploy to EC2 via AWS System Manager (AWS SSM)
+      - name: Deploy to EC2 via github action runner
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -84,23 +67,16 @@ jobs:
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
           API_URL: ${{ secrets.API_URL }}
         run: |
-          INSTANCE_ID="${{ steps.ec2_instance.outputs.instance_id }}"
-          aws ssm send-command \
-            --instance-ids $INSTANCE_ID \
-            --document-name "AWS-RunShellScript" \
-            --comment "Deploy 500kalima application" \
-            --parameters commands="aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip && \
-                                  sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima && \
-                                  sudo rm -rf /home/ubuntu/500kalima.zip && \
-                                  cd /home/ubuntu/500kalima/server && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run migrate:prod && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start /home/ubuntu/500kalima/server/app.js --name 'server' && \
-                                  cd /home/ubuntu/500kalima && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/npm run build && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 start /home/ubuntu/500kalima/app.js --name 'client' && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 save && \
-                                  /home/ubuntu/.nvm/versions/node/v22.2.0/bin/pm2 startup && \
-                                  sudo systemctl reload nginx && \
-                                  sudo systemctl restart nginx" \
-            --output-s3-bucket-name $S3_BUCKET \
-            --output-s3-key-prefix "ssm-output/"
+          aws s3 cp s3://${{ secrets.S3_BUCKET }}/500kalima.zip /home/ubuntu/500kalima.zip && \
+          sudo unzip /home/ubuntu/500kalima.zip -d /home/ubuntu/500kalima && \
+          sudo rm -rf /home/ubuntu/500kalima.zip && \
+          cd /home/ubuntu/500kalima/server && \
+          npm run migrate:prod && \
+          pm2 start /home/ubuntu/500kalima/server/app.js --name 'server' && \
+          cd /home/ubuntu/500kalima && \
+          npm run build && \
+          pm2 start /home/ubuntu/500kalima/app.js --name 'client' && \
+          pm2 save && \
+          pm2 startup && \
+          sudo systemctl reload nginx && \
+          sudo systemctl restart nginx
