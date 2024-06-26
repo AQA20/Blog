@@ -10,7 +10,6 @@
   "scripts": {
     "migration:create": "node --env-file .env umzug/migrate create --name",
     "migrate": "node --env-file .env umzug/migrate up",
-    "migrate:prod": "node umzug/migrate up",
     "migrate:rollback": "node --env-file .env umzug/migrate down",
     "migrate:rollback:all": "node --env-file .env umzug/migrate down --to 0",
     "seed": "node --env-file .env umzug/seed up",
@@ -20,7 +19,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "dev": "nodemon --watch . --exec 'node --env-file .env server.js'",
-    "start": "node server.js"
+    "start": "node --env-file .env server.js"
   },
   "author": "Ahmad AbuDawaba",
   "license": "ISC",
