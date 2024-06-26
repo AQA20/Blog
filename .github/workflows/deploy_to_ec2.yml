@@ -23,6 +23,7 @@ jobs:
             eval "$(ssh-agent -s)" &&
             ssh-add ~/.ssh/github_AI_Blog &&
             cd 500kalima && git pull &&
+            source ~/.nvm/nvm.sh &&
             npm i &&
             cd server && npm i &&
             npm run migrate &&
