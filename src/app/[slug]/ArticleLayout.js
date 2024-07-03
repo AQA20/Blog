@@ -32,7 +32,7 @@ export default async function ArticleLayout({ article, children }) {
   };
 
   return (
-    <div className="w-[680px]">
+    <>
       {/* Article content */}
       <section>{children}</section>
       <section
@@ -105,6 +105,6 @@ export default async function ArticleLayout({ article, children }) {
           </section>
         </SwapIt>
       </section>
-    </div>
+    </>
   );
 }
