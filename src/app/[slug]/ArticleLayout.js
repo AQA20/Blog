@@ -91,7 +91,9 @@ export default async function ArticleLayout({ article, children }) {
         <section className="w-[50%]">
           {articles?.slice(0, 3).map((article) => card(article))}
         </section>
-        <section className="w-[50%]">{articles?.slice(3).map((article) => card(article))}</section>
+        <section className="w-[50%]">
+          {articles?.slice(3).map((article) => card(article))}
+        </section>
       </section>
       <section className="sm:hidden mt-4 items-center">
         <SwapIt slidesPerView={1.3} spaceBetween="40">
