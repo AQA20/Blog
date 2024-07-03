@@ -32,7 +32,7 @@ export default async function ArticleLayout({ article, children }) {
   };
 
   return (
-    <>
+    <div className="w-[680px]">
       {/* Article content */}
       <section>{children}</section>
       <section
@@ -88,10 +88,10 @@ export default async function ArticleLayout({ article, children }) {
       </section>
 
       <section className="hidden sm:flex mt-4 items-center gap-6">
-        <section>
+        <section className="w-[50%]">
           {articles?.slice(0, 3).map((article) => card(article))}
         </section>
-        <section>{articles?.slice(3).map((article) => card(article))}</section>
+        <section className="w-[50%]">{articles?.slice(3).map((article) => card(article))}</section>
       </section>
       <section className="sm:hidden mt-4 items-center">
         <SwapIt slidesPerView={1.3} spaceBetween="40">
@@ -103,6 +103,6 @@ export default async function ArticleLayout({ article, children }) {
           </section>
         </SwapIt>
       </section>
-    </>
+    </div>
   );
 }
