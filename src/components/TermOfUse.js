@@ -4,7 +4,7 @@ const TermOfUse = () => {
       <header>
         <h1>شروط الخدمة</h1>
       </header>
-      <main>
+      <section>
         <section>
           <h2>مقدمة</h2>
           <p>
@@ -92,7 +92,7 @@ const TermOfUse = () => {
             <a href="/contact">اتصل بنا</a>.
           </p>
         </section>
-      </main>
+      </section>
     </article>
   );
 };

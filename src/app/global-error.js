@@ -18,7 +18,7 @@ export default function Error({ error, reset }) {
   return (
     <html className={`pt-4 ${noto_sans_arabic.variable}`} lang="en">
       <body className="md:w-[680px] font-noto">
-        <main className="md:flex">
+        <section className="md:flex">
           <section>
             <div className="px-3 md:w-[680px]">
               <section className="mb-6 min-height">
@@ -27,7 +27,7 @@ export default function Error({ error, reset }) {
               </section>
             </div>
           </section>
-        </main>
+        </section>
       </body>
     </html>
   );

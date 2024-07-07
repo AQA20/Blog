@@ -4,7 +4,7 @@ const PrivacyPolicy = () => {
       <header>
         <h1>سياسة الخصوصية</h1>
       </header>
-      <main>
+      <section>
         <section>
           <h2>مقدمة</h2>
           <p>
@@ -92,7 +92,7 @@ const PrivacyPolicy = () => {
             الاتصال بنا عبر صفحة <a href="/contact">اتصل بنا</a>.
           </p>
         </section>
-      </main>
+      </section>
     </article>
   );
 };
