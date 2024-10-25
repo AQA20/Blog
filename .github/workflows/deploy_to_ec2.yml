@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install root npm dependencies
+      - name: Install server npm dependencies
         run: |
           npm ci
           
@@ -67,6 +67,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Install client npm dependencies
+        run: |
+          npm ci
 
       - name: Build Client Application
         run: |
