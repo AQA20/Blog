@@ -11,10 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Install server npm dependencies
-        run: |
-          npm ci
           
       - name: Cache server npm dependencies
         uses: actions/cache@v3
@@ -99,7 +95,7 @@ jobs:
         run: |
           # Build the application in a temporary directory to minimize downtime
           sudo mkdir -p /var/www/next_temp
-          sudo cp -r ~/actions-runner/_work/Ai-Blog/.next /var/www/next_temp/
+          sudo cp -r ~/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/next_temp/
           sudo rm -rf /var/www/.next
           # Replace the old version with the new version
           sudo mv /var/www/next_temp/.next /var/www/.next
