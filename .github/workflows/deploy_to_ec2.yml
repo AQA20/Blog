@@ -34,8 +34,10 @@ jobs:
         run: |
           cd server
           npm run migrate
-          npm run seed
-          pm2 restart "server" || pm2 start npm --name "server" -- run start
+          npm run seed 
+          pm2 restart "server" || pm2 start npm --name "server" -- start
+          pm2 save
+          pm2 startup
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -85,7 +87,9 @@ jobs:
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          pm2 restart "client" || pm2 start npm --name "client" -- run start
+          pm2 restart "client" || pm2 start npm --name "client" -- start
+          pm2 save
+          pm2 startup
         env:
           API_URL: ${{ secrets.API_URL }}
 
