@@ -6,31 +6,21 @@ on:
       - main
 
 jobs:
-  deploy:
+  start-server:
     runs-on: self-hosted
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Cache root npm dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ./node_modules # Cache for client node_modules
-          key: ${{ runner.os }}-npm-root-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-root-
-
       - name: Install root npm dependencies
         run: |
           npm ci
-
+          
       - name: Cache server npm dependencies
         uses: actions/cache@v3
         with:
           path: |
-            server/node_modules # Cache for server node_modules
+            server/node_modules
           key: ${{ runner.os }}-npm-server-${{ hashFiles('server/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-server-
@@ -45,7 +35,7 @@ jobs:
           cd server
           npm run seed
           npm run migrate
-          pm2 restart "server" || pm2 start npm --name "server" -- run start  # Restart or start if not running
+          pm2 restart "server" || pm2 start npm --name "server" -- run start
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -71,23 +61,34 @@ jobs:
           CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
 
+  build-client:
+    runs-on: self-hosted
+    needs: start-server  # Ensure the server is started before this job runs
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Build Client Application
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          pm2 restart "client" || pm2 start npm --name "client" -- run start  # Restart or start if not running
+          pm2 restart "client" || pm2 start npm --name "client" -- run start
         env:
           API_URL: ${{ secrets.API_URL }}
 
+  deploy:
+    runs-on: self-hosted
+    needs: build-client  # Wait for the client to build before deploying
+    steps:
       - name: Deploy Build and Restart Services
         run: |
-          # Build the application in a temporary directory to minimize the downtime
+          # Build the application in a temporary directory to minimize downtime
           sudo mkdir -p /var/www/next_temp
           sudo cp -r ~/actions-runner/_work/Ai-Blog/.next /var/www/next_temp/
           sudo rm -rf /var/www/.next
           # Replace the old version with the new version
           sudo mv /var/www/next_temp/.next /var/www/.next
-          # Remove temp  directory
+          # Remove temp directory
           sudo rm -rf /var/www/next_temp
           sudo systemctl reload nginx
           sudo systemctl restart nginx
