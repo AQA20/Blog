@@ -37,7 +37,6 @@ jobs:
           npm run seed 
           pm2 restart "server" || pm2 start npm --name "server" -- start
           pm2 save
-          pm2 startup
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -89,7 +88,6 @@ jobs:
           npm run build  # Build the client application
           pm2 restart "client" || pm2 start npm --name "client" -- start
           pm2 save
-          pm2 startup
         env:
           API_URL: ${{ secrets.API_URL }}
 
