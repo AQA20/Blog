@@ -67,6 +67,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
+      - name: Cache client npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            client/node_modules
+          key: ${{ runner.os }}-npm-client-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-client-
 
       - name: Install client npm dependencies
         run: |
