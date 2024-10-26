@@ -16,7 +16,6 @@ runs:
       run: |
         cd ./server
         npm ci
-      working-directory: ./server
       shell: bash
 
     - name: Seed Database and Start Server
