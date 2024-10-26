@@ -9,19 +9,25 @@ jobs:
   start-server:
     runs-on: self-hosted
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Start Server
-        uses: ./actions/start-server
+        uses: ./.github/actions/start-server
 
   build-client:
     runs-on: self-hosted
     needs: start-server
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4  
+
       - name: Start Server
-        uses: ./actions/start-server
+        uses: ./.github/actions/start-server
 
   deploy:
     runs-on: self-hosted
     needs: build-client
     steps:
       - name: Deploy Build and Restart Services
-        uses: ./actions/deploy
+        uses: ./.github/actions/deploy

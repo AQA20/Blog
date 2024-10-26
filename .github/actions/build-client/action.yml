@@ -3,9 +3,6 @@ description: 'Builds the client application'
 runs:
   using: 'composite'
   steps:
-  - name: Checkout code
-    uses: actions/checkout@v4
-
   - name: Cache client npm dependencies
     uses: actions/cache@v4
     with:
