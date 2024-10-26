@@ -19,7 +19,6 @@ runs:
 
     - name: Seed Database and Start Server
       run: |
-        cd server
         npm run migrate
         npm run seed 
         pm2 restart "server" || pm2 start npm --name "server" -- start
