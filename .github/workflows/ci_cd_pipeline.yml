@@ -11,9 +11,28 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+          
+      - name: Cache server npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            server/node_modules
+          key: ${{ runner.os }}-npm-server-${{ hashFiles('server/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-server-
 
-      - name: Start Server
-        uses: ./.github/actions/start-server
+      - name: Install server npm dependencies
+        run: |
+          cd server
+          npm ci
+
+      - name: Seed Database and Start Server
+        run: |
+          cd server
+          npm run migrate
+          npm run seed 
+          pm2 restart "server" || pm2 start npm --name "server" -- start
+          pm2 save
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
@@ -39,22 +58,61 @@ jobs:
           CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
 
-
   build-client:
     runs-on: self-hosted
-    needs: start-server
+    needs: start-server  # Ensure the server is started before this job runs
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4  
+        uses: actions/checkout@v4
+      
+      - name: Cache client npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+          key: ${{ runner.os }}-npm-client-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-client-
 
-      - name: Start Server
-        uses: ./.github/actions/start-server
-    env:
-      API_URL: ${{ secrets.API_URL }}
+      - name: Install client npm dependencies
+        run: |
+          npm ci
+
+      - name: Cache Next.js build artifacts
+        uses: actions/cache@v4
+        with:
+          # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
+          path: |
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+          # Generate a new cache whenever packages or source files change.
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          # If source files changed but packages didn't, rebuild from a prior cache.
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Build Client Application
+        run: |
+          rm -rf .next  # Clean up previous build artifacts
+          npm run build  # Build the client application
+          pm2 restart "client" || pm2 start npm --name "client" -- start
+          pm2 save
+        env:
+          API_URL: ${{ secrets.API_URL }}
 
   deploy:
     runs-on: self-hosted
-    needs: build-client
+    needs: build-client  # Wait for the client to build before deploying
     steps:
       - name: Deploy Build and Restart Services
-        uses: ./.github/actions/deploy
+        run: |
+          # Build the application in a temporary directory to minimize downtime
+          sudo mkdir -p /var/www/next_temp
+          sudo cp -r ~/actions-runner/_work/Ai-Blog/Ai-Blog/.next /var/www/next_temp/
+          sudo rm -rf /var/www/.next
+          # Replace the old version with the new version
+          sudo mv /var/www/next_temp/.next /var/www/.next
+          # Remove temp directory
+          sudo rm -rf /var/www/next_temp
+          sudo systemctl reload nginx
+          sudo systemctl restart nginx
