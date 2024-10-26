@@ -1,0 +1,27 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  start-server:
+    runs-on: self-hosted
+    steps:
+      - name: Start Server
+        uses: ./.github/actions/start-server
+
+  build-client:
+    runs-on: self-hosted
+    needs: start-server
+    steps:
+      - name: Start Server
+        uses: ./.github/actions/start-server
+
+  deploy:
+    runs-on: self-hosted
+    needs: build-client
+    steps:
+      - name: Deploy Build and Restart Services
+        uses: ./.github/actions/deploy
