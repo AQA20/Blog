@@ -6,6 +6,21 @@ on:
       - main
 
 jobs:
+  clear-server-cache:
+    runs-on: self-hosted
+    if: ${{ github.event.head_commit.message == 'clear cache' }} # Triggered when commit message contains 'clear cache'
+    steps:
+      - name: Clear Cached Dependencies
+        run: |
+          echo "Clearing node_modules cache..."
+        # Cache key changes, which automatically invalidates previous cache
+      - name: Reset Cache Key
+        uses: actions/cache@v4
+        with:
+          path: |
+            server/node_modules
+          key: ${{ runner.os }}-npm-server-clear-${{ hashFiles('server/package-lock.json') }} # Adds 'clear' to key
+
   start-server:
     runs-on: self-hosted
     steps:
