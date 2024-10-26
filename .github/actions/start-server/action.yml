@@ -23,6 +23,7 @@ runs:
         npm run seed 
         pm2 restart "server" || pm2 start npm --name "server" -- start
         pm2 save
+      working-directory: ./server  
       shell: bash
       env:
         NODE_ENV: ${{ env.NODE_ENV }}
