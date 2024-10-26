@@ -7,21 +7,28 @@ on:
 jobs:
   clear-server-cache:
     runs-on: self-hosted
-    if: ${{ github.event.head_commit.message == 'clear server cache' }} # Triggered when commit message equal to 'clear server cache'
+    if: ${{ github.event.head_commit.message == 'clear cache' }}
     steps:
-      - name: Clear Cached Dependencies
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Clear node_modules Folder
         run: |
-          echo "Clearing node_modules cache..."
-        # Cache key changes, which automatically invalidates previous cache
-      - name: Reset Cache Key
+          echo "Removing cached node_modules..."
+          rm -rf server/node_modules # Ensures local node_modules are cleared
+
+      - name: Update Cache Key
         uses: actions/cache@v4
         with:
           path: |
             server/node_modules
-          key: ${{ runner.os }}-npm-server-clear-${{ hashFiles('server/package-lock.json') }} # Adds 'clear' to key
+          key: ${{ runner.os }}-npm-server-clear-${{ github.run_id }} # Unique key each run
+
+      - name: Stop Workflow After Cache Invalidation
+        run: exit 0
+
 
   start-server:
-    if: ${{ github.event.head_commit.message != 'clear server cache' }} # Only runs if NOT 'clear cache' commit
     runs-on: self-hosted
     steps:
       - name: Checkout code
