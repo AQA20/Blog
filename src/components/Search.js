@@ -173,7 +173,7 @@ const Search = ({ isShow, onHideSearch }) => {
             {''}
           </Hug>
         </div>
-        <div className="z-11 absolute top-[16%] left-16">
+        <div className="z-11 absolute top-[16%] left-3 md:left-16">
           {inputValue && (
             <Hug onClick={onHideSearch}>
               <RiCloseFill
