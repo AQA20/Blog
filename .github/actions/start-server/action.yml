@@ -13,7 +13,9 @@ runs:
           ${{ runner.os }}-npm-server-
 
     - name: Install server npm dependencies
-      run: npm ci
+      run: |
+        cd ./server
+        npm ci
       working-directory: ./server
       shell: bash
 
@@ -22,8 +24,7 @@ runs:
         npm run migrate
         npm run seed 
         pm2 restart "server" || pm2 start npm --name "server" -- start
-        pm2 save
-      working-directory: ./server  
+        pm2 save 
       shell: bash
       env:
         NODE_ENV: ${{ env.NODE_ENV }}
