@@ -13,9 +13,8 @@ runs:
           ${{ runner.os }}-npm-server-
 
     - name: Install server npm dependencies
-      run: |
-        cd server
-        npm ci
+      run: npm ci
+      working-directory: ./server
       shell: bash
 
     - name: Seed Database and Start Server
