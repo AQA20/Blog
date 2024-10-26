@@ -55,6 +55,7 @@ export const fetchSuggestions = handleAsyncError(async (search) => {
   const {
     data: { data },
   } = await apiClient.get(`/api/articles/suggestions?search=${term}`);
+  console.log('suggestions data', data);
   return data;
 });
 
