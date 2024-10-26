@@ -57,7 +57,6 @@ const Navbar = () => {
   const searchParams = useSearchParams();
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(0);
   const router = useRouter();
   const path = usePathname();
   const { setTheme, theme } = useTheme();
@@ -84,18 +83,6 @@ const Navbar = () => {
       setShowMenu(false);
     };
   }, [searchQuery, path]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      console.log(window.innerWidth)
-      setWindowWidth(window.innerWidth); // Step 3: Update state on resize
-    };
-
-    window.addEventListener('resize', handleResize); // Step 2: Add event listener
-    return () => {
-      window.removeEventListener('resize', handleResize); // Step 4: Clean up listener
-    };
-  }, []);
 
   return (
     <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-light-surface dark:bg-dark-surface">
@@ -154,8 +141,8 @@ const Navbar = () => {
                 </Hug>
               </div>
             )}
-            {/* Show menu icon when showMenu is false, on mobile and when showSearch is false */}
-            {!showMenu && !innerWidth < 600 && !showSearch && (
+            {/* Show menu icon when showMenu is false and when showSearch is false */}
+            {!showMenu && !showSearch && (
               <div className="block md:hidden">
                 <Hug
                   onClick={() => setShowMenu(true)}
