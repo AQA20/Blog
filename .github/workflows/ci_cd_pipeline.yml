@@ -22,6 +22,7 @@ jobs:
           key: ${{ runner.os }}-npm-server-clear-${{ hashFiles('server/package-lock.json') }} # Adds 'clear' to key
 
   start-server:
+    if: ${{ github.event.head_commit.message != 'clear cache' }} # Only runs if NOT 'clear cache' commit
     runs-on: self-hosted
     steps:
       - name: Checkout code
