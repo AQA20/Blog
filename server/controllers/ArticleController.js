@@ -236,20 +236,25 @@ export default class ArticleController {
 
   // Get search article suggestions
   static async getSearchSuggestions(req, res, next) {
-    const search = req.query.search;
-    const articles = await Article.findAll({
-      where: {
-        status: Article.APPROVED,
-        deletedAt: null,
-        title: {
-          [Op.like]: `${search}%`,
+    try {
+      const search = req.query.search;
+      const articles = await Article.findAll({
+        where: {
+          status: Article.APPROVED,
+          deletedAt: null,
+          title: {
+            [Op.like]: `${search}%`,
+          },
         },
-      },
-      limit: 5,
-      attributes: ['title', 'slug'],
-      order: [['createdAt', 'DESC']],
-    });
-    return resHandler(200, articles, res);
+        limit: 5,
+        attributes: ['title', 'slug'],
+        order: [['createdAt', 'DESC']],
+      });
+      return resHandler(200, articles, res);
+    } catch (error) {
+      console.error(error);
+      return resHandler(500, error, res);
+    }
   }
 
   static async getArticles(req, res, next) {
