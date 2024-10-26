@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-
 jobs:
   clear-server-cache:
     runs-on: self-hosted
