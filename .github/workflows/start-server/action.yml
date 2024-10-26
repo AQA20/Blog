@@ -1,0 +1,55 @@
+name: "Start Server"
+description: 'Starts the server and seeds the database'
+runs:
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Cache server npm dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          server/node_modules
+        key: ${{ runner.os }}-npm-server-${{ hashFiles('server/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-server-
+
+    - name: Install server npm dependencies
+      run: |
+        cd server
+        npm ci
+      shell: bash
+
+    - name: Seed Database and Start Server
+      run: |
+        cd server
+        npm run migrate
+        npm run seed 
+        pm2 restart "server" || pm2 start npm --name "server" -- start
+        pm2 save
+      shell: bash
+      env:
+        NODE_ENV: ${{ secrets.NODE_ENV }}
+        DB_USERNAME: ${{ secrets.DB_USERNAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        DB_HOST: ${{ secrets.DB_HOST }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        MYSQL_SSL_CA: ${{ secrets.MYSQL_SSL_CA }}
+        MYSQL_SSL_CERT: ${{ secrets.MYSQL_SSL_CERT }}
+        MYSQL_SSL_KEY: ${{ secrets.MYSQL_SSL_KEY }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_FILE_BUCKET: ${{ secrets.AWS_FILE_BUCKET }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_S3_OBJECT_BASEURL: ${{ secrets.AWS_S3_OBJECT_BASEURL }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
+        PORT: ${{ secrets.PORT }}
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+        CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL }}
+        CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
+        CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
