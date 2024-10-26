@@ -1,4 +1,8 @@
-const allowedOrigins = ['https://500kalima.com', 'http://localhost:3000'];
+const allowedOrigins = [
+  'https://500kalima.com',
+  'http://localhost:3000',
+  'https://www.500kalima.com',
+];
 
 const corsOptions = {
   origin: (origin, callback) => {
