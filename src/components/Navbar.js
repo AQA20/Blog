@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Hug from './Hug';
-import Link from 'next/link';
 import Search from './Search';
 import Menu from './Menu';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -58,6 +57,7 @@ const Navbar = () => {
   const searchParams = useSearchParams();
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(0);
   const router = useRouter();
   const path = usePathname();
   const { setTheme, theme } = useTheme();
@@ -84,6 +84,18 @@ const Navbar = () => {
       setShowMenu(false);
     };
   }, [searchQuery, path]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      console.log(window.innerWidth)
+      setWindowWidth(window.innerWidth); // Step 3: Update state on resize
+    };
+
+    window.addEventListener('resize', handleResize); // Step 2: Add event listener
+    return () => {
+      window.removeEventListener('resize', handleResize); // Step 4: Clean up listener
+    };
+  }, []);
 
   return (
     <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-light-surface dark:bg-dark-surface">
@@ -128,17 +140,33 @@ const Navbar = () => {
             />
           )}
           <div className="relative">
-            {/* Show menu ico when showMenu is true */}
+            {/* Show menu icon when showMenu is false on medium screen and above */}
             {!showMenu && (
-              <Hug
-                onClick={() => setShowMenu(true)}
-                ariaLabel="Show Menu Button"
-              >
-                <RiMenuLine
-                  size="24"
-                  className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
-                />
-              </Hug>
+              <div className="hidden md:block ">
+                <Hug
+                  onClick={() => setShowMenu(true)}
+                  ariaLabel="Show Menu Button"
+                >
+                  <RiMenuLine
+                    size="24"
+                    className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                  />
+                </Hug>
+              </div>
+            )}
+            {/* Show menu icon when showMenu is false, on mobile and when showSearch is false */}
+            {!showMenu && !innerWidth < 600 && !showSearch && (
+              <div className="block md:hidden">
+                <Hug
+                  onClick={() => setShowMenu(true)}
+                  ariaLabel="Show Menu Button"
+                >
+                  <RiMenuLine
+                    size="24"
+                    className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                  />
+                </Hug>
+              </div>
             )}
 
             {showMenu && (
