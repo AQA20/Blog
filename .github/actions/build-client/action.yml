@@ -38,4 +38,4 @@ runs:
       pm2 save
     shell: bash
     env:
-      API_URL: ${{ secrets.API_URL }}
+      API_URL: ${{ env.API_URL }}
