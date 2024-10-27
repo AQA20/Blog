@@ -26,7 +26,14 @@ jobs:
           cd server
           pwd
           npm ci
-
+      - name: Check if node_modules exists
+        run: |
+          if [ -d server/node_modules ]; then
+            echo "node_modules exists";
+            ls -la server/node_modules;
+          else
+            echo "node_modules does NOT exist";
+          fi
       - name: Seed Database and Start Server
         run: |
           pwd
