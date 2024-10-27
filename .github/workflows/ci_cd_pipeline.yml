@@ -5,29 +5,6 @@ on:
     branches:
       - main
 jobs:
-  clear-server-cache:
-    runs-on: self-hosted
-    if: ${{ github.event.head_commit.message == 'clear server cache' }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Clear node_modules Folder
-        run: |
-          echo "Removing cached node_modules..."
-          rm -rf server/node_modules # Ensures local node_modules are cleared
-
-      - name: Update Cache Key
-        uses: actions/cache@v4
-        with:
-          path: |
-            server/node_modules
-          key: ${{ runner.os }}-npm-server-clear-${{ github.run_id }} # Unique key each run
-
-      - name: Stop Workflow After Cache Invalidation
-        run: exit 0
-
-
   start-server:
     runs-on: self-hosted
     steps:
@@ -38,7 +15,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: |
+            pwd
             server/node_modules
+            pwd
           key: ${{ runner.os }}-npm-server-${{ hashFiles('server/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-server-
@@ -50,7 +29,9 @@ jobs:
 
       - name: Seed Database and Start Server
         run: |
+          pwd
           cd server
+          pwd
           npm run migrate
           npm run seed 
           pm2 restart "server" || pm2 start npm --name "server" -- start
