@@ -11,18 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Add /usr/bin to PATH
-        run: echo "PATH=/usr/bin:$PATH" >> $GITHUB_ENV
-
-
-      - name: Load NVM and use Node.js
-        run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Load NVM
-          nvm use node  # Use the latest version
-          node -v  # Check Node version
-          npm -v  # Check npm version
-
       - name: Cache server npm dependencies
         uses: actions/cache@v4
         with:
@@ -36,6 +24,18 @@ jobs:
         run: |
           cd server
           npm ci
+
+      - name: Add /usr/bin to PATH
+        run: echo "PATH=/usr/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Load NVM and use Node.js
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Load NVM
+          nvm use node  # Use the latest version
+          node -v  # Check Node version
+          npm -v  # Check npm version
+
       - name: Seed Database and Start Server
         run: |
           cd server
