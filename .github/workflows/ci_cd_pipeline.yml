@@ -20,11 +20,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-server-
 
-      - name: Install server npm dependencies
-        run: |
-          cd server
-          npm ci
-
       - name: Add /usr/bin to PATH
         run: echo "PATH=/usr/bin:$PATH" >> $GITHUB_ENV
 
@@ -35,6 +30,11 @@ jobs:
           nvm use node  # Use the latest version
           node -v  # Check Node version
           npm -v  # Check npm version
+
+      - name: Install server npm dependencies
+        run: |
+          cd server
+          npm ci
 
       - name: Seed Database and Start Server
         run: |
