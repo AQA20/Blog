@@ -20,17 +20,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-server-
 
-      - name: Add /usr/bin to PATH
-        run: echo "PATH=/usr/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Load NVM and use Node.js
-        run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Load NVM
-          nvm use node  # Use the latest version
-          node -v  # Check Node version
-          npm -v  # Check npm version
-
       - name: Install server npm dependencies
         run: |
           cd server
