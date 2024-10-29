@@ -11,8 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Add Node.js to PATH
-        run: echo "/usr/bin" >> $GITHUB_ENV  # Adjust path as necessary
+      - name: Add /usr/bin to PATH
+        run: echo "PATH=/usr/bin:$PATH" >> $GITHUB_ENV
+
 
       - name: Load NVM and use Node.js
         run: |
