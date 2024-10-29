@@ -96,7 +96,7 @@ const Navbar = () => {
           )}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
-            <Hug onClick={handleBackClick} ariaLabel="Back Button">
+            <Hug onClick={handleBackClick} aria-label="Back Button">
               <RiArrowRightLine
                 size={24}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"

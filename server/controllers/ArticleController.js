@@ -75,7 +75,6 @@ export default class ArticleController {
       origin: 'strict', // Restricts cookie to same-site requests
       maxAge: 86400000, // One day In ms
     };
-
     // Get the user's ip address
     const ipAddress =
       req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.ip;

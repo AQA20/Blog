@@ -1,9 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
 import { RiReplyLine } from '@remixicon/react';
-import Notification from './Notification';
 import Hug from './Hug';
 import { updateArticleShare } from '@/lib';
+import { useNotification } from '@/providers/NotificationProvider';
 
 const ShareButton = ({
   clipboardContent,
@@ -13,25 +12,21 @@ const ShareButton = ({
   textColor = 'text-light-primary dark:text-dark-primary',
   iconColor = 'fill-light-primary dark:fill-dark-primary',
 }) => {
-  const [copyNotification, setCopyNotification] = useState(false);
+  const showNotification = useNotification();
+
   const onShare = async () => {
     const slug = decodeURIComponent(clipboardContent);
     try {
+      // While updateArticleShare returns a promise,  we Fire-and-forget:
+      // updateArticleShare(id) runs in the background for better performance as
+      // no response is needed
+      updateArticleShare(id);
       await navigator.clipboard.writeText(`${window.location.origin}/${slug}`);
-      setCopyNotification(true);
+      showNotification('تم نسخ الرابط بنجاح!.', 'copy');
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const shareArticle = async () => {
-      await updateArticleShare(id);
-    };
-    if (copyNotification) {
-      shareArticle().then((data) => console.log(data));
-    }
-  }, [copyNotification, id]);
 
   return (
     <>
@@ -52,13 +47,6 @@ const ShareButton = ({
           {''}
         </Hug>
       )}
-
-      <Notification
-        onClose={() => setCopyNotification(false)}
-        isShow={copyNotification}
-        type="copy"
-        text="تم نسخ الرابط بنجاح!."
-      />
     </>
   );
 };

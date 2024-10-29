@@ -56,7 +56,8 @@ export default async function ArticleLayout({ article, children }) {
             buttonStyle="bg-light-primary dark:bg-dark-primary dark:text-dark-onPrimary"
             textColor="text-light-onPrimary dark:text-dark-onPrimary"
             iconColor="fill-light-onPrimary dark:fill-dark-onPrimary"
-            clipboardContent={article?.slug}
+            clipboardContent={article.slug}
+            id={article.id}
           />
         </footer>
       </section>

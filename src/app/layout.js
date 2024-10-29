@@ -5,7 +5,9 @@ import Sidebar from '@/components/Sidebar';
 import { fetchArticles } from '@/lib';
 import { Noto_Sans_Arabic } from 'next/font/google';
 import { Suspense } from 'react';
-import { ThemeProvider } from 'next-themes';
+import { NextUIProvider } from '@nextui-org/react';
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { NotificationProvider } from '@/providers/NotificationProvider';
 import CookiesDialog from '@/components/CookiesDialog';
 
 // If loading a variable font, you don't need to specify the font weight
@@ -62,33 +64,41 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
-          <main className="md:flex min-height">
-            <section className="w-full">
-              <Suspense>
-                <Navbar />
-              </Suspense>
-              <div className="px-3 xl:w-[680px]">
-                <section className="mb-6">
-                  <Suspense>{children}</Suspense>
+      <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
+        <NextUIProvider>
+          <NextThemesProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+          >
+            <NotificationProvider>
+              <main className="md:flex min-height">
+                <section className="w-full">
+                  <Suspense>
+                    <Navbar />
+                  </Suspense>
+                  <div className="px-3 xl:w-[680px]">
+                    <section className="mb-6">
+                      <Suspense>{children}</Suspense>
+                    </section>
+                  </div>
                 </section>
+                <aside className="hidden xl:block">
+                  <Suspense>
+                    <Sidebar articles={articles} />
+                  </Suspense>
+                </aside>
+              </main>
+              <div className="px-3">
+                <Suspense>
+                  <Footer />
+                </Suspense>
               </div>
-            </section>
-            <aside className="hidden xl:block">
-              <Suspense>
-                <Sidebar articles={articles} />
-              </Suspense>
-            </aside>
-          </main>
-          <div className="px-3">
-            <Suspense>
-              <Footer />
-            </Suspense>
-          </div>
-          <CookiesDialog />
-        </body>
-      </ThemeProvider>
+              <CookiesDialog />
+            </NotificationProvider>
+          </NextThemesProvider>
+        </NextUIProvider>
+      </body>
     </html>
   );
 }

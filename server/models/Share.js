@@ -52,6 +52,15 @@ Share.init(
     sequelize,
     timestamps: true,
     paranoid: true,
+    // Optimize query performance and enforce data integrity.
+    // The unique index on the combination of articleId, ipAddress, and uuid ensures that
+    // no two records can exist with the same articleId and ipAddress for the same user (identified by uuid).
+    indexes: [
+      {
+        unique: true,
+        fields: ['articleId', 'ipAddress', 'uuid'],
+      },
+    ],
   },
 );
 

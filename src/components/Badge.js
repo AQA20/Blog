@@ -24,15 +24,14 @@ const Badge = ({ title, link }) => {
   );
 
   return (
-    <Link className="text-sm text-nowrap dark:text-dark-onSurface" href={link}>
-      <button
-        className={clsx(
-          'border-2 my-2 border-outline dark:border-dark-outlineVariant h-8 px-4 rounded-lg ml-2',
-          { 'active-filter': isActive || '' },
-        )}
-      >
-        {title}
-      </button>
+    <Link
+      href={link}
+      className={clsx(
+        'inline-block align-middle border-2 my-2 border-outline dark:border-dark-outlineVariant h-10 px-4 pt-2 rounded-lg ml-2 text-sm text-nowrap dark:text-dark-onSurface',
+        { 'active-filter': isActive },
+      )}
+    >
+      {title}
     </Link>
   );
 };
