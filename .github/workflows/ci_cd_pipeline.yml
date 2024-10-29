@@ -10,6 +10,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+
+      - name: Set up Node.js
+        run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+          nvm install node  # Install the latest version of Node.js
+          nvm use node  # Use the latest version
+
           
       - name: Cache server npm dependencies
         uses: actions/cache@v4
@@ -23,7 +32,7 @@ jobs:
       - name: Install server npm dependencies
         run: |
           cd server
-          npm ci --verbose
+          npm ci
       - name: Seed Database and Start Server
         run: |
           cd server
