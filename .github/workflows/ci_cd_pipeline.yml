@@ -11,23 +11,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check Node.js version
-        run: node -v
-
-
-      - name: Check PATH
-        run: echo $PATH
-
+      - name: Add Node.js to PATH
+        run: echo "/usr/bin" >> $GITHUB_ENV  # Adjust path as necessary
 
       - name: Load NVM and use Node.js
         run: |
           export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # Load NVM
           nvm use node  # Use the latest version
-          node -v       # Check the version
-          npm -v        # Check the version
-
-
+          node -v  # Check Node version
+          npm -v  # Check npm version
 
       - name: Cache server npm dependencies
         uses: actions/cache@v4
