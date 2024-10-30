@@ -1,8 +1,8 @@
 'use client';
 
 import Dialog from './Dialog';
-import { RiCake3Line } from '@remixicon/react';
 import { useEffect, useState } from 'react';
+import Cake3Line from './iconComponents/Cake3Line';
 
 const CookiesDialog = () => {
   const [useCookies, setUseCookies] = useState(null);
@@ -25,7 +25,7 @@ const CookiesDialog = () => {
           onOk={handleOkClick}
         >
           <div className="my-4">
-            <RiCake3Line
+            <Cake3Line
               size={48}
               className="text-light-onSurfaceVariant dark:text-dark-onSurfaceVariant"
             />

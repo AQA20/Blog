@@ -1,15 +1,12 @@
 import Button from '@/components/Button';
 import Link from 'next/link';
-import { RiRadarLine } from '@remixicon/react';
+import ReplyLine from '@/components/iconComponents/ReplyLine';
 
 export default function NotFound() {
   return (
     <section className="mt-52">
       <figure>
-        <RiRadarLine
-          size="40"
-          className="fill-black dark:fill-dark-onSurface"
-        />
+        <ReplyLine size="40" className="fill-black dark:fill-dark-onSurface" />
       </figure>
       <section className="my-4">
         <header>

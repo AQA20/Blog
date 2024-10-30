@@ -1,10 +1,10 @@
 'use client';
 
-import { RiArrowRightLine } from '@remixicon/react';
-import { RiCloseFill } from '@remixicon/react';
+import ArrowRightLine from './iconComponents/ArrowRightLine';
+import CloseFill from './iconComponents/CloseFill';
+import SearchLine from './iconComponents/SearchLine';
 import Hug from './Hug';
 import { useEffect, useState, useRef, useMemo, Suspense } from 'react';
-import { RiSearchLine } from '@remixicon/react';
 import clsx from 'clsx';
 import { fetchSuggestions, debounce } from '@/lib';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
@@ -154,7 +154,7 @@ const Search = ({ isShow, onHideSearch }) => {
               >
                 <li>
                   <Hug>
-                    <RiSearchLine size={24} />
+                    <SearchLine size={24} />
                     {''}
                   </Hug>
                   <div className="truncate w-full">{suggestion.title}</div>
@@ -166,7 +166,7 @@ const Search = ({ isShow, onHideSearch }) => {
 
         <div className="absolute top-[16%] right-4">
           <Hug onClick={onHideSearch}>
-            <RiArrowRightLine
+            <ArrowRightLine
               size={20}
               className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
             />
@@ -176,7 +176,7 @@ const Search = ({ isShow, onHideSearch }) => {
         <div className="z-11 absolute top-[16%] left-3 md:left-16">
           {inputValue && (
             <Hug onClick={onHideSearch}>
-              <RiCloseFill
+              <CloseFill
                 size={20}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurfaceVariant"
               />

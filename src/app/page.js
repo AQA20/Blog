@@ -2,8 +2,8 @@ import { Suspense, lazy } from 'react';
 import { fetchArticles, timeAgo } from '@/lib';
 const Hero = lazy(() => import('@/components/Hero'));
 const Card = lazy(() => import('@/components/Card'));
-import Paginate from '@/components/Paginate';
-import FilterBadges from '@/components/FilterBadges';
+const Paginate = lazy(() => import('@/components/Paginate'));
+const FilterBadges = lazy(() => import('@/components/FilterBadges'));
 
 // Todo implement unit & integration tests
 

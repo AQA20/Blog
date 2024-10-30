@@ -1,6 +1,7 @@
 'use client';
+
+import ErrorWarningFill from '@/components/iconComponents/ErrorWarningFill';
 import Button from '@/components/Button';
-import { RiErrorWarningFill } from '@remixicon/react';
 import { useEffect } from 'react';
 
 export default function Error({ error, reset }) {
@@ -10,7 +11,7 @@ export default function Error({ error, reset }) {
   return (
     <section className="mt-52">
       <figure>
-        <RiErrorWarningFill size="40" className="fill-light-error" />
+        <ErrorWarningFill size="40" className="fill-light-error" />
       </figure>
       <section className="my-4">
         <header>

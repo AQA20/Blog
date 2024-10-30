@@ -5,23 +5,21 @@ import Hug from './Hug';
 import Search from './Search';
 import Menu from './Menu';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import {
-  RiMenuLine,
-  RiCloseLine,
-  RiSearchLine,
-  RiArrowRightLine,
-  RiHome2Line,
-  RiHashtag,
-  RiContrastFill,
-  RiMoonLine,
-  RiSunLine,
-} from '@remixicon/react';
+import ArrowRightLine from './iconComponents/ArrowRightLine';
+import MenuLIne from './iconComponents/MenuLIne';
+import CloseLine from './iconComponents/CloseLine';
+import SearchLine from './iconComponents/SearchLine';
+import Home2Line from './iconComponents/Home2Line';
+import Hashtag from './iconComponents/Hashtag';
+import ContrastFill from './iconComponents/ContrastFill';
+import MoonLine from './iconComponents/MoonLine';
+import SunLine from './iconComponents/SunLine';
 import { useTheme } from 'next-themes';
 import Logo from './Logo';
 
 const menuItems = [
-  { name: 'الرئيسية', url: '/', icon: <RiHome2Line size={24} /> },
-  { name: 'الهاشتاقات', url: '/tags', icon: <RiHashtag size={24} /> },
+  { name: 'الرئيسية', url: '/', icon: <Home2Line size={24} /> },
+  { name: 'الهاشتاقات', url: '/tags', icon: <Hashtag size={24} /> },
 ];
 
 const subMenuItems = (setTheme, theme) => ({
@@ -29,19 +27,19 @@ const subMenuItems = (setTheme, theme) => ({
     {
       name: 'تلقائي',
       onClick: () => setTheme('system'),
-      icon: <RiContrastFill size={24} />,
+      icon: <ContrastFill size={24} />,
       style: theme === 'system' ? 'active' : '',
     },
     {
       name: 'وضع الليل',
       onClick: () => setTheme('dark'),
-      icon: <RiMoonLine size={24} />,
+      icon: <MoonLine size={24} />,
       style: theme === 'dark' ? 'active' : '',
     },
     {
       name: 'وضع النهار',
       onClick: () => setTheme('light'),
-      icon: <RiSunLine size={24} />,
+      icon: <SunLine size={24} />,
       style: theme === 'light' ? 'active' : '',
     },
   ],
@@ -100,7 +98,7 @@ const Navbar = () => {
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
             <Hug onClick={handleBackClick} label="Back Button">
-              <RiArrowRightLine
+              <ArrowRightLine
                 size={24}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
               />
@@ -115,7 +113,7 @@ const Navbar = () => {
                 onClick={() => setShowSearch(true)}
                 label="Show Search Button"
               >
-                <RiSearchLine
+                <SearchLine
                   size="24"
                   className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                 />
@@ -134,7 +132,7 @@ const Navbar = () => {
             {!showMenu && (
               <div className="hidden md:block ">
                 <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
-                  <RiMenuLine
+                  <MenuLIne
                     size="24"
                     className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                   />
@@ -145,7 +143,7 @@ const Navbar = () => {
             {!showMenu && !showSearch && (
               <div className="block md:hidden">
                 <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
-                  <RiMenuLine
+                  <MenuLIne
                     size="24"
                     className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
                   />
@@ -162,7 +160,7 @@ const Navbar = () => {
                      rounded-full hover:cursor-pointer"
                   aria-label="Close Menu Button"
                 >
-                  <RiCloseLine
+                  <CloseLine
                     size={24}
                     className="text-light-onSurface dark:text-dark-onSurface"
                   />
