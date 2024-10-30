@@ -1,6 +1,7 @@
+import dynamic from 'next/dynamic';
 import Badge from './Badge';
 import filter from '@/lib/filter';
-import SwapIt from '@/components/SwapIt';
+const SwapIt = dynamic(() => import('@/components/SwapIt'));
 
 const FilterBadge = ({ title, link }) => {
   return (

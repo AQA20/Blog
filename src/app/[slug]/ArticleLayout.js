@@ -1,8 +1,8 @@
-import { lazy } from 'react';
+import dynamic from 'next/dynamic';
+const SwapIt = dynamic(() => import('@/components/SwapIt'));
 import Badge from '@/components/Badge';
 import Card from '@/components/Card';
 import ShareButton from '@/components/ShareButton';
-const SwapIt = lazy(() => import('@/components/SwapIt'));
 import { fetchTags, fetchArticles } from '@/lib';
 import timeAgo from '@/lib/timeAgo';
 import '../styles/article.css';
