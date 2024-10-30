@@ -1,11 +1,10 @@
 import './styles/globals.css';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
-import Sidebar from '@/components/Sidebar';
-import { fetchArticles } from '@/lib';
+import dynamic from 'next/dynamic';
+const DynamicFooter = dynamic(() => import('@/components/Footer'));
+const DynamicSidebar = dynamic(() => import('@/components/Sidebar'));
 import { Noto_Sans_Arabic } from 'next/font/google';
 import { Suspense } from 'react';
-import { NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { NotificationProvider } from '@/providers/NotificationProvider';
 import CookiesDialog from '@/components/CookiesDialog';
@@ -51,12 +50,6 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const { articles } = await fetchArticles({
-    orderBy: 'views',
-    order: 'DESC',
-    limit: 3,
-  });
-
   return (
     <html
       className={`pt-4 scroll-smooth ${noto_sans_arabic.variable}`}
@@ -65,39 +58,37 @@ export default async function RootLayout({ children }) {
       suppressHydrationWarning
     >
       <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
-        <NextUIProvider>
-          <NextThemesProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-          >
-            <NotificationProvider>
-              <main className="md:flex min-height">
-                <section className="w-full">
-                  <Suspense>
-                    <Navbar />
-                  </Suspense>
-                  <div className="px-3 xl:w-[680px]">
-                    <section className="mb-6">
-                      <Suspense>{children}</Suspense>
-                    </section>
-                  </div>
-                </section>
-                <aside className="hidden xl:block">
-                  <Suspense>
-                    <Sidebar articles={articles} />
-                  </Suspense>
-                </aside>
-              </main>
-              <div className="px-3">
+        <NextThemesProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <NotificationProvider>
+            <main className="md:flex min-height">
+              <section className="w-full">
                 <Suspense>
-                  <Footer />
+                  <Navbar />
                 </Suspense>
-              </div>
-              <CookiesDialog />
-            </NotificationProvider>
-          </NextThemesProvider>
-        </NextUIProvider>
+                <div className="px-3 xl:w-[680px]">
+                  <section className="mb-6">
+                    <Suspense>{children}</Suspense>
+                  </section>
+                </div>
+              </section>
+              <aside className="hidden xl:block">
+                <Suspense>
+                  <DynamicSidebar />
+                </Suspense>
+              </aside>
+            </main>
+            <div className="px-3">
+              <Suspense>
+                <DynamicFooter />
+              </Suspense>
+            </div>
+            <CookiesDialog />
+          </NotificationProvider>
+        </NextThemesProvider>
       </body>
     </html>
   );

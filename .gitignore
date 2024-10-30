@@ -48,3 +48,5 @@ tmp/uploads/*
 
 #exclude server node modules
 server/node_modules
+
+analyze
