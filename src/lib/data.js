@@ -59,7 +59,7 @@ export const fetchSuggestions = handleAsyncError(async (search) => {
 });
 
 export const fetchTags = cache(
-  handleAsyncError(async (limit = 7) => {
+  handleAsyncError(async (limit = 6) => {
     const {
       data: { data },
     } = await apiClient.get(`/api/tags/?limit=${limit}`);
