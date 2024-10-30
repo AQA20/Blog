@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, lazy } from 'react';
 import Hug from './Hug';
-import Search from './Search';
+const Search = lazy(() => import('./Search'));
 import Menu from './Menu';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import ArrowRightLine from './iconComponents/ArrowRightLine';
