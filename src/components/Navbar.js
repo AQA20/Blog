@@ -65,7 +65,6 @@ const Navbar = () => {
     () => subMenuItems(setTheme, theme),
     [theme],
   );
-
   const handleBackClick = () => {
     router.back();
   };
@@ -88,12 +87,16 @@ const Navbar = () => {
     <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-light-surface dark:bg-dark-surface">
       <nav className="flex justify-between items-center">
         <div>
-          {/* If home page show logo and search is hidden */}
-          {isHomePage && !showSearch && (
-            <a href="/" className="text-2xl" aria-label="Home Page Link">
-              <Logo fill={theme === 'light' ? 'black' : 'white'} />
-            </a>
-          )}
+          {/* If home page and search is hidden */}
+          {isHomePage &&
+            !showSearch &&
+            (!theme ? (
+              <p>Logo</p>
+            ) : (
+              <a href="/" className="text-2xl" aria-label="Home Page Link">
+                <Logo fill={theme === 'light' || !theme ? 'black' : 'white'} />
+              </a>
+            ))}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
             <Hug onClick={handleBackClick} aria-label="Back Button">
