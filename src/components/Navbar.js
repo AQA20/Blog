@@ -99,7 +99,7 @@ const Navbar = () => {
             ))}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
-            <Hug onClick={handleBackClick} aria-label="Back Button">
+            <Hug onClick={handleBackClick} label="Back Button">
               <RiArrowRightLine
                 size={24}
                 className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
@@ -113,7 +113,7 @@ const Navbar = () => {
             <div className="rounded-full">
               <Hug
                 onClick={() => setShowSearch(true)}
-                ariaLabel="Show Search Button"
+                label="Show Search Button"
               >
                 <RiSearchLine
                   size="24"
@@ -133,10 +133,7 @@ const Navbar = () => {
             {/* Show menu icon when showMenu is false on medium screen and above */}
             {!showMenu && (
               <div className="hidden md:block ">
-                <Hug
-                  onClick={() => setShowMenu(true)}
-                  ariaLabel="Show Menu Button"
-                >
+                <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
                   <RiMenuLine
                     size="24"
                     className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
@@ -147,10 +144,7 @@ const Navbar = () => {
             {/* Show menu icon when showMenu is false and when showSearch is false */}
             {!showMenu && !showSearch && (
               <div className="block md:hidden">
-                <Hug
-                  onClick={() => setShowMenu(true)}
-                  ariaLabel="Show Menu Button"
-                >
+                <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
                   <RiMenuLine
                     size="24"
                     className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
@@ -166,7 +160,7 @@ const Navbar = () => {
                   className="flex items-center justify-center h-[40px] w-[40px]
                      bg-light-surfaceContainer dark:bg-dark-surfaceContainerLow 
                      rounded-full hover:cursor-pointer"
-                  ariaLabel="Close Menu Button"
+                  aria-label="Close Menu Button"
                 >
                   <RiCloseLine
                     size={24}

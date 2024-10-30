@@ -2,8 +2,14 @@ import Card from './Card';
 import Badge from './Badge';
 import { Suspense } from 'react';
 import { timeAgo } from '@/lib';
+import { fetchArticles } from '@/lib';
 
-const Sidebar = ({ articles }) => {
+const Sidebar = async () => {
+  const { articles } = await fetchArticles({
+    orderBy: 'views',
+    order: 'DESC',
+    limit: 3,
+  });
   return (
     <article className="w-[344px] mr-12 pr-2 sticky top-0 py-2">
       <header>

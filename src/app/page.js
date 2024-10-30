@@ -1,7 +1,7 @@
-import Hero from '@/components/Hero';
-import Card from '@/components/Card';
+import { Suspense, lazy } from 'react';
 import { fetchArticles, timeAgo } from '@/lib';
-import { Suspense } from 'react';
+const Hero = lazy(() => import('@/components/Hero'));
+const Card = lazy(() => import('@/components/Card'));
 import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
 

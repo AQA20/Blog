@@ -3,7 +3,7 @@
 const Hug = ({
   children,
   style = '',
-  ariaLabel = 'button',
+  label = 'button',
   disabled = false,
   onClick = () => null,
 }) => {
@@ -15,7 +15,7 @@ const Hug = ({
       items-center disabled:text-light-outlineVariant 
       disabled:dark:text-dark-outlineVariant ${style}`}
       disabled={disabled}
-      aria-label={ariaLabel}
+      aria-label={label}
     >
       {children}
     </button>
