@@ -22,7 +22,6 @@ const nextConfig = {
   staticPageGenerationTimeout: 300,
   swcMinify: true, // Enables the SWC minifier for faster builds
   reactStrictMode: process.env.NODE_ENV !== 'production',
-  productionBrowserSourceMaps: true,
 };
 
 export default withBundleAnalyzer(nextConfig);
