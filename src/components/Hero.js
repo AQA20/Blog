@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Button from './Button';
-import { RiArrowDownLine } from '@remixicon/react';
+import ArrowDownLine from './iconComponents/ArrowDownLine';
 import { Suspense, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -55,7 +55,7 @@ const Hero = ({ article }) => {
             componentRef.current.scrollIntoView({ behavior: 'smooth' })
           }
         >
-          <RiArrowDownLine
+          <ArrowDownLine
             size="20px"
             className="fill-white dark:fill-dark-onPrimary"
           />

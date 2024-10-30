@@ -3,7 +3,8 @@
 import Hug from './Hug';
 import Link from 'next/link';
 import { useMemo } from 'react';
-import { RiArrowLeftSLine, RiArrowRightSLine } from '@remixicon/react';
+import ArrowLeftSLine from './iconComponents/ArrowLeftSLine';
+import ArrowRightSLine from './iconComponents/ArrowRightSLine';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 
 const Paginate = ({ pages }) => {
@@ -68,14 +69,14 @@ const Paginate = ({ pages }) => {
           style="rounded-full"
           disabled={pageQuery === 1}
         >
-          <RiArrowRightSLine size={24} />
+          <ArrowRightSLine size={24} />
         </Hug>
         <Hug
           onClick={handleArrowClick}
           style="rounded-full"
           disabled={pageQuery === pages}
         >
-          <RiArrowLeftSLine size={24} />
+          <ArrowLeftSLine size={24} />
         </Hug>
       </div>
     </nav>

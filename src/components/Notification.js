@@ -4,12 +4,10 @@ import { useEffect, useRef } from 'react';
 import Hug from './Hug';
 import clsx from 'clsx';
 import { debounce } from '@/lib';
-import {
-  RiCheckLine,
-  RiCloseFill,
-  RiErrorWarningLine,
-  RiFileCopyLine,
-} from '@remixicon/react';
+import CheckLine from './iconComponents/CheckLine';
+import CloseFill from './iconComponents/CloseFill';
+import ErrorWarningLine from './iconComponents/ErrorWarningLine';
+import FileCopyLine from './iconComponents/FileCopyLine';
 
 const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
   const notificationRef = useRef(null);
@@ -24,25 +22,17 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
     switch (type) {
       case 'warning':
         return (
-          <RiErrorWarningLine
-            size={24}
-            className="text-light-inverseOnSurface"
-          />
+          <ErrorWarningLine size={24} className="text-light-inverseOnSurface" />
         );
       case 'error':
         return (
-          <RiErrorWarningLine
-            size={24}
-            className="text-light-inverseOnSurface"
-          />
+          <ErrorWarningLine size={24} className="text-light-inverseOnSurface" />
         );
       case 'success':
-        return (
-          <RiCheckLine size={24} className="text-light-inverseOnSurface" />
-        );
+        return <CheckLine size={24} className="text-light-inverseOnSurface" />;
       case 'copy':
         return (
-          <RiFileCopyLine size={24} className="text-light-inverseOnSurface" />
+          <FileCopyLine size={24} className="text-light-inverseOnSurface" />
         );
     }
   };
@@ -71,7 +61,7 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
         </div>
         <div>
           <Hug onClick={onClose}>
-            <RiCloseFill size={24} className="fill-light-inverseOnSurface" />
+            <CloseFill size={24} className="fill-light-inverseOnSurface" />
           </Hug>
         </div>
       </div>

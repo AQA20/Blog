@@ -1,6 +1,6 @@
 'use client';
 
-import { RiArrowLeftSLine } from '@remixicon/react';
+import ArrowLeftSLine from './iconComponents/ArrowLeftSLine';
 import { useReducer, useMemo } from 'react';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -50,7 +50,7 @@ const SubMenu = ({ items }) => {
                 'transform -rotate-90': subMenus[name] === true,
               })}
             >
-              <RiArrowLeftSLine size={24} />
+              <ArrowLeftSLine size={24} />
             </div>
           </button>
 
