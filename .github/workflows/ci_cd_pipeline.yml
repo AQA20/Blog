@@ -95,6 +95,7 @@ jobs:
           pm2 save
         env:
           API_URL: ${{ secrets.API_URL }}
+          ANALYZE: ${{ secrets.ANALYZE }}
 
   deploy:
     runs-on: self-hosted
