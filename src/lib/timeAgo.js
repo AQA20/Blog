@@ -1,4 +1,5 @@
-import { parseISO, formatDistanceToNow } from 'date-fns';
+import parseISO from 'date-fns/parseISO';
+import formatDistanceToNow from 'date-fns/formatDistanceToNow';
 import arLocale from 'date-fns/locale/ar';
 
 const timeAgo = (timestamp) => {
