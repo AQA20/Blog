@@ -1,6 +1,6 @@
 'use client';
 
-import { Children, cloneElement } from 'react';
+import { Children } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
 
@@ -10,14 +10,11 @@ const SwapIt = ({
   childStyle = '',
   children,
 }) => {
-  const swiperChildren = Children.map(children, (child, index) => {
-    return cloneElement(
-      <SwiperSlide className={childStyle}>{child}</SwiperSlide>,
-      {
-        key: index,
-      },
-    );
-  });
+  const swiperChildren = Children.map(children, (child, index) => (
+    <SwiperSlide key={index} className={childStyle}>
+      {child}
+    </SwiperSlide>
+  ));
   return (
     <div>
       <Swiper
@@ -25,6 +22,7 @@ const SwapIt = ({
         slidesPerView={slidesPerView}
         spaceBetween={spaceBetween}
         centeredSlides={false}
+        lazy={true}
       >
         {swiperChildren}
       </Swiper>
