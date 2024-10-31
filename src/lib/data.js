@@ -35,21 +35,23 @@ export const fetchArticle = cache(
 // Using Cache for caching the previous calls, when the function is called again
 // with same arguments, wrap it with handleAsyncError to catch errors and fetch
 // the all the articles
-export const fetchArticles = handleAsyncError(async (options) => {
-  const { orderBy, order, search, limit, page } = options;
-  const normalizedPage = page ? page : 1;
-  const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
-  const normalizedOrder = order ? order : 'DESC';
-  const normalizedLimit = limit ? limit : 5;
-  const normalizedSearch = search ? search : '';
-  const {
-    data: { data },
-  } = await apiClient.get(
-    `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
-  );
+export const fetchArticles = cache(
+  handleAsyncError(async (options) => {
+    const { orderBy, order, search, limit, page } = options;
+    const normalizedPage = page ? page : 1;
+    const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
+    const normalizedOrder = order ? order : 'DESC';
+    const normalizedLimit = limit ? limit : 5;
+    const normalizedSearch = search ? search : '';
+    const {
+      data: { data },
+    } = await apiClient.get(
+      `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
+    );
 
-  return data;
-});
+    return data;
+  }),
+);
 
 // Wrap it with handleAsyncError to catch errors and fetch
 // all of article slugs
