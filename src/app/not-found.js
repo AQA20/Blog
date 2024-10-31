@@ -1,12 +1,20 @@
 import Button from '@/components/Button';
 import Link from 'next/link';
-import ReplyLine from '@/components/iconComponents/ReplyLine';
+import RadarLine from '@/components/iconComponents/RadarLine';
+
+// This function generates static parameters for each article
+// export async function generateStaticParams() {
+//   // Fetch all of the slugs from the API
+//   const data = await fetchArticleSlugs();
+//   // Each slug will be used to generate a static page
+//   return 'not-found'
+// }
 
 export default function NotFound() {
   return (
     <section className="mt-52">
       <figure>
-        <ReplyLine size="40" className="fill-black dark:fill-dark-onSurface" />
+        <RadarLine size="40" className="fill-black dark:fill-dark-onSurface" />
       </figure>
       <section className="my-4">
         <header>

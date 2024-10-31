@@ -4,38 +4,39 @@ import { notFound } from 'next/navigation';
 import DOMPurify from 'isomorphic-dompurify';
 import ShareButton from '@/components/ShareButton';
 import ArticleLayout from './ArticleLayout';
-import { fetchArticle } from '@/lib';
-import { cookies } from 'next/headers';
+import { fetchArticle, fetchArticleSlugs } from '@/lib';
 import moment from 'moment';
 
-const existingCookies = () => {
-  return (
-    cookies()
-      .getAll()
-      .map((cookie) => `${cookie.name}=${cookie.value}`)
-      .join('; ') || ''
-  );
-};
+// This function generates static parameters for each article
+export async function generateStaticParams() {
+  // Fetch all of the slugs from the API
+  const data = await fetchArticleSlugs();
+  // Each slug will be used to generate a static page
+  return data.map((article) => article.slug);
+}
 
 export async function generateMetadata({ params }) {
   // Even though we're calling fetchArticle twice once here and once
   // In the page component the request will be sent once, as we're
   // using react cache
-  const article = await fetchArticle(params.slug, existingCookies());
+  const article = await fetchArticle(params.slug);
   !article && notFound();
 
+  const { title, description, featuredImg, author, createdAt, Tags, slug } =
+    article;
+
   return {
-    title: article.title,
-    description: article.description,
+    title,
+    description,
     openGraph: {
       // Open Graph (OG) tags
-      title: article.title,
-      description: article.description,
-      url: `https://500kalima.com/${article.slug}`,
+      title,
+      description,
+      url: `https://500kalima.com/${slug}`,
       siteName: '500kalima',
       images: [
         {
-          url: article.featuredImg, // Must be an absolute URL
+          url: featuredImg, // Must be an absolute URL
           width: 680,
           height: 510,
         },
@@ -44,18 +45,16 @@ export async function generateMetadata({ params }) {
       type: 'website',
     },
     // Other metadata
-    canonicalUrl: `https://500kalima.com/${article.slug}`,
-    author: article.author.name,
-    publicationDate: moment(article.createdAt).format(
-      'MMMM Do YYYY, h:mm:ss a',
-    ),
-    keywords: article.Tags.map((tag) => tag.name).join(', '),
+    canonicalUrl: `https://500kalima.com/${slug}`,
+    author: author.name,
+    publicationDate: moment(createdAt).format('MMMM Do YYYY, h:mm:ss a'),
+    keywords: Tags.map((tag) => tag.name).join(', '),
     language: 'ar',
   };
 }
 
 export default async function Page({ params }) {
-  const article = await fetchArticle(params.slug, existingCookies());
+  const article = await fetchArticle(params.slug);
   !article && notFound();
 
   const cleanHtml = DOMPurify.sanitize(article.content, {

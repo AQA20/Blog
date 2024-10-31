@@ -288,6 +288,22 @@ export default class ArticleController {
     return resHandler(200, data, res);
   }
 
+  // Get all article slugs
+  static async getAllArticleSlugs(req, res, next) {
+    // Find approved and not deleted articles, only select the slug attribute
+    const articles = await Article.findAll({
+      where: {
+        status: Article.APPROVED,
+        deletedAt: null,
+      },
+      attributes: ['slug'],
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Return articles
+    return resHandler(200, articles, res);
+  }
+
   static async createArticle(req, res, next) {
     // Set authorId which references the user_id and it's required
     req.body.authorId = req.user.id;

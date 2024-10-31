@@ -20,19 +20,21 @@ const handleAsyncError = (func) => {
   };
 };
 
+// Using Cache for caching the previous calls, when the function is called again
+// with same arguments, wrap it with handleAsyncError to catch errors and fetch
+// the article by its slug
 export const fetchArticle = cache(
-  handleAsyncError(async (slug, cookies) => {
+  handleAsyncError(async (slug) => {
     const {
       data: { data },
-    } = await apiClient.get(`/api/article/${slug}`, {
-      headers: {
-        Cookie: cookies,
-      },
-    });
+    } = await apiClient.get(`/api/article/${slug}`);
     return data;
   }),
 );
 
+// Using Cache for caching the previous calls, when the function is called again
+// with same arguments, wrap it with handleAsyncError to catch errors and fetch
+// the all the articles
 export const fetchArticles = handleAsyncError(async (options) => {
   const { orderBy, order, search, limit, page } = options;
   const normalizedPage = page ? page : 1;
@@ -45,6 +47,16 @@ export const fetchArticles = handleAsyncError(async (options) => {
   } = await apiClient.get(
     `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
   );
+
+  return data;
+});
+
+// Wrap it with handleAsyncError to catch errors and fetch
+// all of article slugs
+export const fetchArticleSlugs = handleAsyncError(async () => {
+  const {
+    data: { data },
+  } = await apiClient.get('/api/article/slugs');
 
   return data;
 });
