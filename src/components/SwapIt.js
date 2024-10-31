@@ -22,7 +22,7 @@ const SwapIt = ({
         slidesPerView={slidesPerView}
         spaceBetween={spaceBetween}
         centeredSlides={false}
-        lazy={true}
+        lazy="true"
       >
         {swiperChildren}
       </Swiper>

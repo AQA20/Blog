@@ -19,6 +19,12 @@ router.get(
   handleAsyncApiError(ArticleController.getArticles),
 );
 
+// Get all article slugs
+router.get(
+  '/article/slugs',
+  handleAsyncApiError(ArticleController.getAllArticleSlugs),
+);
+
 // Get article
 router.get(
   '/article/:value',
