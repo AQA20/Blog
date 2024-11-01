@@ -61,6 +61,7 @@
   animation: expandHeight 0.3s 0.4s forwards;
   position: absolute;
   width: 608px;
+  background-color: red;
 }
 
 @media (max-width: 640px) {
