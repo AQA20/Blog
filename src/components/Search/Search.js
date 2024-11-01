@@ -1,14 +1,14 @@
 'use client';
 
-import ArrowRightLine from './iconComponents/ArrowRightLine';
-import CloseFill from './iconComponents/CloseFill';
-import SearchLine from './iconComponents/SearchLine';
-import Hug from './Hug';
+import ArrowRightLine from '../iconComponents/ArrowRightLine';
+import CloseFill from '../iconComponents/CloseFill';
+import SearchLine from '../iconComponents/SearchLine';
+import Hug from '../Hug';
 import { useEffect, useState, useRef, useMemo, Suspense } from 'react';
 import clsx from 'clsx';
 import { fetchSuggestions, debounce } from '@/lib';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import '../app/styles/search.css';
+import './search.css';
 
 const Search = ({ isShow, onHideSearch }) => {
   const inputRef = useRef(null);
@@ -141,9 +141,9 @@ const Search = ({ isShow, onHideSearch }) => {
         {suggestions.show && suggestions.data?.length > 0 && (
           <ul
             ref={suggestionRef}
-            className="suggestions rounded-tr-none rounded-tl-none block
+            className={`suggestions rounded-tr-none rounded-tl-none block
            bg-light-surfaceContainerHigh dark:bg-dark-surfaceContainerHigh
-            dark:text-dark-onSurfaceVariant"
+            dark:text-dark-onSurfaceVariant`}
           >
             <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
             {suggestions.data?.map((suggestion) => (

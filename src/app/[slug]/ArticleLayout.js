@@ -65,7 +65,7 @@ export default async function ArticleLayout({ article, children }) {
       <section className="my-4">
         <div className="read-more text-lg">اقرأ أيضا</div>
         <section className="sm:hidden -ml-[.75rem] ">
-          <SwapIt slidesPerView={3.8} spaceBetween={10} childStyle="!w-fit">
+          <SwapIt slidesPerView={3.2} spaceBetween={10} childStyle="!w-fit">
             {tags.map((tag) => (
               <Badge
                 className="w-full"
