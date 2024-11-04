@@ -7,7 +7,7 @@ import { Noto_Sans_Arabic } from 'next/font/google';
 import { Suspense } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { NotificationProvider } from '@/providers/NotificationProvider';
-import CookiesDialog from '@/components/CookiesDialog';
+import CookieConsentManager from '@/components/CookieConsentManager';
 
 // If loading a variable font, you don't need to specify the font weight
 const noto_sans_arabic = Noto_Sans_Arabic({
@@ -86,7 +86,7 @@ export default async function RootLayout({ children }) {
                 <DynamicFooter />
               </Suspense>
             </div>
-            <CookiesDialog />
+            <CookieConsentManager />
           </NotificationProvider>
         </NextThemesProvider>
       </body>
