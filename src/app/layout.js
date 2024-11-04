@@ -8,6 +8,7 @@ import { Suspense } from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { NotificationProvider } from '@/providers/NotificationProvider';
 import CookieConsentManager from '@/components/CookieConsentManager';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 // If loading a variable font, you don't need to specify the font weight
 const noto_sans_arabic = Noto_Sans_Arabic({
@@ -90,6 +91,7 @@ export default async function RootLayout({ children }) {
           </NotificationProvider>
         </NextThemesProvider>
       </body>
+      <GoogleAnalytics gaId="G-VWF93TCR92" />
     </html>
   );
 }
