@@ -141,7 +141,7 @@ export default class CategoryController {
       { model: Article, name: 'Articles' },
     ]);
 
-    // Check if category was successfully delete
+    // Check if category was successfully deleted
     if (isDeleted) {
       return resHandler(204, 'Category was successfully deleted!', res);
     }

@@ -8,13 +8,6 @@ const devError = (res, err) => {
 };
 
 const prodError = (res, err) => {
-  // Temp debug
-  return res.status(err.statusCode).json({
-    status: err.status,
-    statusCode: err.statusCode,
-    message: err.message,
-    trace: err.stack,
-  });
   // Check if the error is related to application operation
   // such as invalid user input, database connection errors, file system errors, etc
   if (

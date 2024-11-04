@@ -40,11 +40,9 @@ ArticleTag.associate = (models) => {
   // Define associations
   ArticleTag.belongsTo(models.Tag, {
     foreignKey: 'tagId',
-    onDelete: 'CASCADE',
   });
   ArticleTag.belongsTo(models.Article, {
     foreignKey: 'articleId',
-    onDelete: 'CASCADE',
   });
 };
 

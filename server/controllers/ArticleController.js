@@ -6,6 +6,7 @@ import Image from '../models/Image.js';
 import View from '../models/View.js';
 import Share from '../models/Share.js';
 import Metrics from '../services/Metrics.js';
+import ArticleTag from '../models/ArticleTag.js';
 import resHandler from '../services/ResHandler.js';
 import S3Service from '../services/S3Client.js';
 import ApiError from '../services/ApiError.js';
@@ -104,60 +105,63 @@ export default class ArticleController {
     return resHandler(200, 'Article share counts have been updated', res);
   }
 
+  static async #fetchArticle(query) {
+    return await Article.findOne({
+      where: { status: Article.APPROVED, ...query },
+      include: [
+        {
+          model: User,
+          required: true,
+          as: 'author',
+          attributes: ['id', 'name'],
+        },
+        { model: Category, attributes: ['id', 'name'] },
+        {
+          model: Tag,
+          through: {
+            attributes: [],
+            where: {
+              deletedAt: null,
+            },
+          },
+          attributes: ['id', 'name'],
+        },
+        { model: Image, attributes: ['id', 'name'] },
+      ],
+    });
+  }
+
   static async getArticle(req, res, next) {
     const value = req.params.value;
     // Determine whether id or slug was passed and return the corresponding query
     const query = getQuery(value, 'slug');
-    db.sequelize.transaction(async (t) => {
-      const article = await Article.findOne({
-        where: { status: Article.APPROVED, ...query },
-        include: [
-          {
-            model: User,
-            required: true,
-            as: 'author',
-            attributes: ['id', 'name'],
-          },
-          { model: Category, attributes: ['id', 'name'] },
-          {
-            model: Tag,
-            through: {
-              attributes: [],
-              where: {
-                deletedAt: null,
-              },
-            },
-            attributes: ['id', 'name'],
-          },
-          { model: Image, attributes: ['id', 'name'] },
-        ],
+
+    const article = await ArticleController.#fetchArticle(query);
+    if (!article) {
+      return next(new ApiError('Article is not found', 404));
+    }
+    // Find the article's thumbnail image
+    const thumbnailImg = article.Images.find(
+      (image) => image.id === article.thumbnailId,
+    );
+    // Fetch article's featured image from s3
+    const featuredImg = ArticleController.#s3Service.getFile(thumbnailImg.name);
+    // Attach the featuredImg to the article object
+    article.setDataValue('featuredImg', featuredImg);
+    // Fetch other articles images from s3
+    const images = await ArticleController.#addImgUrls(article.Images);
+    article.setDataValue('Images', images);
+
+    // Update article views metric
+    const { metricUUID, cookie } =
+      await ArticleController.#updateArticleMetrics(req, {
+        articleId: article.id,
+        model: View,
+        metricName: 'viewUUID',
       });
-      if (!article) {
-        return next(new ApiError('Article is not found', 404));
-      }
-      const thumbnailImg = article.Images.find(
-        (image) => image.id === article.thumbnailId,
-      );
-
-      // Fetch article's featured image from s3
-      const featuredImg = ArticleController.#s3Service.getFile(
-        thumbnailImg.name,
-      );
-      // Attach the featuredImg to the article object
-      article.setDataValue('featuredImg', featuredImg);
-      // Fetch other articles images from s3
-      const images = await ArticleController.#addImgUrls(article.Images);
-      article.setDataValue('Images', images);
-
-      const { metricUUID, cookie } =
-        await ArticleController.#updateArticleMetrics(req, {
-          articleId: article.id,
-          model: View,
-          metricName: 'viewUUID',
-        });
-      res.cookie('viewUUID', metricUUID, cookie);
-      return resHandler(200, article, res);
-    });
+    // Set viewUUID cookie
+    res.cookie('viewUUID', metricUUID, cookie);
+    return resHandler(200, article, res);
   }
 
   // Find all of the articles with the necessary relations sorted by data in specific order
@@ -235,25 +239,20 @@ export default class ArticleController {
 
   // Get search article suggestions
   static async getSearchSuggestions(req, res, next) {
-    try {
-      const search = req.query.search;
-      const articles = await Article.findAll({
-        where: {
-          status: Article.APPROVED,
-          deletedAt: null,
-          title: {
-            [Op.like]: `${search}%`,
-          },
+    const search = req.query.search;
+    const articles = await Article.findAll({
+      where: {
+        status: Article.APPROVED,
+        deletedAt: null,
+        title: {
+          [Op.like]: `${search}%`,
         },
-        limit: 5,
-        attributes: ['title', 'slug'],
-        order: [['createdAt', 'DESC']],
-      });
-      return resHandler(200, articles, res);
-    } catch (error) {
-      console.error(error);
-      return resHandler(500, error, res);
-    }
+      },
+      limit: 5,
+      attributes: ['title', 'slug'],
+      order: [['createdAt', 'DESC']],
+    });
+    return resHandler(200, articles, res);
   }
 
   static async getArticles(req, res, next) {
@@ -383,5 +382,24 @@ export default class ArticleController {
       { where: { id: req.params.id } },
     );
     return resHandler(201, 'Article status has been updated', res);
+  }
+
+  static async deleteArticle(req, res) {
+    const id = req.params.id;
+
+    // Fetch article with associated tags, images, and category
+    const article = await ArticleController.#fetchArticle({ id });
+
+    // If article isn't found, return 404 error
+    if (!article) {
+      throw new ApiError('Article not found', 404);
+    }
+
+    await db.sequelize.transaction(async (t) => {
+      await article.destroy({ t });
+    });
+
+    // Return the response
+    return resHandler(204, '', res);
   }
 }
