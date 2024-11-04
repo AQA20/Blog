@@ -29,7 +29,7 @@ export default class SitemapController {
 
     // Generate the sitemap
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap-image/1.1">
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
       <url>
         <loc>${`${baseUrl}`}</loc>
         <lastmod>${new Date().toISOString()}</lastmod>
