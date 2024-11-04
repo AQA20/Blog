@@ -1,6 +1,7 @@
 // article.js
 import { DataTypes, Model } from 'sequelize';
 import db from '../config/databaseConnection.js';
+import Metrics from '../services/Metrics.js';
 
 const sequelize = db.sequelize;
 
@@ -98,6 +99,58 @@ Article.associate = (models) => {
   Article.hasMany(models.Share, {
     foreignKey: 'articleId',
   });
+
+  Article.hasMany(models.ArticleTag, {
+    foreignKey: 'articleId',
+    as: 'articleTags',
+  });
 };
+
+// Hook to clean up by soft deleting associated records when an Article is deleted
+Article.beforeDestroy(async (article, options) => {
+  const transaction = options.transaction;
+
+  // Check if tags can be deleted
+  const tagDeletions = article.Tags.map(async (tag) => {
+    const articleTagCount = await db.models.ArticleTag.count({
+      where: { tagId: tag.id },
+      transaction,
+    });
+
+    if (articleTagCount === 1) {
+      // Soft delete associated ArticleTag and Tag
+      await db.models.ArticleTag.destroy({
+        where: { articleId: article.id },
+        transaction,
+      });
+      return db.models.Tag.destroy({ where: { id: tag.id }, transaction });
+    }
+  });
+
+  // Check if the category can be deleted
+  let categoryDeletion;
+  const categoryArticleCount = await Article.count({
+    where: { categoryId: article.categoryId },
+    transaction,
+  });
+
+  if (categoryArticleCount === 1) {
+    categoryDeletion = db.models.Category.destroy({
+      where: { id: article.categoryId },
+      transaction,
+    });
+  }
+
+  // Soft delete associated images
+  const imageDeletions = article.Images.map(async (image) =>
+    db.models.Image.destroy({ where: { id: image.id }, transaction }),
+  );
+
+  // Delete article metrics
+  await Metrics.deleteMetrics(article.id, transaction);
+
+  // Execute all deletions
+  await Promise.all([...tagDeletions, categoryDeletion, ...imageDeletions]);
+});
 
 export default Article;

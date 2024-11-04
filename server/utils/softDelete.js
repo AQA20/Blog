@@ -1,7 +1,7 @@
 import ApiError from '../services/ApiError.js';
 
 const softDelete = async (id, model, relationModels) => {
-  // Fetch the model from dtabase
+  // Fetch the model from database
   const modelData = await model.findOne({
     where: { id },
     attributes: ['id'],

@@ -1,6 +1,8 @@
 import db from '../config/databaseConnection.js';
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from 'sequelize';
+import View from '../models/View.js';
+import Share from '../models/Share.js';
 
 export default class Metrics {
   static async updateMetric(model, data) {
@@ -14,7 +16,6 @@ export default class Metrics {
 
     // 24h in ms (currentDate -24h * 60m * 60s * 1000 = (n)ms)
     const twentyFourHoursAgo = new Date(new Date() - 24 * 60 * 60 * 1000);
-    console.log('uuid', uuid);
     // By wrapping the operations in a transaction, you ensure that either all
     // operations succeed or none do, maintaining the integrity of the database
     return await db.sequelize.transaction(async (t) => {
@@ -54,6 +55,22 @@ export default class Metrics {
       }
 
       return existingMetric.uuid;
+    });
+  }
+
+  static async deleteMetrics(articleId, transaction) {
+    if (!articleId) {
+      throw new Error('Property articleId is required');
+    }
+    // Remove article Views metric
+    await View.destroy({
+      where: { articleId },
+      transaction,
+    });
+    // Remove article Shares metric
+    await Share.destroy({
+      where: { articleId },
+      transaction,
     });
   }
 }

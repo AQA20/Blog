@@ -24,12 +24,4 @@ router.put(
   handleAsyncApiError(ArticleTagController.updateArticleTag),
 );
 
-// Delete article tag
-router.delete(
-  '/article/tag/:id',
-  authorized,
-  isAdmin,
-  handleAsyncApiError(ArticleTagController.deleteArticleTag),
-);
-
 export default router;

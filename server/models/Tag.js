@@ -42,6 +42,19 @@ Tag.associate = (models) => {
   Tag.belongsToMany(models.Article, {
     through: 'ArticleTags',
   });
+
+  Tag.hasMany(models.ArticleTag, {
+    foreignKey: 'tagId',
+    as: 'taggedArticles',
+  });
 };
+
+// Hook to soft delete associated ArticleTag records when Tag is deleted
+Tag.beforeDestroy(async (tag, options) => {
+  await db.models.ArticleTag.update(
+    { deletedAt: new Date() },
+    { where: { tagId: tag.id }, transaction: options.transaction },
+  );
+});
 
 export default Tag;
