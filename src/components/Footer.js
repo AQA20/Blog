@@ -42,6 +42,14 @@ const Footer = () => {
               سياسة الكوكيز
             </a>
           </li>
+          <li>
+            <a
+              className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=3')}`}
+              href="/api/sitemap.xml"
+            >
+              خريطة الموقع
+            </a>
+          </li>
         </ul>
         <div className="dark:text-dark-onSurfaceVariant">
           جميع الحقوق محفوظة &copy; 2024
