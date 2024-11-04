@@ -5,6 +5,7 @@ import imageRoutes from './routes/imageRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import tagRoutes from './routes/tagRoutes.js';
 import articleTagRoutes from './routes/articleTagRoutes.js';
+import sitemapRoutes from './routes/sitemapRoutes.js';
 import globalErrorHandler from './middleware/globalErrorHandler.js';
 import ApiError from './services/ApiError.js';
 import cors from 'cors';
@@ -44,6 +45,7 @@ app.use('/api', imageRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', tagRoutes);
 app.use('/api', articleTagRoutes);
+app.use('/api', sitemapRoutes);
 
 // Handle not found routes
 app.all('*', (req, res, next) => {

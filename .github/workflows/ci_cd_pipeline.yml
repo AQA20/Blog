@@ -34,6 +34,7 @@ jobs:
           pm2 save
         env:
           NODE_ENV: ${{ secrets.NODE_ENV }}
+          SITEMAP_BASEURL: ${{ secrets.SITEMAP_BASEURL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
