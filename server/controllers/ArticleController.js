@@ -6,7 +6,6 @@ import Image from '../models/Image.js';
 import View from '../models/View.js';
 import Share from '../models/Share.js';
 import Metrics from '../services/Metrics.js';
-import ArticleTag from '../models/ArticleTag.js';
 import resHandler from '../services/ResHandler.js';
 import S3Service from '../services/S3Client.js';
 import ApiError from '../services/ApiError.js';
@@ -255,7 +254,7 @@ export default class ArticleController {
     return resHandler(200, articles, res);
   }
 
-  static async getArticles(req, res, next) {
+  static async paginatedArticles(req) {
     const query = req.query;
     const badValues = ['undefined', 'null'];
     if (Object.values(query).some((value) => badValues.indexOf(value) !== -1)) {
@@ -279,11 +278,15 @@ export default class ArticleController {
       offset,
     });
 
-    const data = {
+    return {
       currentPage: page,
       totalPages: Math.ceil((count || 0) / pageSize),
       articles,
     };
+  }
+
+  static async getArticles(req, res, next) {
+    const data = await ArticleController.paginatedArticles(req);
     return resHandler(200, data, res);
   }
 
