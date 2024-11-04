@@ -10,9 +10,6 @@ export default class SitemapController {
       next,
     );
 
-    console.log('SITEMAP_BASEURL:', process.env.SITEMAP_BASEURL);
-    console.log('NODE_ENV:', process.env.NODE_ENV);
-
     const baseUrl = process.env.SITEMAP_BASEURL;
     // Generate page urls
     const pageUrls = [];
