@@ -10,7 +10,7 @@ export default class SitemapController {
       next,
     );
 
-    const baseUrl = process.env.SITEMAP_BASEURL;
+    const baseUrl = 'https://500kalima.com';
     // Generate page urls
     const pageUrls = [];
     for (let i = 1; i <= paginatedArticles.totalPages; i++) {
