@@ -68,10 +68,6 @@ export default class SitemapController {
               <loc>${`${baseUrl}/tags/${tagSlug}`}</loc>
               <lastmod>${new Date().toISOString()}</lastmod>
             </url>
-            <url>
-              <loc>${`${baseUrl}/tags/${tagSlug}?search=${tagSlug}`}</loc>
-              <lastmod>${new Date().toISOString()}</lastmod>
-            </url>
           `;
         })
         .join('')}
