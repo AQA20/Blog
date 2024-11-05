@@ -106,8 +106,30 @@ Article.associate = (models) => {
   });
 };
 
+// Hook to clean up by soft deleting associated records when an Article is updated
+Article.afterUpdate(async (article, options) => {
+  const transaction = options.transaction;
+  const { categoryId, oldCategoryId } = options.context;
+  // If categoryId is being updated
+  if (categoryId) {
+    // Check if old category can be deleted
+    const categoriesCount = await Article.count({
+      where: { categoryId: oldCategoryId },
+      transaction,
+    });
+    // If no other articles set to this category
+    if (categoriesCount === 0) {
+      // Soft delete the old associated category
+      await db.models.Category.destroy({
+        where: { id: oldCategoryId },
+        transaction,
+      });
+    }
+  }
+});
+
 // Hook to clean up by soft deleting associated records when an Article is deleted
-Article.beforeDestroy(async (article, options) => {
+Article.afterDestroy(async (article, options) => {
   const transaction = options.transaction;
 
   // Check if tags can be deleted
@@ -117,6 +139,7 @@ Article.beforeDestroy(async (article, options) => {
       transaction,
     });
 
+    // If there was only one ArticleTag, which links the deleted Article with a Tag
     if (articleTagCount === 1) {
       // Soft delete associated ArticleTag and Tag
       await db.models.ArticleTag.destroy({
@@ -134,7 +157,8 @@ Article.beforeDestroy(async (article, options) => {
     transaction,
   });
 
-  if (categoryArticleCount === 1) {
+  // If no other articles set to this category
+  if (categoryArticleCount === 0) {
     categoryDeletion = db.models.Category.destroy({
       where: { id: article.categoryId },
       transaction,
