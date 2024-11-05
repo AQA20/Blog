@@ -333,27 +333,23 @@ export default class ArticleController {
 
   static async updateArticle(req, res) {
     const articleId = req.params.id;
-    const content = req.body?.content;
-    const thumbnailId = req.body?.thumbnailId;
-
     // Managed transactions
     // all queries will automatically look for a transaction on the namespace
-    // as we have cls-hooked (CLS) module and instantiate a namespace in config/databaseConnection.js.
+    // as we have cls-hooked (CLS) module and instantiated a namespace in config/databaseConnection.js.
     await db.sequelize.transaction(async (t) => {
-      if (thumbnailId) {
-        const imageableModel = await Image.findByPk(thumbnailId);
-        if (!imageableModel) {
-          throw new ApiError('Incorrect thumbnailId', 400);
-        }
-      }
-
-      if (content) {
-        // sanitize html content
-        req.body.content = DOMPurify.sanitize(content);
-      }
-
-      // Update article
-      await Article.update(req.body, { where: { id: articleId } });
+      // Fetch the article instance first
+      const existedArticle = await Article.findByPk(articleId);
+      // Save the old categoryId to pass it to the hooks
+      const oldCategoryId = existedArticle.categoryId;
+      // Update the article instance's fields
+      existedArticle.set(req.body);
+      // Save the updated instance with the context
+      await existedArticle.save({
+        context: {
+          categoryId: req.body.categoryId,
+          oldCategoryId,
+        },
+      });
 
       // Refetch the updated article
       const article = await Article.findByPk(articleId, {
@@ -365,6 +361,7 @@ export default class ArticleController {
         ],
       });
 
+      // Find the featured image and attach it's url from s3
       const thumbnailImg = article.Images.find(
         (image) => image.id === article.thumbnailId,
       );
@@ -390,14 +387,11 @@ export default class ArticleController {
   static async deleteArticle(req, res) {
     const id = req.params.id;
 
-    // Fetch article with associated tags, images, and category
+    // Fetch article with associated tags, images, and category So the
+    // beforeDestroy hook cleans up those associated models
     const article = await ArticleController.#fetchArticle({ id });
 
-    // If article isn't found, return 404 error
-    if (!article) {
-      throw new ApiError('Article not found', 404);
-    }
-
+    // Use transaction just in case something went wrong
     await db.sequelize.transaction(async (t) => {
       await article.destroy({ t });
     });
