@@ -13,7 +13,7 @@ const Sidebar = async () => {
   return (
     <article className="w-[344px] mr-12 pr-2 sticky top-0 py-2">
       <header>
-        <h2 className="mb-4 mt-2">الأكثر قراءة</h2>
+        <h2 className="mb-4 mt-2 text-title-l">الأكثر قراءة</h2>
       </header>
       <section>
         <Suspense fallback="...loading sidebar cards">
@@ -32,7 +32,7 @@ const Sidebar = async () => {
           ))}
         </Suspense>
       </section>
-      <h2 className="mb-2">أشهر المواضيع</h2>
+      <h2 className="mb-2 text-title-l">أشهر المواضيع</h2>
       <footer className="flex flex-wrap">
         {articles.map((article) =>
           article.Tags.map((tag) => (

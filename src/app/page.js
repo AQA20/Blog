@@ -8,19 +8,19 @@ const FilterBadges = lazy(() => import('@/components/FilterBadges'));
 // Todo implement unit & integration tests
 
 export default async function Home({ searchParams }) {
+  const urlSearchParams = await searchParams;
+  const { orderBy, order, page } = urlSearchParams;
   const data = await fetchArticles({
-    orderBy: searchParams?.orderBy,
-    order: searchParams?.order,
-    page: searchParams?.page,
+    orderBy,
+    order,
+    page,
   });
 
   return (
     <Suspense fallback="...loading articles">
       <article className="my-4">
-        {!searchParams?.page && !searchParams?.orderBy && (
-          <Hero article={data.articles[0]} />
-        )}
-        <FilterBadges urlSearchParams={searchParams} />
+        {!page && !orderBy && <Hero article={data.articles[0]} />}
+        <FilterBadges urlSearchParams={urlSearchParams} />
         <div className="my-6"></div>
         <section id="#articles">
           {data.articles.map((article) => {

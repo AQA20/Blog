@@ -1,12 +1,18 @@
 import Joi from 'joi';
+import { existsInDatabase } from '../../../utils/joiCustomValidations.js';
+import Category from '../../../models/Category.js';
 
 const deleteCategoryRequest = Joi.object({
-  id: Joi.number().required(),
+  id: Joi.number()
+    .required()
+    .external(async (value, helpers) => {
+      return existsInDatabase(Category, value, helpers, 'Invalid Category id');
+    }),
 });
 
-const deleteCategoryRequestMiddleware = (req, res, next) => {
+const deleteCategoryRequestMiddleware = async (req, res, next) => {
   try {
-    const { error } = deleteCategoryRequest.validate(req.params);
+    const { error } = await deleteCategoryRequest.validateAsync(req.params);
     if (error) {
       return next(error);
     }

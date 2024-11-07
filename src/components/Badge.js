@@ -27,7 +27,7 @@ const Badge = ({ title, link }) => {
     <Link
       href={link}
       className={clsx(
-        'inline-block align-middle border-2 my-2 border-outline dark:border-dark-outlineVariant h-10 px-4 pt-2 rounded-lg ml-2 text-sm text-nowrap dark:text-dark-onSurface',
+        'inline-block align-middle border-2 my-2 border-outline dark:border-dark-outlineVariant h-8 px-4 pt-1 rounded-lg ml-2 text-sm text-nowrap dark:text-dark-onSurface',
         { 'active-filter': isActive },
       )}
     >

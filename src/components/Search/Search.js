@@ -50,6 +50,11 @@ const Search = ({ isShow, onHideSearch }) => {
 
   const [timeoutId, setTimeoutId] = useState(null);
 
+  // Show suggestions on initial load
+  useEffect(() => {
+    !addHashtag && debounceFunction('');
+  }, []);
+
   // Update inputValue when searchQuery changes.
   useEffect(() => {
     setInputValue(addHashtag ? `#${searchQuery}` : searchQuery);

@@ -12,14 +12,15 @@ export async function generateStaticParams() {
   // Fetch all of the slugs from the API
   const data = await fetchArticleSlugs();
   // Each slug will be used to generate a static page
-  return data.map((article) => article.slug);
+  return data.map((article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({ params }) {
+  const routeParams = await params;
   // Even though we're calling fetchArticle twice once here and once
   // In the page component the request will be sent once, as we're
   // using react cache
-  const article = await fetchArticle(params.slug);
+  const article = await fetchArticle(routeParams.slug);
   !article && notFound();
 
   const { title, description, featuredImg, author, createdAt, Tags, slug } =
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const article = await fetchArticle(params.slug);
+  const routeParams = await params;
+  const article = await fetchArticle(routeParams.slug);
   !article && notFound();
 
   const cleanHtml = DOMPurify.sanitize(article.content, {

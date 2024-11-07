@@ -1,18 +1,21 @@
 const handleAsyncError = (func) => {
-  return (...args) => {
-    return func(...args).catch((error) => {
-      console.error(error);
-      throw error;
-    });
+  return async (...args) => {
+    try {
+      await func(...args);
+    } catch (error) {
+      console.error('Caught an error in handleAsyncError:', error);
+    }
   };
 };
 
 const handleAsyncApiError = (func) => {
-  return (req, res, next) => {
-    return func(req, res, next).catch((error) => {
-      console.error('here', error);
+  return async (req, res, next) => {
+    try {
+      await func(req, res, next); // Await here to fully capture async behavior
+    } catch (error) {
+      console.error('Caught an error in handleAsyncApiError:', error);
       next(error);
-    });
+    }
   };
 };
 

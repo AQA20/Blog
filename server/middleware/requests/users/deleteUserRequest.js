@@ -1,12 +1,18 @@
 import Joi from 'joi';
+import { existsInDatabase } from '../../../utils/joiCustomValidations.js';
+import User from '../../../models/User.js';
 
 const deleteUserRequest = Joi.object({
-  id: Joi.number().required(),
+  id: Joi.number()
+    .required()
+    .external(async (value, helpers) => {
+      return existsInDatabase(User, value, helpers, 'Invalid User id');
+    }),
 });
 
-const deleteUserRequestMiddleware = (req, res, next) => {
+const deleteUserRequestMiddleware = async (req, res, next) => {
   try {
-    const { error } = deleteUserRequest.validate(req.params);
+    const { error } = await deleteUserRequest.validateAsync(req.params);
     if (error) {
       return next(error);
     }

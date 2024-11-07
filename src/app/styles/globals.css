@@ -39,58 +39,41 @@ html {
   }
 }
 
-/* default text colors default font size */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  @apply text-light-onSurface dark:text-dark-onSurface;
+}
 
+/* default text colors default font size */
 
 /* default text tags default font size */
 h1 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 2.625rem;
-}
-
-@media (max-width: 640px) {
-  h1 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.7rem;
-  }
+  @apply text-headline-s sm:text-headline-l;
 }
 
 h2 {
-  font-size: 1.25rem;
-  font-weight: 700;
-  line-height: 2rem;
+  @apply text-title-l sm:text-headline-m;
 }
 
-@media (max-width: 640px) {
-  h2 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    line-height: 1.5rem;
-  }
-}
-
-h3, .read-more {
-  font-size: 1rem;
-  font-weight: 700;
-  line-height: 1.5rem;
-}
-
-@media (max-width: 640px) {
-  h2 {
-    font-size: 1.08rem;
-    font-weight: 700;
-    line-height: 1.3rem;
-  }
+h3 {
+  @apply text-headline-s;
 }
 
 p {
-  font-size: 1rem;
-  line-height: 1.5rem;
-  font-weight: 400;
-  color: theme('textColor.light.onSurfaceVariant');
+  @apply text-body-l;
 }
+
+.read-more {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+}
+
 /* End of  text tags default font size */
 
 /* Keep footer at the bottom of the page */

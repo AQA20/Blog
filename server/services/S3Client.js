@@ -61,7 +61,7 @@ export default class S3Service {
       const deleteObjectCommand = new DeleteObjectCommand(params);
       return await this.#s3Client.send(deleteObjectCommand);
     } catch (error) {
-      console.error('Error delete file from S3', error);
+      console.error('Error deleting a file from S3', error);
       throw error;
     }
   }

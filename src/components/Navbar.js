@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo, lazy } from 'react';
 import Hug from './Hug';
-const Search = lazy(() => import('./Search/Search'));
+import Search from './Search/Search';
 import Menu from './Menu';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import ArrowRightLine from './iconComponents/ArrowRightLine';
@@ -107,6 +107,7 @@ const Navbar = () => {
         </div>
 
         <div className="flex justify-items-center gap-2">
+          {/* Show search button when showSearch is false */}
           {!showSearch && (
             <div className="rounded-full">
               <Hug

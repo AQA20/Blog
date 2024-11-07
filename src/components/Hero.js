@@ -12,7 +12,7 @@ const Hero = ({ article }) => {
   const router = useRouter();
 
   return (
-    <article className="mt-4 mb-6 group">
+    <article className="mt-4 mb-6">
       <Suspense fallback={<p>...loading</p>}>
         <Image
           onClick={() => router.push(`/${article.slug}`)}
@@ -28,10 +28,7 @@ const Hero = ({ article }) => {
       <section className="my-5">
         <header>
           <h1>
-            <Link
-              className="group-hover:text-light-primary group-hover:dark:text-dark-primary"
-              href={`/${article.slug}`}
-            >
+            <Link className="text-headline-m" href={`/${article.slug}`}>
               {article.title}
             </Link>
           </h1>
@@ -39,7 +36,7 @@ const Hero = ({ article }) => {
         <section>
           <p>
             <Link
-              className="dark:text-dark-onSurfaceVariant"
+              className="onSurfaceVariant dark:text-dark-onSurfaceVariant"
               href={`/${article.slug}`}
             >
               {article.description}
