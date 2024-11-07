@@ -32,25 +32,17 @@ const Card = ({
       >
         <section>
           <time>
-            <p className="dark:text-dark-onSurfaceVariant">
-              {timeAgo ? timeAgo : 'منذ شهرين'}
-            </p>
+            <p>{timeAgo ? timeAgo : 'منذ شهرين'}</p>
           </time>
 
           <header>
-            <h2
-              className={clsx('mb-1 line-clamp-2', {
-                'text-lg': isSmall,
-                'text-sm': isXSmall,
-              })}
+            <h1
+              className={clsx('mb-1 line-clamp-2 text-title-m sm:text-title-l')}
             >
-              <Link
-                className="group-hover:text-light-primary group-hover:dark:text-dark-primary"
-                href={articleUri}
-              >
+              <Link className="group-hover:underline" href={articleUri}>
                 {title}
               </Link>
-            </h2>
+            </h1>
           </header>
           <section
             className={clsx('line-clamp-2', {
@@ -58,12 +50,7 @@ const Card = ({
             })}
           >
             <p>
-              <Link
-                className="dark:text-dark-onSurfaceVariant"
-                href={articleUri}
-              >
-                {description}
-              </Link>
+              <Link href={articleUri}>{description}</Link>
             </p>
           </section>
         </section>

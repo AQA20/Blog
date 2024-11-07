@@ -4,6 +4,8 @@ export default class ApiError extends Error {
     super(message);
     // Set the statusCode property
     this.statusCode = statusCode;
+    // Explicitly Assign the error message
+    this.message = message;
     // Determine whether it's a client error or server error
     this.status = statusCode >= 500 ? 'error' : 'failed';
     // This error class will only be used for operational errors

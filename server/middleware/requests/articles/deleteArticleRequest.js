@@ -10,9 +10,9 @@ const deleteArticleRequest = Joi.object({
     }),
 });
 
-const deleteArticleRequestMiddleware = (req, res, next) => {
+const deleteArticleRequestMiddleware = async (req, res, next) => {
   try {
-    const { error } = deleteArticleRequest.validateAsync(req.params);
+    const { error } = await deleteArticleRequest.validateAsync(req.params);
     if (error) {
       return next(error);
     }

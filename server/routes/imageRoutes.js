@@ -10,8 +10,8 @@ import { handleAsyncApiError } from '../utils/handleErrors.js';
 
 const router = express.Router();
 
-// Get Image
-router.get('/image/:id', handleAsyncApiError(ImageController.getImage));
+// Get Image url
+router.get('/image/:id', handleAsyncApiError(ImageController.getImageUrl));
 
 // Upload Image
 router.post(

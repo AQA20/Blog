@@ -5,8 +5,22 @@ import View from '../models/View.js';
 import Share from '../models/Share.js';
 
 export default class Metrics {
+  /**
+   * Updates or creates a unique metric for a specific article based on IP address or UUID.
+   * This method ensures that metrics are tracked uniquely per user and per article within a 24-hour period.
+   *
+   * It uses a transaction to guarantee that the database operations are atomic: either both the
+   * check and creation succeed, or neither do, ensuring data consistency.
+   *
+   * @param {object} model - The Sequelize model for the metric (e.g., View or Share).
+   * @param {object} data - The data for the metric, including uuid, ipAddress, and articleId.
+   * @returns {string} The unique UUID of the metric, either newly created or existing.
+   * @throws {Error} If the ipAddress or articleId is not provided.
+   */
   static async updateMetric(model, data) {
     const { uuid, ipAddress, articleId } = data;
+
+    // Validate input parameters
     if (!ipAddress) {
       throw new Error('IpAddress is required');
     }
@@ -14,60 +28,56 @@ export default class Metrics {
       throw new Error('Property articleId is required');
     }
 
-    // 24h in ms (currentDate -24h * 60m * 60s * 1000 = (n)ms)
+    // Calculate the timestamp for 24 hours ago
     const twentyFourHoursAgo = new Date(new Date() - 24 * 60 * 60 * 1000);
-    // By wrapping the operations in a transaction, you ensure that either all
-    // operations succeed or none do, maintaining the integrity of the database
+
+    // Perform database operations within a transaction for data integrity
     return await db.sequelize.transaction(async (t) => {
+      // Check if the metric for this article and user (IP or UUID) already exists in the last 24 hours
       const existingMetric = await model.findOne({
         where: {
           articleId,
-          // Check if it's the same user by the ipAddress and uuid (Only record unique metrics)
           [Op.or]: [{ ipAddress }, { uuid: uuid || '' }],
-          createdAt: {
-            [Op.gte]: twentyFourHoursAgo, // Within the last 24 hours (As cookie is set to expire after 24h)
-          },
+          createdAt: { [Op.gte]: twentyFourHoursAgo }, // Only consider metrics from the last 24 hours
         },
-        // lock: t.LOCK.UPDATE to Prevents Duplicate Records When a query is
-        // executed with a pessimistic lock, it tells the database to lock the
-        // selected rows for the duration of the transaction. This means that
-        // while one transaction is reading or writing to the locked row, other
-        // transactions that try to access the same row will have to wait until
-        // the first transaction is completed.
-
-        // In this case, when the first request checks for an existing metric
-        // using the findOne query, the row is locked. If another request comes
-        // in while the first one is still processing, it will have to wait
-        // until the lock is released.
-        lock: t.LOCK.UPDATE, // Acquire a lock on the row
+        lock: t.LOCK.UPDATE, // Lock the row for the duration of the transaction to prevent duplicates
       });
 
       if (!existingMetric) {
+        // If no existing metric, create a new one
         const uniqueId = uuidv4();
-        // If no existing metric within the last 24 hours, create a new record
         await model.create({
           articleId,
           ipAddress,
           uuid: uniqueId,
         });
 
-        return uniqueId;
+        return uniqueId; // Return the newly created UUID
       }
 
+      // If metric exists, return the existing UUID
       return existingMetric.uuid;
     });
   }
 
+  /**
+   * Deletes metrics for a specific article from both Views and Shares models.
+   * This method is used to clean up metrics associated with an article, typically when an article is deleted.
+   *
+   * @param {string} articleId - The ID of the article whose metrics are to be deleted.
+   * @param {object} transaction - Sequelize transaction object to ensure atomicity.
+   * @throws {Error} If the articleId is not provided.
+   */
   static async deleteMetrics(articleId, transaction) {
     if (!articleId) {
       throw new Error('Property articleId is required');
     }
-    // Remove article Views metric
+
+    // Delete metrics associated with the article in both Views and Shares
     await View.destroy({
       where: { articleId },
       transaction,
     });
-    // Remove article Shares metric
     await Share.destroy({
       where: { articleId },
       transaction,

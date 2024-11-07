@@ -2,6 +2,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../config/databaseConnection.js';
 import Metrics from '../services/Metrics.js';
+import ImageService from '../services/ImageService.js';
 
 const sequelize = db.sequelize;
 
@@ -105,6 +106,39 @@ Article.associate = (models) => {
     as: 'articleTags',
   });
 };
+
+// After finding an article (or articles), retrieve image URLs from S3 and append them to the article objects.
+Article.afterFind(async (data) => {
+  // Instantiate an ImageService instance for handling image URL retrieval
+  const imgService = new ImageService();
+  // If data is an array of articles and no Images are included in the data, exit early
+  if (Array.isArray(data) && !data[0]?.Images) return;
+
+  // Helper function to attach image URLs to an article
+  const attachImageUrls = (article) => {
+    if (!article || !article?.Images) return;
+    // Get the URL of the thumbnail (featured image) for the article
+    const thumbnailUrl = imgService.getImageUrl(
+      article.Images,
+      article.thumbnailId,
+    );
+    article.setDataValue('featuredImg', thumbnailUrl); // Attach the thumbnail image URL
+
+    if (article.Images) {
+      // Get and attach all related image URLs for the article
+      const allImages = imgService.getImageUrls(article.Images);
+      article.setDataValue('Images', allImages); // Attach all image URLs
+    }
+  };
+
+  // If data is an array of articles, process each article
+  if (Array.isArray(data)) {
+    data.forEach(attachImageUrls);
+  } else {
+    // If only one article is returned, process it
+    attachImageUrls(data);
+  }
+});
 
 // Hook to clean up by soft deleting associated records when an Article is updated
 Article.afterUpdate(async (article, options) => {

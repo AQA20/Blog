@@ -1,13 +1,19 @@
 import Joi from 'joi';
+import { existsInDatabase } from '../../../utils/joiCustomValidations.js';
+import Tag from '../../../models/Tag.js';
 
 const updateTagRequest = Joi.object({
-  id: Joi.number().required(),
+  id: Joi.number()
+    .required()
+    .external(async (value, helpers) => {
+      return existsInDatabase(Tag, value, helpers, 'Invalid Tag id');
+    }),
   name: Joi.string().trim().min(10).max(20).required(),
 });
 
-const updateTagRequestMiddleware = (req, res, next) => {
+const updateTagRequestMiddleware = async (req, res, next) => {
   try {
-    const { error } = updateTagRequest.validate(req.params);
+    const { error } = await updateTagRequest.validateAsync(req.params);
     if (error) {
       return next(error);
     }

@@ -4,18 +4,20 @@ import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
 
 export default async function Page({ searchParams, params }) {
-  const tag = params?.tag.replace(/-/g, ' ').replace('#', '').trim();
+  const routeParams = await params;
+  const urlSearchParams = await searchParams;
+  const tag = routeParams?.tag.replace(/-/g, ' ').replace('#', '').trim();
   const { articles, totalPages } = await fetchTagArticles(tag, {
-    orderBy: searchParams?.orderBy,
-    order: searchParams?.order,
-    page: searchParams?.page,
-    search: searchParams?.search,
+    orderBy: urlSearchParams?.orderBy,
+    order: urlSearchParams?.order,
+    page: urlSearchParams?.page,
+    search: urlSearchParams?.search,
   });
   return (
     <div>
       {/* <p className="my-4">تم العثور على 250 نتيجة</p> */}
       <div className="my-2">
-        <FilterBadges urlSearchParams={searchParams} />
+        <FilterBadges urlSearchParams={urlSearchParams} />
       </div>
       {articles.map((article) => (
         <Card

@@ -5,129 +5,34 @@ import Tag from '../models/Tag.js';
 import Image from '../models/Image.js';
 import View from '../models/View.js';
 import Share from '../models/Share.js';
-import Metrics from '../services/Metrics.js';
 import resHandler from '../services/ResHandler.js';
-import S3Service from '../services/S3Client.js';
 import ApiError from '../services/ApiError.js';
 import createSlug from '../utils/createArticleSlug.js';
-import DOMPurify from 'isomorphic-dompurify';
 import db from '../config/databaseConnection.js';
 import getQuery from '../utils/getQuery.js';
+import ArticleService from '../services/ArticleService.js';
 import { Op } from 'sequelize';
 
 export default class ArticleController {
-  static #s3Service = new S3Service();
+  // Default page size
   static #pageSize = 5;
 
-  // Add the actual s3 image url for an array of images
-  static #addImgUrls(images) {
-    // Loop over the images array
-    return images.map((image) => {
-      // Fetch each image url from s3 using it's name
-      const imgUrl = ArticleController.#s3Service.getFile(image.name);
-      // Append the img url to image as imgUrl
-      image.setDataValue('imgUrl', imgUrl);
-      return image;
-    });
-  }
-
-  // Add actual s3 image urls for an array of articles
-  static #addArticleImgUrls(articles) {
-    // Loop over the article
-    const articlesWithImgs = articles.map((article) => {
-      // Get the thumbnailImg from the article.Images array
-      // Instead of querying the database
-      const thumbnailImg = article.Images.find(
-        (image) => image.id === article.thumbnailId,
-      );
-      // Get the actual s3 image url for the article thumbnail image
-      const featuredImg = ArticleController.#s3Service.getFile(
-        thumbnailImg.name,
-      );
-      // Append the image url to the article
-      article.setDataValue('featuredImg', featuredImg);
-      // Add the actual s3 url for all of the article images
-      const images = ArticleController.#addImgUrls(article.Images);
-      // Append the new images which have the image urls
-      article.setDataValue('Images', images);
-      return article;
-    });
-    return articlesWithImgs;
-  }
-
-  // Update article shares or views
-  static async #updateArticleMetrics(req, options) {
-    const { articleId, model, metricName } = options;
-    if (
-      [articleId, model, metricName].some(
-        (item) => !item || item === 'undefined',
-      )
-    ) {
-      throw new Error(
-        'Missing required options, make sure to pass all of the required options (articleId, metric, metricName)',
-      );
-    }
-
-    // Default cookie
-    const cookie = {
-      secure: process.env.NODE_ENV === 'production', // Cookie will only be sent over HTTPS
-      httpOnly: true, // Cookie cannot be accessed by client-side JavaScript
-      origin: 'strict', // Restricts cookie to same-site requests
-      maxAge: 86400000, // One day In ms
-    };
-    // Get the user's ip address
-    const ipAddress =
-      req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.ip;
-    // Get uuid from cookies if it was set previously
-    const uuid = req.cookies?.[metricName];
-
-    // Create a data object containing the necessary data to update a metric
-    const data = { uuid, ipAddress, articleId };
-    const metricUUID = await Metrics.updateMetric(model, data);
-    return {
-      metricUUID,
-      cookie,
-    };
-  }
-
   // Update article shares
-  static async updateShareArticle(req, res, next) {
+  static async updateShareArticle(req, res) {
     const articleId = req.params.id;
 
-    const { metricUUID, cookie } =
-      await ArticleController.#updateArticleMetrics(req, {
+    // Update article shares count and destructure the returned values
+    const { metricUUID, cookie } = await ArticleService.updateArticleMetrics(
+      req,
+      {
         articleId,
         model: Share,
         metricName: 'shareUUID',
-      });
+      },
+    );
+    // Set shareUUID cookie for later verification
     res.cookie('shareUUID', metricUUID, cookie);
     return resHandler(200, 'Article share counts have been updated', res);
-  }
-
-  static async #fetchArticle(query) {
-    return await Article.findOne({
-      where: { status: Article.APPROVED, ...query },
-      include: [
-        {
-          model: User,
-          required: true,
-          as: 'author',
-          attributes: ['id', 'name'],
-        },
-        { model: Category, attributes: ['id', 'name'] },
-        {
-          model: Tag,
-          through: {
-            attributes: [],
-            where: {
-              deletedAt: null,
-            },
-          },
-          attributes: ['id', 'name'],
-        },
-        { model: Image, attributes: ['id', 'name'] },
-      ],
-    });
   }
 
   static async getArticle(req, res, next) {
@@ -135,116 +40,34 @@ export default class ArticleController {
     // Determine whether id or slug was passed and return the corresponding query
     const query = getQuery(value, 'slug');
 
-    const article = await ArticleController.#fetchArticle(query);
+    const article = await ArticleService.fetchArticle(query);
+
     if (!article) {
       return next(new ApiError('Article is not found', 404));
     }
-    // Find the article's thumbnail image
-    const thumbnailImg = article.Images.find(
-      (image) => image.id === article.thumbnailId,
-    );
-    // Fetch article's featured image from s3
-    const featuredImg = ArticleController.#s3Service.getFile(thumbnailImg.name);
-    // Attach the featuredImg to the article object
-    article.setDataValue('featuredImg', featuredImg);
-    // Fetch other articles images from s3
-    const images = await ArticleController.#addImgUrls(article.Images);
-    article.setDataValue('Images', images);
 
     // Update article views metric
-    const { metricUUID, cookie } =
-      await ArticleController.#updateArticleMetrics(req, {
+    const { metricUUID, cookie } = await ArticleService.updateArticleMetrics(
+      req,
+      {
         articleId: article.id,
         model: View,
         metricName: 'viewUUID',
-      });
-    // Set viewUUID cookie
+      },
+    );
+    // Set viewUUID cookie for later verification
     res.cookie('viewUUID', metricUUID, cookie);
     return resHandler(200, article, res);
   }
 
-  // Find all of the articles with the necessary relations sorted by data in specific order
-  static async #getAllArticles(options) {
-    const { search, orderBy, order, pageSize, offset } = options;
-    let searchQuery;
-    if (search) {
-      searchQuery = {
-        title: {
-          [Op.like]: `${search}%`,
-        },
-      };
-    } else {
-      searchQuery = {};
-    }
-
-    const { rows, count } = await Article.findAndCountAll({
-      where: {
-        status: Article.APPROVED,
-        ...searchQuery,
-        thumbnailId: {
-          [Op.ne]: null,
-        },
-      },
-      attributes: {
-        exclude: ['content'],
-        // Include a sub query to count views for each article
-        include: [
-          [
-            db.sequelize.literal(
-              '(SELECT COUNT(*) FROM Views WHERE Views.articleId = Article.id)',
-            ),
-            'views',
-          ],
-          [
-            db.sequelize.literal(
-              '(SELECT COUNT(*) FROM Shares WHERE Shares.articleId = Article.id)',
-            ),
-            'shares',
-          ],
-        ],
-      },
-
-      include: [
-        {
-          model: Category,
-          attributes: ['id', 'name'],
-        },
-        {
-          model: Tag,
-          through: {
-            attributes: [],
-            where: {
-              deletedAt: null,
-            },
-          },
-          attributes: ['id', 'name'],
-        },
-        {
-          model: Image,
-          where: { imageableType: Image.ARTICLE },
-          attributes: ['id', 'name'],
-        },
-      ],
-      offset,
-      limit: pageSize,
-      order: [[db.sequelize.literal(orderBy), order]],
-      distinct: true,
-    });
-
-    // Fetch article images
-    const articlesWithImgs = ArticleController.#addArticleImgUrls(rows);
-    return { articles: articlesWithImgs, count };
-  }
-
   // Get search article suggestions
-  static async getSearchSuggestions(req, res, next) {
+  static async getSearchSuggestions(req, res) {
     const search = req.query.search;
     const articles = await Article.findAll({
       where: {
         status: Article.APPROVED,
-        deletedAt: null,
         title: {
-          [Op.like]: `${search}%`,
+          [Op.like]: `${search}%`, // Match the beginning of string followed by anything
         },
       },
       limit: 5,
@@ -257,10 +80,11 @@ export default class ArticleController {
   static async paginatedArticles(req) {
     const query = req.query;
     const badValues = ['undefined', 'null'];
+    // Check if query has prohibited values
     if (Object.values(query).some((value) => badValues.indexOf(value) !== -1)) {
       throw new ApiError('Bad request unexpected value', 400);
     }
-    // Get optional queries
+    // Get optional queries and assign default values if they were not provided
     const search = query.search || '';
     const orderBy = query.orderBy || 'createdAt';
     const order = query.order || 'DESC';
@@ -268,9 +92,11 @@ export default class ArticleController {
     const pageSize = query?.limit
       ? Number(query.limit)
       : ArticleController.#pageSize;
+    // Calculate the offset to be used in pagination
     const offset = (page - 1) * pageSize;
 
-    const { count, articles } = await ArticleController.#getAllArticles({
+    // Get all articles and destructure returned values
+    const { count, articles } = await ArticleService.getAllArticles({
       search,
       orderBy,
       order,
@@ -278,26 +104,24 @@ export default class ArticleController {
       offset,
     });
 
+    // Return articles data
     return {
       currentPage: page,
-      totalPages: Math.ceil((count || 0) / pageSize),
+      totalPages: Math.ceil(count / pageSize) || 1,
       articles,
     };
   }
 
-  static async getArticles(req, res, next) {
+  static async getArticles(req, res) {
     const data = await ArticleController.paginatedArticles(req);
     return resHandler(200, data, res);
   }
 
   // Get all article slugs
-  static async getAllArticleSlugs(req, res, next) {
-    // Find approved and not deleted articles, only select the slug attribute
+  static async getAllArticleSlugs(req, res) {
+    // Find approved and only select the slug attribute
     const articles = await Article.findAll({
-      where: {
-        status: Article.APPROVED,
-        deletedAt: null,
-      },
+      where: { status: Article.APPROVED },
       attributes: ['slug'],
       order: [['createdAt', 'DESC']],
     });
@@ -306,12 +130,9 @@ export default class ArticleController {
     return resHandler(200, articles, res);
   }
 
-  static async createArticle(req, res, next) {
+  static async createArticle(req, res) {
     // Set authorId which references the user_id and it's required
     req.body.authorId = req.user.id;
-
-    // sanitize html content
-    req.body.content = DOMPurify.sanitize(req.body.content);
 
     // Set article publish state
     req.body.status = Article.PENDING;
@@ -361,15 +182,6 @@ export default class ArticleController {
         ],
       });
 
-      // Find the featured image and attach it's url from s3
-      const thumbnailImg = article.Images.find(
-        (image) => image.id === article.thumbnailId,
-      );
-      const featuredImg = ArticleController.#s3Service.getFile(
-        thumbnailImg.name,
-      );
-      article.setDataValue('featuredImg', featuredImg);
-
       // Return the updated article
       return resHandler(201, article, res);
     });
@@ -389,7 +201,7 @@ export default class ArticleController {
 
     // Fetch article with associated tags, images, and category So the
     // beforeDestroy hook cleans up those associated models
-    const article = await ArticleController.#fetchArticle({ id });
+    const article = await ArticleService.fetchArticle({ id });
 
     // Use transaction just in case something went wrong
     await db.sequelize.transaction(async (t) => {

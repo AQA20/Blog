@@ -11,7 +11,7 @@ export default class TagController {
   static #s3Service = new S3Service();
   static #pageSize = 2;
 
-  static async getTags(req, res, next) {
+  static async getTags(req, res) {
     const query = req.query;
     const page = query.page ? parseInt(query.page) : 1;
     const pageSize = query?.limit
@@ -60,7 +60,7 @@ export default class TagController {
     return resHandler(200, data, res);
   }
 
-  static async getTag(req, res, next) {
+  static async getTag(req, res) {
     const value = req.params.value;
     let query;
     if (isNaN(value)) {
@@ -77,7 +77,7 @@ export default class TagController {
 
   // Get all of the articles that belong to a specific tag id, ordered by views,shares or createdAt depending on user inputs
   // While we can achieve that using the sequelize ORM, I preferred to use raw query, AS it a bit complex query
-  static async getTagWithArticles(req, res, next) {
+  static async getTagWithArticles(req, res) {
     const sequelize = db.sequelize;
     const tagName = req.params.name;
 
@@ -95,9 +95,8 @@ export default class TagController {
       attributes: ['id'],
     });
 
-    // Throw error if tag wasn't found
     if (!tag) {
-      throw new ApiError('Tag was not found', 404);
+      throw new ApiError('Tag not found', 404);
     }
 
     // Get the tagId
@@ -175,10 +174,6 @@ export default class TagController {
       },
     );
 
-    if (!tagArticles) {
-      throw new ApiError('Tag is not found', 404);
-    }
-
     // Fetch the featuredImg url from s3
     const tagArticlesWithImgs = await Promise.all(
       tagArticles.map(async (article) => {
@@ -197,7 +192,7 @@ export default class TagController {
     return resHandler(200, data, res);
   }
 
-  static async createTag(req, res, next) {
+  static async createTag(req, res) {
     const [tag] = await Tag.findOrCreate({
       where: {
         name: req.params.name,
@@ -219,11 +214,11 @@ export default class TagController {
     return resHandler(201, 'Tag updated successfully!', res);
   }
 
-  static async deleteTag(req, res, next) {
+  static async deleteTag(req, res) {
     // Get the passed tagId from req.params object
     const tagId = req.params.id;
     // Soft delete tag
-    const isDeleted = await softDelete(tagId, Tag, [
+    const isDeleted = softDelete(tagId, Tag, [
       { model: Article, name: 'Articles' },
     ]);
 

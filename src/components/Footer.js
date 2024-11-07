@@ -17,7 +17,7 @@ const Footer = () => {
   return (
     <footer className="my-8 text-light-black text-sm">
       <section>
-        <ul className="flex gap-2 underline dark:decoration-dark-outlineVariant">
+        <ul className="flex flex-wrap gap-2 underline dark:decoration-dark-outlineVariant">
           <li>
             <a
               className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=1')}`}
@@ -51,7 +51,7 @@ const Footer = () => {
             </a>
           </li>
         </ul>
-        <div className="dark:text-dark-onSurfaceVariant">
+        <div className="mt-4 text-light-onSurfaceVariant dark:text-dark-onSurfaceVariant">
           جميع الحقوق محفوظة &copy; 2024
         </div>
       </section>

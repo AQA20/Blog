@@ -4,7 +4,7 @@ import ShareButton from './ShareButton';
 const CardFooter = ({ clipboardContent, id, tags = [], shareText = true }) => {
   return (
     <section className="min-w-full">
-      <footer className="h-14 flex items-center justify-between">
+      <footer className="h-[52px] flex items-center justify-between">
         <div className="flex truncate">
           <div className="truncate">
             {tags.map((tag) => (

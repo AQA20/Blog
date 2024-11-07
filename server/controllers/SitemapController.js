@@ -1,14 +1,10 @@
 import Article from '../models/Article.js';
 import Tag from '../models/Tag.js';
-import ArticleController from './ArticleController.js';
+import ArticleService from '../services/ArticleService.js';
 
 export default class SitemapController {
-  static async getSitemap(req, res, next) {
-    const paginatedArticles = await ArticleController.paginatedArticles(
-      req,
-      res,
-      next,
-    );
+  static async getSitemap(req, res) {
+    const paginatedArticles = await ArticleService.paginatedArticles(req);
 
     const baseUrl = 'https://500kalima.com';
     // Generate page urls

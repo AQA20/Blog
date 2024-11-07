@@ -45,12 +45,10 @@ export default async function ArticleLayout({ article, children }) {
                   px-6 py-4 my-4"
       >
         <header>
-          <h1>هل أعجبك المقال؟</h1>
+          <h3>هل أعجبك المقال؟</h3>
         </header>
         <section>
-          <p className="dark:text-dark-onSurface">
-            اذا اعجبك المقال قم بمشاركته مع اصدقائك
-          </p>
+          <p>اذا اعجبك المقال قم بمشاركته مع اصدقائك</p>
         </section>
         <footer className="my-4">
           <ShareButton
@@ -63,7 +61,9 @@ export default async function ArticleLayout({ article, children }) {
         </footer>
       </section>
       <section className="my-4">
-        <div className="read-more text-lg">اقرأ أيضا</div>
+        <div className="read-more text-headline-l text-light-onSurface dark:text-dark-onSurface">
+          اقرأ أيضا
+        </div>
         <section className="sm:hidden -ml-[.75rem] ">
           <SwapIt slidesPerView={3.2} spaceBetween={10} childStyle="!w-fit">
             {tags.map((tag) => (
@@ -89,7 +89,7 @@ export default async function ArticleLayout({ article, children }) {
         </section>
       </section>
 
-      <section className="hidden sm:flex mt-4 gap-6">
+      <section className="hidden sm:flex mt-4 gap-6  xl:w-[630px]">
         <section className="w-[50%]">
           {articles?.slice(0, 3).map((article) => card(article))}
         </section>
