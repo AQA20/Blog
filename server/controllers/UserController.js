@@ -9,7 +9,18 @@ export default class UserController {
   static async login(req, res) {
     // Get user from the requested (It attached to the req in the authenticating middleware)
     const user = req.user;
-    user.setDataValue('userRoles', await user.getUserRoles());
+    let userRoles = await user.getUserRoles();
+    userRoles = userRoles.map((userRole) => {
+      return {
+        id: userRole.Role.id,
+        name: userRole.Role.name,
+        permissions: userRole.Role.Permissions.map((permission) => ({
+          id: permission.id,
+          name: permission.name,
+        })),
+      };
+    });
+    user.setDataValue('userRoles', userRoles);
     return resHandler(200, user, res);
   }
 
