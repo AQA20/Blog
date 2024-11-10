@@ -5,6 +5,7 @@ import S3Service from '../services/S3Client.js';
 import { handleAsyncError } from '../utils/handleErrors.js';
 import { readFileAsync } from '../utils/fsUtils.js';
 import { Buffer } from 'buffer';
+import Image from '../models/Image.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -58,17 +59,17 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
       // Insert new image raw in images table
       return {
         imageableId: article.id,
-        imageableType: 'ARTICLE',
-        name: name,
+        imageableType: Image.ARTICLE,
+        name,
       };
     });
 
     await queryInterface.bulkInsert('Images', newImages, {
-      where: { imageableType: 'ARTICLE' },
+      where: { imageableType: Image.ARTICLE },
     });
 
     const createdImages = await queryInterface.select(null, 'Images', {
-      where: { imageableType: 'ARTICLE' },
+      where: { imageableType: Image.ARTICLE },
     });
 
     await Promise.all(
@@ -81,12 +82,13 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
     );
   });
 });
+
 export const down = handleAsyncError(async ({ context: { sequelize } }) => {
   const queryInterface = sequelize.getQueryInterface();
   await sequelize.transaction(async (transaction) => {
     // Fetch all Article images
     const articleImages = await queryInterface.select(null, 'Images', {
-      where: { imageableType: 'ARTICLE' },
+      where: { imageableType: Image.ARTICLE },
       attributes: ['name'],
     });
 
@@ -99,7 +101,7 @@ export const down = handleAsyncError(async ({ context: { sequelize } }) => {
     );
     // Bulk Delete article images from database
     await queryInterface.bulkDelete('Images', {
-      imageableType: 'ARTICLE',
+      imageableType: Image.ARTICLE,
     });
   });
 });

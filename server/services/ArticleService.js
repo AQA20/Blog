@@ -40,7 +40,7 @@ export default class ArticleService {
 
     // Create a data object containing the necessary data to update a metric
     const data = { uuid, ipAddress, articleId };
-    const metricUUID = Metrics.updateMetric(model, data);
+    const metricUUID = await Metrics.updateMetric(model, data);
     return {
       metricUUID,
       cookie,
