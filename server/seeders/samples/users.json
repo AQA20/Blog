@@ -1,25 +1,24 @@
 {
-    "users": [
-      {
-        "name": "Admin",
-        "email": "admin@500words.com",
-        "password": "ggdsfg435d$%$#"
-      },
-      {
-        "name": "John",
-        "email": "john@gmail.com",
-        "password": "34df2$#fds"
-      },
-      {
-        "name": "Mike",
-        "email": "mike@gmail.com",
-        "password": "fsdaf23*2#$@"
-      },
-      {
-        "name": "Sara",
-        "email": "sara@gmail.com",
-        "password": "gfds342*2#$@"
-      }
-    ]
-  }
-  
+  "users": [
+    {
+      "name": "Admin",
+      "email": "admin@500words.com",
+      "password": "ggdsfg435d$%$#"
+    },
+    {
+      "name": "John",
+      "email": "john@gmail.com",
+      "password": "34df2$#fds"
+    },
+    {
+      "name": "Mike",
+      "email": "mike@gmail.com",
+      "password": "fsdaf23*2#$@"
+    },
+    {
+      "name": "Sara",
+      "email": "sara@gmail.com",
+      "password": "gfds342*2#$@"
+    }
+  ]
+}
