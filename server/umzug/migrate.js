@@ -1,3 +1,12 @@
 import { migrator } from './umzug.js';
 
-migrator.runAsCLI();
+async function runMigrations() {
+  try {
+    await migrator.up();
+    console.log('Migrations applied successfully!');
+  } catch (error) {
+    console.error('Migration failed:', error);
+  }
+}
+
+runMigrations();
