@@ -10,7 +10,6 @@
   "scripts": {
     "migration:create": "node umzug/migrate create --name",
     "migrate": "node umzug/migrate up",
-    "migrate:dev": "node umzug/migrate up",
     "migrate:status": "node umzug/migrateStatus.js",
     "migrate:rollback": "node umzug/migrate down",
     "migrate:rollback:all": "node  umzug/migrate down --to 0",
