@@ -14,12 +14,12 @@ export default class Metrics {
    *
    * @param {object} model - The Sequelize model for the metric (e.g., View or Share).
    * @param {object} data - The data for the metric, including uuid, ipAddress, and articleId.
-   * @returns {string} The unique UUID of the metric, either newly created or existing.
+   * @returns {Promise<string>} A promise that resolves to the unique UUID of the metric,
+   * either newly created or existing.
    * @throws {Error} If the ipAddress or articleId is not provided.
    */
   static async updateMetric(model, data) {
     const { uuid, ipAddress, articleId } = data;
-
     // Validate input parameters
     if (!ipAddress) {
       throw new Error('IpAddress is required');
@@ -32,7 +32,7 @@ export default class Metrics {
     const twentyFourHoursAgo = new Date(new Date() - 24 * 60 * 60 * 1000);
 
     // Perform database operations within a transaction for data integrity
-    return await db.sequelize.transaction(async (t) => {
+    return db.sequelize.transaction(async (t) => {
       // Check if the metric for this article and user (IP or UUID) already exists in the last 24 hours
       const existingMetric = await model.findOne({
         where: {
