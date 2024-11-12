@@ -3,16 +3,19 @@ import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import ApiError from '../services/ApiError.js';
 
+// Todo: Implement Rate Limiting to Track Failed Login Attempts using redis
 // Route for user login
 const authenticate = async (req, res, next) => {
   try {
+    const errorMessage = 'Invalid credentials';
     // Find user by email
     const user = await User.findOne({
       where: { email: req.body.email },
     });
     // Check if user exists
     if (!user) {
-      throw new ApiError('User not found', 400);
+      console.error('User not found');
+      throw new ApiError(errorMessage, 400);
     }
     // Verify password
     const isPasswordValid = bcrypt.compareSync(
@@ -22,7 +25,8 @@ const authenticate = async (req, res, next) => {
 
     // Handle invalid password
     if (!isPasswordValid) {
-      throw new ApiError('Invalid email or password', 400);
+      console.error('Invalid email or password');
+      throw new ApiError(errorMessage, 400);
     }
 
     // Generate JWT token
