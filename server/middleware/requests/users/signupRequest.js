@@ -8,7 +8,7 @@ const signupRequest = Joi.object({
     .max(64)
     .pattern(
       new RegExp(
-        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,64}$',
+        '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z\\d])[A-Za-z\\d\\S]{12,64}$',
       ),
     )
     .required()
