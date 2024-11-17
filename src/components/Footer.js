@@ -15,12 +15,12 @@ const Footer = () => {
   };
 
   return (
-    <footer className="my-8 text-light-black text-sm">
+    <footer className="my-8 text-black text-sm">
       <section>
         <ul className="flex flex-wrap gap-2 underline dark:decoration-dark-outlineVariant">
           <li>
             <a
-              className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=1')}`}
+              className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=1')}`}
               href="/policy?index=1"
             >
               شروط الخدمة
@@ -28,7 +28,7 @@ const Footer = () => {
           </li>
           <li>
             <a
-              className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=2')}`}
+              className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=2')}`}
               href="/policy?index=2"
             >
               سياسة الخصوصية
@@ -36,7 +36,7 @@ const Footer = () => {
           </li>
           <li>
             <a
-              className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=3')}`}
+              className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=3')}`}
               href="/policy?index=3"
             >
               سياسة الكوكيز
@@ -44,14 +44,14 @@ const Footer = () => {
           </li>
           <li>
             <a
-              className={`hover:text-light-primary dark:text-dark-onSurfaceVariant hover:dark:text-dark-primary ${activeClass('index=3')}`}
+              className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=3')}`}
               href="/api/sitemap.xml"
             >
               خريطة الموقع
             </a>
           </li>
         </ul>
-        <div className="mt-4 text-light-onSurfaceVariant dark:text-dark-onSurfaceVariant">
+        <div className="mt-4 text-onSurfaceVariant">
           جميع الحقوق محفوظة &copy; 2024
         </div>
       </section>

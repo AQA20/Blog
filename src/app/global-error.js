@@ -22,7 +22,7 @@ export default function Error({ error, reset }) {
           <section>
             <div className="px-3 md:w-[680px]">
               <section className="mb-6 min-height">
-                <p className="text-light-error">{error.message}</p>
+                <p className="text-error">{error.message}</p>
                 <button onClick={reset}>المحاولة مرة اخرى</button>
               </section>
             </div>

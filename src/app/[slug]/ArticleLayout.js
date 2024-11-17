@@ -37,11 +37,10 @@ export default async function ArticleLayout({ article, children }) {
       {/* Article content */}
       <section>{children}</section>
       <section
-        className="rounded-xl bg-light-surfaceContainerHigh 
-                  dark:bg-dark-surfaceContainerHigh
-                  outline-2 outline-light-outlineVariant 
-                  dark:border-dark-outlineVariant 
-                  dark:outline-light-outlineVariant 
+        className="rounded-xl bg-surfaceContainerHigh 
+                  outline-2 outline-outlineVariant 
+                  dark:border-outlineVariant 
+                  dark:outline-outlineVariant 
                   px-6 py-4 my-4"
       >
         <header>
@@ -52,16 +51,16 @@ export default async function ArticleLayout({ article, children }) {
         </section>
         <footer className="my-4">
           <ShareButton
-            buttonStyle="bg-light-primary dark:bg-dark-primary dark:text-dark-onPrimary"
-            textColor="text-light-onPrimary dark:text-dark-onPrimary"
-            iconColor="fill-light-onPrimary dark:fill-dark-onPrimary"
+            buttonStyle="bg-primary text-onPrimary"
+            textColor="text-onPrimary"
+            iconColor="fill-onPrimary"
             clipboardContent={article.slug}
             id={article.id}
           />
         </footer>
       </section>
       <section className="my-4">
-        <div className="read-more text-headline-l text-light-onSurface dark:text-dark-onSurface">
+        <div className="read-more text-headline-l text-onSurface">
           اقرأ أيضا
         </div>
         <section className="sm:hidden -ml-[.75rem] ">

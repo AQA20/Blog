@@ -82,7 +82,7 @@ const Navbar = () => {
   }, [searchQuery, path]);
 
   return (
-    <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-light-surface dark:bg-dark-surface">
+    <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-surface">
       <nav className="flex justify-between items-center">
         <div>
           {/* If home page and search is hidden */}
@@ -100,7 +100,7 @@ const Navbar = () => {
             <Hug onClick={handleBackClick} label="Back Button">
               <ArrowRightLine
                 size={24}
-                className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                className="fill-onSurfaceVariant dark:fill-onSurface"
               />
             </Hug>
           )}
@@ -116,7 +116,7 @@ const Navbar = () => {
               >
                 <SearchLine
                   size="24"
-                  className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                  className="fill-onSurfaceVariant dark:fill-onSurface"
                 />
               </Hug>
             </div>
@@ -135,7 +135,7 @@ const Navbar = () => {
                 <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
                   <MenuLIne
                     size="24"
-                    className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                    className="fill-onSurfaceVariant dark:fill-onSurface"
                   />
                 </Hug>
               </div>
@@ -146,7 +146,7 @@ const Navbar = () => {
                 <Hug onClick={() => setShowMenu(true)} label="Show Menu Button">
                   <MenuLIne
                     size="24"
-                    className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
+                    className="fill-onSurfaceVariant dark:fill-onSurface"
                   />
                 </Hug>
               </div>
@@ -157,14 +157,11 @@ const Navbar = () => {
                 <button
                   onClick={() => setShowMenu(false)}
                   className="flex items-center justify-center h-[40px] w-[40px]
-                     bg-light-surfaceContainer dark:bg-dark-surfaceContainerLow 
+                     bg-surfaceContainer dark:bg-surfaceContainerLow 
                      rounded-full hover:cursor-pointer"
                   aria-label="Close Menu Button"
                 >
-                  <CloseLine
-                    size={24}
-                    className="text-light-onSurface dark:text-dark-onSurface"
-                  />
+                  <CloseLine size={24} className="text-light-onSurface" />
                 </button>
                 <div className="absolute left-1 top-14">
                   <Menu

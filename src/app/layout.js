@@ -58,7 +58,7 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
-      <body className="w-full xl:w-[680px] font-noto bg-light-surface dark:bg-dark-surface">
+      <body className="w-full xl:w-[680px] font-noto bg-surface">
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"

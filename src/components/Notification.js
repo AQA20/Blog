@@ -21,19 +21,13 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
   const Icon = () => {
     switch (type) {
       case 'warning':
-        return (
-          <ErrorWarningLine size={24} className="text-light-inverseOnSurface" />
-        );
+        return <ErrorWarningLine size={24} className="text-inverseOnSurface" />;
       case 'error':
-        return (
-          <ErrorWarningLine size={24} className="text-light-inverseOnSurface" />
-        );
+        return <ErrorWarningLine size={24} className="text-inverseOnSurface" />;
       case 'success':
-        return <CheckLine size={24} className="text-light-inverseOnSurface" />;
+        return <CheckLine size={24} className="text-inverseOnSurface" />;
       case 'copy':
-        return (
-          <FileCopyLine size={24} className="text-light-inverseOnSurface" />
-        );
+        return <FileCopyLine size={24} className="text-inverseOnSurface" />;
     }
   };
 
@@ -46,7 +40,7 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
           'bg-[#c7ad6b]': type === 'warning',
           'bg-[#dc2626]': type === 'error',
           'bg-[#15803d]': type === 'success',
-          'bg-light-inverseSurface': type === 'copy',
+          'bg-inverseSurface': type === 'copy',
           'visible translate-y-0': isShow,
           'invisible translate-y-[200px]': !isShow,
         },
@@ -57,11 +51,11 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
           <div>
             <Icon />
           </div>
-          <p className="text-light-inverseOnSurface">{text}</p>
+          <p className="text-inverseOnSurface">{text}</p>
         </div>
         <div>
           <Hug onClick={onClose}>
-            <CloseFill size={24} className="fill-light-inverseOnSurface" />
+            <CloseFill size={24} className="fill-inverseOnSurface" />
           </Hug>
         </div>
       </div>

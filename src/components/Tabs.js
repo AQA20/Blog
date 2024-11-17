@@ -13,26 +13,25 @@ const Tabs = ({ tabs, index }) => {
             <button
               key={header}
               onClick={() => replace(`/policy?index=${i + 1}`)}
-              className="flex items-center h-10  hover:cursor-pointer hover:text-light-primary dark:hover:text-dark-primary"
+              className="flex items-center h-10  hover:cursor-pointer hover:text-primary"
             >
               <div className="relative">
                 <p
                   className={clsx('text-sm dark:text-dark-onSurfaceVariant', {
-                    'text-light-primary dark:text-dark-primary':
-                      index === i + 1,
+                    'text-primary': index === i + 1,
                   })}
                 >
                   {header}
                 </p>
                 {index === i + 1 && (
-                  <hr className="absolute w-full top-[31px] h-1 bg-light-primary dark:bg-dark-primary rounded-t-[100px] rounder-r-[100px]" />
+                  <hr className="absolute w-full top-[31px] h-1 bg-primary rounded-t-[100px] rounder-r-[100px]" />
                 )}
               </div>
             </button>
           ))}
         </div>
       }
-      <hr className="text-light-outlineVariant mt-1 mb-4" />
+      <hr className="text-outlineVariant mt-1 mb-4" />
       {Object.values(tabs).map(
         (tab, i) => index === i + 1 && <div key={index}>{tab}</div>,
       )}

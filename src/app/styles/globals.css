@@ -10,13 +10,80 @@ html {
   box-sizing: border-box;
 }
 
+@layer base {
+  /* hsl(hue, saturation, lightness) */
+  :root {
+    --background: 210, 80%, 98%;
+    --on-background: 206, 13%, 11%;
+    --primary: 198, 66%, 31%;
+    --on-primary: 0, 0%, 100%;
+    --primary-container: 221, 100%, 92%;
+    --error: 0, 75%, 42%;
+    --on-error: 0, 0%, 100%;
+    --surface: 210, 80%, 98%;
+    --on-surface: 206, 13%, 11%;
+    --on-surface-variant: 205, 8%, 28%;
+    --outline-variant: 208, 19%, 78%;
+    --shadow: 0, 0%, 0%;
+    --inverse-surface: 202, 8%, 19%;
+    --inverse-on-surface: 210, 29%, 95%;
+    --inverse-primary: 202, 81%, 76%;
+    --surface-container: 210, 24%, 93%, 1;
+    --surface-container-lowest: 0, 0%, 100%;
+    --surface-container-low: 210, 36%, 96%;
+    --surface-container-high: 210, 18%, 91%;
+    --surface-container-highest: 210, 14%, 89%;
+  }
+  .dark {
+    --background: 203, 21%, 7%;
+    --on-background: 210, 14%, 89%;
+    --primary: 202, 81%, 76%;
+    --on-primary: 196, 100%, 14%;
+    --error: 6, 100%, 84%;
+    --on-error: 357, 100%, 21%;
+    --surface: 203, 21%, 7%;
+    --on-surface: 210, 14%, 89%;
+    --on-surface-variant: 208, 12%, 78%;
+    --outline-variant: 205, 8%, 28%;
+    --inverse-surface: 210, 14%, 89%;
+    --inverse-on-surface: 202, 81%, 76%;
+    --inverse-primary: 198, 66%, 31%;
+    --surface-container: 206, 11%, 12%;
+    --surface-container-lowest: 203, 29%, 5%;
+    --surface-container-low: 206, 13%, 11%;
+    --surface-container-high: 203, 10%, 16%, 1;
+    --surface-container-highest: 210, 8%, 21%;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-onSurface;
+  }
+
+  h1 {
+    @apply text-headline-s sm:text-headline-l;
+  }
+
+  h2 {
+    @apply text-title-l sm:text-headline-m;
+  }
+
+  h3 {
+    @apply text-headline-s;
+  }
+
+  p {
+    @apply text-body-l;
+  }
+}
+
 @layer components {
   .search-input,
   .suggestions {
     @apply w-[calc(100vw-64px)]
       md:w-[616px] h-[40px]
-    bg-light-surfaceContainer 
-    bg-dark-surfaceContainer
+      bg-surfaceContainer 
       outline-0
       border-0
       rounded-3xl px-12 ml-0;
@@ -29,25 +96,16 @@ html {
     @apply flex items-center transition-colors duration-300;
   }
   .hover-pointer {
-    @apply cursor-pointer hover:text-light-primary dark:hover:text-dark-primary;
+    @apply cursor-pointer hover:text-primary;
   }
   .active-filter {
-    @apply bg-light-primary text-light-onPrimary;
+    @apply bg-primary text-onPrimary;
   }
   .active {
-    @apply text-light-primary dark:!text-dark-primary;
+    @apply text-primary;
   }
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  @apply text-light-onSurface dark:text-dark-onSurface;
-}
 
 /* default text colors default font size */
 

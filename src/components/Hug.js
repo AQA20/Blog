@@ -12,8 +12,8 @@ const Hug = ({
       onClick={onClick}
       className={`w-[40px] 
       h-[40px] flex justify-center 
-      items-center disabled:text-light-outlineVariant 
-      disabled:dark:text-dark-outlineVariant ${style}`}
+      items-center disabled:text-outlineVariant 
+      ${style}`}
       disabled={disabled}
       aria-label={label}
     >

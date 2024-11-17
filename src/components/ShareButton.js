@@ -10,8 +10,8 @@ const ShareButton = ({
   buttonStyle,
   id,
   shareText = true,
-  textColor = 'text-light-primary dark:text-dark-primary',
-  iconColor = 'fill-light-primary dark:fill-dark-primary',
+  textColor = 'text-primary',
+  iconColor = 'fill-primary',
 }) => {
   const showNotification = useNotification();
 
@@ -41,10 +41,7 @@ const ShareButton = ({
         </button>
       ) : (
         <Hug onClick={onShare}>
-          <ReplyLine
-            size="20"
-            className="fill-light-primary dark:fill-dark-primary"
-          />
+          <ReplyLine size="20" className="fill-primary" />
           {''}
         </Hug>
       )}

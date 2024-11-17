@@ -42,7 +42,7 @@ const SubMenu = ({ items }) => {
           <button
             onClick={() => handleSubMenuClick(name)}
             className="h-[48px] w-full flex justify-between items-center py-3 pr-6 pl-4 transition-colors
-            duration-300 hover:cursor-pointer hover:text-light-primary hover:dark:first:text-dark-primary"
+            duration-300 hover:cursor-pointer hover:text-primary"
           >
             {name}
             <div
