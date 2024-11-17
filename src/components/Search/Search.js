@@ -121,9 +121,8 @@ const Search = ({ isShow, onHideSearch }) => {
           <input
             className={clsx(
               `search-input relative focus:border-none
-              bg-light-surfaceContainerHigh
-              dark:bg-dark-surfaceContainerHigh
-              dark:text-dark-onSurfaceVariant`,
+              bg-surfaceContainerHigh
+              text-onSurfaceVariant`,
               {
                 'rounded-br-none rounded-bl-none transition-all duration-[800ms]':
                   suggestions.show && suggestions.data?.length > 0,
@@ -147,15 +146,14 @@ const Search = ({ isShow, onHideSearch }) => {
           <ul
             ref={suggestionRef}
             className={`suggestions rounded-tr-none rounded-tl-none block
-           bg-light-surfaceContainerHigh dark:bg-dark-surfaceContainerHigh
-            dark:text-dark-onSurfaceVariant`}
+           bg-surfaceContainerHigh`}
           >
             <li className="text-sm hover:cursor-default">مقترحات قد تعجبك!</li>
             {suggestions.data?.map((suggestion) => (
               <a
                 key={suggestion.title}
                 href={`/${suggestion.slug}`}
-                className="transition-color duration-100 hover:text-light-primary dark:hover:text-dark-primary w-full"
+                className="transition-color duration-100 hover:text-primary w-full"
               >
                 <li>
                   <Hug>
@@ -171,20 +169,14 @@ const Search = ({ isShow, onHideSearch }) => {
 
         <div className="absolute top-[16%] right-4">
           <Hug onClick={onHideSearch}>
-            <ArrowRightLine
-              size={20}
-              className="fill-light-onSurfaceVariant dark:fill-dark-onSurface"
-            />
+            <ArrowRightLine size={20} className="fill-onSurfaceVariant" />
             {''}
           </Hug>
         </div>
         <div className="z-11 absolute top-[16%] left-3 md:left-16">
           {inputValue && (
             <Hug onClick={onHideSearch}>
-              <CloseFill
-                size={20}
-                className="fill-light-onSurfaceVariant dark:fill-dark-onSurfaceVariant"
-              />
+              <CloseFill size={20} className="fill-onSurfaceVariant" />
               {''}
             </Hug>
           )}

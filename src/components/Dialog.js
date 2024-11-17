@@ -38,10 +38,8 @@ const Dialog = ({
       p-6 
       border 
       border-solid 
-      border-light-outlineVariant
-      dark:border-dark-outlineVariant
-      bg-light-surfaceContainerHigh
-      dark:bg-dark-surfaceContainerHigh 
+      border-outlineVariant
+      bg-surfaceContainerHigh
       rounded-lg
       "
       ref={dialogRef}
@@ -50,8 +48,8 @@ const Dialog = ({
       <footer className="flex items-center gap-2">
         <Button onClick={handleActionClick} title={okButtonTitle} />
         <Button
-          style="bg-transparent border border-light-primary"
-          titleStyle="text-light-primary"
+          style="bg-transparent border border-primary"
+          titleStyle="text-primary"
           onClick={handleClose}
           title={closeButtonTitle}
         />

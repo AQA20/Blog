@@ -8,7 +8,7 @@ const Tag = ({ name }) => {
   return (
     <span className="ml-4">
       <Link
-        className="hover:cursor-pointer text-light-primary dark:text-dark-primary "
+        className="hover:cursor-pointer text-primary"
         href={`/tags/${encodedTagName}?search=${encodedTagName}`}
       >
         #{name}

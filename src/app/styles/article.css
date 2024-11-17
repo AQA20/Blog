@@ -16,7 +16,7 @@
 
 @layer components {
   #articleContent a {
-    @apply text-light-primary dark:!text-dark-primary;
+    @apply text-primary;
   }
   #articleContent p, #articleContent h1, #articleContent h2, #articleContent h3 {
     @apply py-2;

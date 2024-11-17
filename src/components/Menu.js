@@ -39,8 +39,8 @@ const Menu = ({ onClose, menuItems, subMenuItems, footerItems = [] }) => {
   }, []);
 
   return (
-    <div ref={menuRef} className="w-[280px] dark:text-dark-onSurface">
-      <ul className="py-2 bg-light-surfaceContainer dark:bg-dark-surfaceContainer rounded-lg">
+    <div ref={menuRef} className="w-[280px] text-onSurface">
+      <ul className="py-2 bg-surfaceContainer rounded-lg">
         {menuItems.map((item, index) => (
           <li key={index} className="h-[48px] menu-link px-4 py-3">
             {item?.url ? (
@@ -66,12 +66,12 @@ const Menu = ({ onClose, menuItems, subMenuItems, footerItems = [] }) => {
           </li>
         ))}
         {Object.keys(subMenuItems).length > 0 && (
-          <hr className="border-light-outlineVariant dark:border-dark-outlineVariant my-2" />
+          <hr className="border-outlineVariant my-2" />
         )}
         <SubMenu items={subMenuItems} />
       </ul>
       {footerItems.length > 0 && (
-        <ul className="mt-1 py-2 bg-light-surfaceContainer dark:bg-dark-surfaceContainer rounded-lg">
+        <ul className="mt-1 py-2 bg-surfaceContainer rounded-lg">
           {footerItems.map((item, index) => (
             <li
               key={index}

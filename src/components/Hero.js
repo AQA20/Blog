@@ -35,10 +35,7 @@ const Hero = ({ article }) => {
         </header>
         <section>
           <p>
-            <Link
-              className="onSurfaceVariant dark:text-dark-onSurfaceVariant"
-              href={`/${article.slug}`}
-            >
+            <Link className="text-onSurfaceVariant" href={`/${article.slug}`}>
               {article.description}
             </Link>
           </p>
@@ -54,7 +51,7 @@ const Hero = ({ article }) => {
         >
           <ArrowDownLine
             size="20px"
-            className="fill-white dark:fill-dark-onPrimary"
+            className="fill-white dark:fill-onPrimary"
           />
         </Button>
       </footer>

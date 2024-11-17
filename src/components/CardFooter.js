@@ -20,7 +20,7 @@ const CardFooter = ({ clipboardContent, id, tags = [], shareText = true }) => {
           />
         </div>
       </footer>
-      <hr className="mt-2 mb-6 dark:border-dark-outlineVariant" />
+      <hr className="mt-2 mb-6 border-outlineVariant" />
     </section>
   );
 };

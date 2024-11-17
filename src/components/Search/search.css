@@ -95,7 +95,7 @@
 }
 
 .suggestions button:hover {
-  color: theme('colors.light.primary');
+  color: theme('colors.primary');
 }
 
 /* End of search component suggestions styles & animations */

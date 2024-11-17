@@ -86,8 +86,8 @@ export default async function Page({ params }) {
         </figure>
         <section className="mt-4 mb-2">
           <ShareButton
-            buttonStyle="bg-light-primary dark:bg-dark-primary dark:text-dark-onPrimary"
-            textColor="text-light-onPrimary dark:text-dark-onPrimary"
+            buttonStyle="bg-primary text-onPrimary"
+            textColor="text-onPrimary"
             iconColor="fill-light-onPrimary dark:fill-dark-onPrimary"
             id={article.id}
             clipboardContent={article.slug}

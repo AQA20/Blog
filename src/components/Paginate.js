@@ -48,7 +48,7 @@ const Paginate = ({ pages }) => {
             <li key={i}>
               <Link href={handlePageClick(i + 1)}>
                 <Hug
-                  style={`${pageQuery === i + 1 ? 'rounded-full bg-light-primary text-light-onPrimary' : ''}`}
+                  style={`${pageQuery === i + 1 ? 'rounded-full bg-primary text-onPrimary' : ''}`}
                 >
                   {i + 1}
                 </Hug>
