@@ -127,11 +127,6 @@ export default class ArticleService {
           },
           attributes: ['id', 'name'],
         },
-        {
-          model: Image,
-          where: { imageableType: Image.ARTICLE },
-          attributes: ['id', 'name'],
-        },
       ],
       offset,
       limit: pageSize,

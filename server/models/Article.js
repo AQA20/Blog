@@ -2,6 +2,7 @@
 import { DataTypes, Model } from 'sequelize';
 import db from '../config/databaseConnection.js';
 import Metrics from '../services/Metrics.js';
+import Image from './Image.js';
 import ImageService from '../services/ImageService.js';
 
 const sequelize = db.sequelize;
@@ -107,36 +108,53 @@ Article.associate = (models) => {
   });
 };
 
-// After finding an article (or articles), retrieve image URLs from S3 and append them to the article objects.
 Article.afterFind(async (data) => {
-  // Instantiate an ImageService instance for handling image URL retrieval
+  // Initialize the ImageService instance to handle image URL retrieval
   const imgService = new ImageService();
-  // If data is an array of articles and no Images are included in the data, exit early
-  if (Array.isArray(data) && !data[0]?.Images) return;
 
-  // Helper function to attach image URLs to an article
-  const attachImageUrls = (article) => {
-    if (!article || !article?.Images) return;
-    // Get the URL of the thumbnail (featured image) for the article
-    const thumbnailUrl = imgService.getImageUrl(
-      article.Images,
-      article.thumbnailId,
-    );
-    article.setDataValue('featuredImg', thumbnailUrl); // Attach the thumbnail image URL
+  /**
+   * Helper function to attach image URLs to an article object
+   * @param {Object} article - The article object
+   */
+  const attachImageUrls = async (article) => {
+    // Skip if the article is not found or thumbnailId is not retrieved
+    if (!article || !article.thumbnailId) return;
 
     if (article.Images) {
-      // Get and attach all related image URLs for the article
-      const allImages = imgService.getImageUrls(article.Images);
-      article.setDataValue('Images', allImages); // Attach all image URLs
+      // If the article includes its associated Images
+      // Retrieve and set the featured image (thumbnail) URL
+      const thumbnailUrl = imgService.getImageUrl(
+        article.Images,
+        article.thumbnailId,
+      );
+      article.setDataValue('featuredImg', thumbnailUrl);
+
+      // Retrieve and set all image URLs for the article
+      const allImageUrls = imgService.getImageUrls(article.Images);
+      article.setDataValue('Images', allImageUrls);
+    } else {
+      // If Images are not preloaded, fetch the featured image URL by thumbnailId
+      const imageable = await imgService.getImageableWithImgUrl(
+        article.thumbnailId, // Thumbnail ID to fetch the image
+        null,
+        {
+          type: Image.ARTICLE, // Image type (specific to the ImageService logic)
+          imgLinkProperty: 'featuredImg', // The property to set the image URL
+        },
+      );
+
+      // Attach the featured image URL to the article
+      article.setDataValue('featuredImg', imageable.dataValues.featuredImg);
     }
   };
 
-  // If data is an array of articles, process each article
+  // Handle the input data from the `afterFind` hook
   if (Array.isArray(data)) {
-    data.forEach(attachImageUrls);
+    // If multiple articles are retrieved, process each in parallel
+    await Promise.all(data.map(attachImageUrls));
   } else {
-    // If only one article is returned, process it
-    attachImageUrls(data);
+    // If a single article is retrieved, process it directly
+    await attachImageUrls(data);
   }
 });
 
