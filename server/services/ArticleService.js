@@ -4,7 +4,6 @@ import Category from '../models/Category.js';
 import Tag from '../models/Tag.js';
 import Image from '../models/Image.js';
 import Metrics from '../services/Metrics.js';
-import ApiError from '../services/ApiError.js';
 import db from '../config/databaseConnection.js';
 import { Op } from 'sequelize';
 
@@ -71,7 +70,7 @@ export default class ArticleService {
   // Find all of the articles with the necessary relations sorted by data in specific order
   static async getAllArticles(options) {
     // Destructure values from options object
-    const { search, orderBy, order, pageSize, offset } = options;
+    const { search, orderBy, order, pageSize, offset, status } = options;
     let searchQuery = {};
     if (search) {
       searchQuery = {
@@ -84,7 +83,7 @@ export default class ArticleService {
     // Find and count the articles
     const { rows, count } = await Article.findAndCountAll({
       where: {
-        status: Article.APPROVED,
+        status,
         ...searchQuery,
         thumbnailId: {
           [Op.ne]: null, // Where thumbnailId not equal to null
@@ -132,39 +131,5 @@ export default class ArticleService {
     });
 
     return { articles: rows, count };
-  }
-
-  static async paginatedArticles(req) {
-    const query = req.query;
-    const badValues = ['undefined', 'null'];
-    // Check if query has prohibited values
-    if (Object.values(query).some((value) => badValues.indexOf(value) !== -1)) {
-      throw new ApiError('Bad request unexpected value', 400);
-    }
-    // Get optional queries and assign default values if they were not provided
-    const search = query.search || '';
-    const orderBy = query.orderBy || 'createdAt';
-    const order = query.order || 'DESC';
-    const page = query.page ? Number(req.query.page) : 1;
-    const pageSize = query?.limit
-      ? Number(query.limit)
-      : ArticleService.#pageSize;
-    // Calculate the offset to be used for the pagination
-    const offset = (page - 1) * pageSize;
-    // Get all articles and destructure returned values
-    const { count, articles } = await ArticleService.getAllArticles({
-      search,
-      orderBy,
-      order,
-      pageSize,
-      offset,
-    });
-
-    // Return articles data
-    return {
-      currentPage: page,
-      totalPages: Math.ceil(count / pageSize),
-      articles,
-    };
   }
 }

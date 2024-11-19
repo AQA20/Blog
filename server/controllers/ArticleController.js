@@ -92,6 +92,7 @@ export default class ArticleController {
     const pageSize = query?.limit
       ? Number(query.limit)
       : ArticleController.#pageSize;
+    const status = query.status || Article.APPROVED;
     // Calculate the offset to be used in pagination
     const offset = (page - 1) * pageSize;
 
@@ -102,6 +103,7 @@ export default class ArticleController {
       order,
       pageSize,
       offset,
+      status,
     });
 
     const totalPages = Math.ceil(count / pageSize) || 1;
