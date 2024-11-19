@@ -49,10 +49,7 @@ const Hero = ({ article }) => {
             componentRef.current.scrollIntoView({ behavior: 'smooth' })
           }
         >
-          <ArrowDownLine
-            size="20px"
-            className="fill-white dark:fill-onPrimary"
-          />
+          <ArrowDownLine size="20px" className="fill-onPrimary" />
         </Button>
       </footer>
     </article>

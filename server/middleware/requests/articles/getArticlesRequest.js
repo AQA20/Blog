@@ -5,7 +5,7 @@ const getArticleRequest = Joi.object({
   orderBy: Joi.string().trim().valid('views', 'shares', 'createdAt'),
   order: Joi.string().trim().valid('DESC', 'ASC'),
   page: Joi.number(),
-  limit: Joi.number().max(6),
+  limit: Joi.number().max(10),
 });
 
 const getArticleRequestMiddleware = (req, res, next) => {

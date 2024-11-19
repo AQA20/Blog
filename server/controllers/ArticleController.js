@@ -104,10 +104,13 @@ export default class ArticleController {
       offset,
     });
 
+    const totalPages = Math.ceil(count / pageSize) || 1;
+
     // Return articles data
     return {
-      currentPage: page,
-      totalPages: Math.ceil(count / pageSize) || 1,
+      page,
+      totalPages,
+      hasNextPage: totalPages > page,
       articles,
     };
   }

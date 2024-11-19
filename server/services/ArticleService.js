@@ -61,12 +61,6 @@ export default class ArticleService {
         { model: Category, attributes: ['id', 'name'] },
         {
           model: Tag,
-          through: {
-            attributes: [],
-            where: {
-              deletedAt: null,
-            },
-          },
           attributes: ['id', 'name'],
         },
         { model: Image, attributes: ['id', 'name'] },
@@ -122,10 +116,13 @@ export default class ArticleService {
         },
         {
           model: Tag,
-          through: {
-            attributes: [],
-          },
           attributes: ['id', 'name'],
+        },
+        {
+          model: User, // Model
+          required: true, // forces an inner join
+          as: 'author', // Alias name
+          attributes: ['id', 'name'], // Columns to include
         },
       ],
       offset,
