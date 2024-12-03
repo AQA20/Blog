@@ -59,8 +59,6 @@ export default class UserController {
     // Verify the refresh token
     const decoded = jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
 
-    console.log(decoded);
-
     // Generate new tokens
     const { accessToken } = UserController.generateAccessTokens(
       decoded.user.id,
@@ -130,6 +128,8 @@ export default class UserController {
       { expiresIn: ACCESS_TOKEN_EXPIRATION_TIME },
     );
 
+    console.info('user', id, email);
+    console.info('refreshtoken', process.env.JWT_REFRESH_SECRET);
     // Generate a new refresh token
     const newRefreshToken = jwt.sign(
       {
