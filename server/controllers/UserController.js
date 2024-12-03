@@ -32,7 +32,6 @@ export default class UserController {
     const user = req.user;
     let userRoles = await user.getUserRoles();
     userRoles = await UserController.#formatUserRoles(userRoles);
-
     // Only returns the neccacccary data
     return resHandler(
       201,
@@ -50,7 +49,6 @@ export default class UserController {
   static async refreshAccessToken(req, res) {
     // Get refresh token from the cookie
     const oldRefreshToken = req.cookies.refreshToken;
-    console.info('##########Cookies##########', req.cookies, '\n');
     // Check if the refresh token exists
     if (!oldRefreshToken) {
       throw new ApiError('Refresh token not found', 401);
@@ -69,7 +67,7 @@ export default class UserController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      secure: true,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
     });
 
@@ -149,7 +147,7 @@ export default class UserController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      secure: true,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
     });
 
@@ -157,7 +155,7 @@ export default class UserController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+      secure: true,
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
     });
   }
