@@ -50,7 +50,7 @@ export default class UserController {
   static async refreshAccessToken(req, res) {
     // Get refresh token from the cookie
     const oldRefreshToken = req.cookies.refreshToken;
-
+    console.info('##########Cookies##########', req.cookies, '\n');
     // Check if the refresh token exists
     if (!oldRefreshToken) {
       throw new ApiError('Refresh token not found', 401);
