@@ -128,8 +128,6 @@ export default class UserController {
       { expiresIn: ACCESS_TOKEN_EXPIRATION_TIME },
     );
 
-    console.info('user', id, email);
-    console.info('refreshtoken', process.env.JWT_REFRESH_SECRET);
     // Generate a new refresh token
     const newRefreshToken = jwt.sign(
       {
