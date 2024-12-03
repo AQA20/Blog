@@ -90,9 +90,13 @@ export default class ImageService {
    * const image = await imageService.#getImageable(123, null, { type: 'User', attributes: ['name', 'url'] });
    * console.log(image); // Image with ID 123 for a User
    */
-  async #getImageable(imgId, imageableId, options = { attributes: ['name'] }) {
+  async #getImageable(
+    imgId,
+    imageableId,
+    options = { attributes: ['name'], paranoid: true },
+  ) {
     // Destructure values from options
-    const { type, attributes } = options;
+    const { type, attributes, paranoid } = options;
     let imageableModel;
 
     // If imgId is provided, find image by its primary key (imgId)
@@ -100,12 +104,14 @@ export default class ImageService {
       imageableModel = await Image.findByPk(imgId, {
         where: { imageableType: type },
         attributes,
+        paranoid,
       });
     } else if (imageableId) {
       // If imgId is not provided, find image by imageableId
       imageableModel = await Image.findOne({
         where: { imageableId, imageableType: type },
         attributes,
+        paranoid,
       });
     } else {
       // Throw an error if neither imgId nor imageableId is provided
@@ -113,6 +119,42 @@ export default class ImageService {
     }
 
     return imageableModel;
+  }
+
+  /**
+   * Validates the required parameters for creating an imageable.
+   *
+   * @param {number} imageableId - The ID of the imageable entity.
+   * @param {string} type - The type of the imageable entity.
+   * @param {Object} file - The image file object.
+   * @param {Buffer} buffer - The image buffer.
+   * @param {string} mimetype - The mimetype of the image buffer.
+   * @throws {Error} If any required parameter is missing or invalid.
+   */
+  #validateParameters(imageableId, type, file, buffer, mimetype) {
+    if (!imageableId) throw new Error('The imageableId argument is required.');
+    if (!type) throw new Error('The type argument is required.');
+    if (!file && !buffer)
+      throw new Error('Either the file or buffer option is required.');
+    if (buffer && !mimetype)
+      throw new Error('The mimetype is required when buffer is provided.');
+  }
+
+  /**
+   * Retrieves the file data from either the file object or buffer.
+   *
+   * @param {Object} file - The file object.
+   * @param {Buffer} buffer - The image buffer.
+   * @param {string} mimetype - The mimetype of the image.
+   * @returns {Object} The file data containing `fileBuffer` and `fileMimetype`.
+   */
+  #getFileData(file, buffer, mimetype) {
+    if (file) {
+      return { fileBuffer: file.buffer, fileMimetype: file.mimetype };
+    }
+
+    // At this point, we are guaranteed that buffer is provided (because of validation)
+    return { fileBuffer: buffer, fileMimetype: mimetype };
   }
 
   /**
@@ -129,7 +171,7 @@ export default class ImageService {
    * @param {string} [options.imgLinkProperty='imgUrl'] - The property name to store the image URL (default is 'imgUrl').
    * @param {string} [options.capture=''] - Optional capture information for the image.
    *
-   * @returns {Object} The created imageable model with the image URL attached.
+   * @returns {Promise<Object>} The created imageable model with the image URL attached.
    *
    * @throws {Error} If any required parameter (`imageableId`, `type`, `file`) is missing.
    *
@@ -140,26 +182,31 @@ export default class ImageService {
   async createImageable(
     imageableId,
     type,
-    { file, imgLinkProperty = 'imgUrl', capture = '' },
+    { file, buffer, mimetype, imgLinkProperty = 'imgUrl', capture = '' },
   ) {
-    // Validate required arguments
-    if (!file) throw new Error('The file option is required');
-    if (!imageableId) throw new Error('The imageableId argument is required');
-    if (!type) throw new Error('The type argument is required');
+    // Validate required parameters and ensure necessary properties are present
+    this.#validateParameters(imageableId, type, file, buffer, mimetype);
 
-    // Upload the image to AWS S3 and get the file name
-    const name = await this.#s3Service.uploadFile(file.buffer, file.mimetype);
+    // Determine the file data and upload to S3
+    const { fileBuffer, fileMimetype } = this.#getFileData(
+      file,
+      buffer,
+      mimetype,
+    );
+
+    // Upload image to S3 and get the file name
+    const fileName = await this.#s3Service.uploadFile(fileBuffer, fileMimetype);
 
     // Create the imageable record in the database
     const imageableModel = await Image.create({
       imageableId,
       imageableType: type,
       capture,
-      name,
+      name: fileName,
     });
 
-    // Get the image URL from S3 and attach it to the model
-    const imgUrl = this.#s3Service.getFile(name);
+    // Attach the image URL from S3 to the model
+    const imgUrl = this.#s3Service.getFile(fileName);
     imageableModel.setDataValue(imgLinkProperty, imgUrl);
 
     return imageableModel;
@@ -190,7 +237,7 @@ export default class ImageService {
   async getImageableWithImgUrl(
     imgId,
     imageableId,
-    { type, imgLinkProperty = 'imgUrl', attributes = ['name'] },
+    { type, imgLinkProperty = 'imgUrl', attributes = ['name'], paranoid },
   ) {
     // Validate the type and ensure either imgId or imageableId is provided
     if (!type) throw new Error('The type option is required');
@@ -199,8 +246,12 @@ export default class ImageService {
 
     // Fetch the imageable model based on imgId or imageableId
     const imageableModel = imgId
-      ? await this.#getImageable(imgId, null, { type, attributes })
-      : await this.#getImageable(null, imageableId, { type, attributes });
+      ? await this.#getImageable(imgId, null, { type, attributes, paranoid })
+      : await this.#getImageable(null, imageableId, {
+          type,
+          attributes,
+          paranoid,
+        });
 
     // Get the image URL from AWS S3 using the image name
     const imgUrl = this.#s3Service.getFile(imageableModel.name);

@@ -3,7 +3,10 @@ import db from '../config/databaseConnection.js';
 
 const sequelize = db.sequelize;
 
-class Category extends Model {}
+class Category extends Model {
+  static NAME_CH_MIN = 2;
+  static NAME_CH_MAX = 20;
+}
 
 Category.init(
   {

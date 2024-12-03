@@ -3,11 +3,13 @@ import ArticleController from '../controllers/ArticleController.js';
 import authorized from '../middleware/authorized.js';
 import isAdmin from '../middleware/isAdmin.js';
 import getArticlesRequest from '../middleware/requests/articles/getArticlesRequest.js';
+import getArticleRequest from '../middleware/requests/articles/getArticleRequest.js';
 import getSearchSuggestionsRequest from '../middleware/requests/articles/getSearchSuggestionsRequest.js';
 import createArticleRequest from '../middleware/requests/articles/createArticleRequest.js';
 import updateArticleRequest from '../middleware/requests/articles/updateArticleRequest.js';
 import updateArticleStatus from '../middleware/requests/articles/updateArticleStatus.js';
 import deleteArticleRequest from '../middleware/requests/articles/deleteArticleRequest.js';
+import restoreArticleRequest from '../middleware/requests/articles/restoreArticleRequest.js';
 import { handleAsyncApiError } from '../utils/handleErrors.js';
 
 const router = express.Router();
@@ -28,6 +30,7 @@ router.get(
 // Get article
 router.get(
   '/article/:value',
+  getArticleRequest,
   handleAsyncApiError(ArticleController.getArticle),
 );
 
@@ -78,6 +81,15 @@ router.delete(
   isAdmin,
   deleteArticleRequest,
   handleAsyncApiError(ArticleController.deleteArticle),
+);
+
+// Restore article
+router.put(
+  '/article/restore/:id',
+  authorized,
+  isAdmin,
+  restoreArticleRequest,
+  handleAsyncApiError(ArticleController.restoreArticle),
 );
 
 export default router;

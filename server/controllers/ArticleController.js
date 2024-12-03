@@ -2,6 +2,7 @@ import Article from '../models/Article.js';
 import User from '../models/User.js';
 import Category from '../models/Category.js';
 import Tag from '../models/Tag.js';
+import ArticleTag from '../models/ArticleTag.js';
 import Image from '../models/Image.js';
 import View from '../models/View.js';
 import Share from '../models/Share.js';
@@ -37,10 +38,11 @@ export default class ArticleController {
 
   static async getArticle(req, res, next) {
     const value = req.params.value;
+    const allStatuses = req.query.allStatuses;
     // Determine whether id or slug was passed and return the corresponding query
     const query = getQuery(value, 'slug');
 
-    const article = await ArticleService.fetchArticle(query);
+    const article = await ArticleService.fetchArticle(query, !!allStatuses);
 
     if (!article) {
       return next(new ApiError('Article is not found', 404));
@@ -145,26 +147,64 @@ export default class ArticleController {
     // Create an article slug using article's title
     req.body.slug = createSlug(req.body.title);
 
-    // Create article
-    const article = await Article.create(req.body, {
-      include: [
-        { model: User, as: 'author', attributes: ['id', 'name'] },
-        { model: Category, attributes: ['id', 'name'] },
-        { model: Image, attributes: ['id', 'name'] },
-        { model: Tag, required: true, attributes: ['id', 'name'] },
-      ],
+    // Use transaction so if something went wrong it rolls back all database
+    // operations, note we're automatically pass transactions to all queries in
+    // server/config/databaseConnection.js so we don't need to manually pass it
+    // to each query.
+    await db.sequelize.transaction(async (t) => {
+      // Create article
+      const article = await Article.create(req.body, {
+        include: [
+          { model: User, as: 'author', attributes: ['id', 'name'] },
+          { model: Category, attributes: ['id', 'name'] },
+          { model: Image, attributes: ['id', 'name'] },
+          { model: Tag, required: true, attributes: ['id', 'name'] },
+        ],
+      });
+
+      // Replace base46 src with a AWS s3 URL
+      const { sanitizedHtml, imageables } =
+        await ArticleService.processHtmlImages(article.id, req.body.content);
+      // Update the article html content;
+      article.content = sanitizedHtml;
+      // Set first image as article thumbnail Image
+      article.thumbnailId = imageables[0].dataValues.id;
+      await article.save();
+
+      return resHandler(201, article, res);
     });
-    return resHandler(201, article, res);
   }
 
   static async updateArticle(req, res) {
     const articleId = req.params.id;
-    // Managed transactions
-    // all queries will automatically look for a transaction on the namespace
-    // as we have cls-hooked (CLS) module and instantiated a namespace in config/databaseConnection.js.
+    // Use transaction so if something went wrong it rolls back all database
+    // operations, note we're automatically pass transactions to all queries in
+    // server/config/databaseConnection.js so we don't need to manually pass it
+    // to each query.
     await db.sequelize.transaction(async (t) => {
       // Fetch the article instance first
-      const existedArticle = await Article.findByPk(articleId);
+      const existedArticle = await Article.findByPk(articleId, {
+        include: Tag,
+      });
+
+      // Replace base46 src with a AWS s3 URL
+      const { sanitizedHtml } = await ArticleService.processHtmlImages(
+        existedArticle.id,
+        req.body.content,
+      );
+      // Update the article html content;
+      req.body.content = sanitizedHtml;
+
+      // Save old tags for further processing
+      const oldTags = existedArticle.Tags;
+      const newTags = req.body.tags || [];
+
+      // Create article tags
+      await ArticleService.createArticleTags(newTags, existedArticle.id, t);
+
+      // Delete unused tags
+      await ArticleService.deleteArticleTags(oldTags, newTags, t);
+
       // Save the old categoryId to pass it to the hooks
       const oldCategoryId = existedArticle.categoryId;
       // Update the article instance's fields
@@ -204,16 +244,82 @@ export default class ArticleController {
   static async deleteArticle(req, res) {
     const id = req.params.id;
 
-    // Fetch article with associated tags, images, and category So the
-    // beforeDestroy hook cleans up those associated models
-    const article = await ArticleService.fetchArticle({ id });
-
-    // Use transaction just in case something went wrong
+    // Use transaction so if something went wrong it rolls back all database
+    // operations, note we're automatically pass transactions to all queries in
+    // server/config/databaseConnection.js so we don't need to manually pass it
+    // to each query.
     await db.sequelize.transaction(async (t) => {
-      await article.destroy({ t });
+      // Fetch article with associated tags, images, and category So the
+      // beforeDestroy hook cleans up those associated models
+      const article = await ArticleService.fetchArticle({ id }, true);
+      article.status = Article.TRASHED;
+      await article.save();
+      await article.destroy();
     });
 
     // Return the response
     return resHandler(204, '', res);
+  }
+
+  static async restoreArticle(req, res) {
+    const id = req.params.id;
+    // Set paranoid to false to include soft deleted rows
+    const paranoid = false;
+    // Use transaction so if something went wrong it rolls back all database
+    // operations, note we're automatically pass transactions to all queries in
+    // server/config/databaseConnection.js so we don't need to manually pass it
+    // to each query. However we need to pass it to nested functions that query
+    // the database
+    await db.sequelize.transaction(async (t) => {
+      // Fetch the article with its associations, including soft-deleted rows
+      const article = await Article.findByPk(id, {
+        paranoid,
+        include: [
+          {
+            model: User,
+            as: 'author',
+            required: true,
+            paranoid,
+            attributes: ['id', 'name'],
+          },
+          { model: Category, paranoid, attributes: ['id', 'name'] },
+          { model: Tag, paranoid, attributes: ['id', 'name'] },
+          { model: Image, paranoid, attributes: ['id', 'name'] },
+          { model: Share, paranoid, attributes: ['id', 'articleId'] },
+          { model: View, paranoid, attributes: ['id', 'articleId'] },
+        ],
+      });
+
+      // Restore the article and set status to Pending
+      await article.restore();
+      article.status = Article.PENDING;
+      await article.save();
+
+      // Restore article's category
+      await Category.restore({ where: { id: article.categoryId } });
+
+      // Prepare all associated models for restoration (using Promise.all)
+      const restorePromises = [];
+
+      // Restore Shares, Views, and Images in parallel
+      restorePromises.push(...article.Shares.map((share) => share.restore()));
+      restorePromises.push(...article.Views.map((view) => view.restore()));
+      restorePromises.push(...article.Images.map((image) => image.restore()));
+
+      // For each tag, restore it and its associated ArticleTag
+      for (const tag of article.Tags) {
+        restorePromises.push(tag.restore()); // Restore the tag
+        const articleTag = await ArticleTag.findOne({
+          where: { tagId: tag.id, articleId: article.id },
+        });
+        if (articleTag) restorePromises.push(articleTag.restore()); // Restore the associated ArticleTag
+      }
+
+      // Wait for all restore operations to finish
+      await Promise.all(restorePromises);
+
+      // Return the restored article
+      return resHandler(200, article, res);
+    });
   }
 }

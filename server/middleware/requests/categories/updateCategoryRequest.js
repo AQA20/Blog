@@ -8,7 +8,11 @@ const updateCategoryRequest = Joi.object({
     .external(async (value, helpers) => {
       return existsInDatabase(Category, value, helpers, 'Invalid Category id');
     }),
-  name: Joi.string().trim().min(10).max(20).required(),
+  name: Joi.string()
+    .trim()
+    .min(Category.NAME_CH_MIN)
+    .max(Category.NAME_CH_MAX)
+    .required(),
 });
 
 const updateCategoryRequestMiddleware = async (req, res, next) => {

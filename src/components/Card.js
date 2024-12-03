@@ -14,11 +14,13 @@ const Card = ({
   tags,
   slug,
   id,
+  animate = true,
   isSmall = false,
-  isXSmall = false,
   timeAgo = null,
   largeTitle = false,
   footer = true,
+  width = 120,
+  height = 80,
 }) => {
   const router = useRouter();
   const articleUri = `/${slug}`;
@@ -56,21 +58,16 @@ const Card = ({
         </section>
 
         <figure
-          className={clsx(
-            'flex mt-2 min-w-[120px] h-[80px] translate-all duration-200 group-hover:scale-105',
-            {
-              'sm:min-w-[108px] sm:min-h-[72px]': isXSmall,
-              'sm:min-w-[120px] sm:min-h-[80px]': isSmall,
-              'sm:min-w-[180px] sm:min-h-[120px]': !isSmall && !isXSmall,
-            },
-          )}
+          className={clsx('flex mt-2 translate-all duration-200', {
+            'group-hover:scale-105': animate,
+          })}
         >
           <Suspense fallback={<p>Loading image...</p>}>
             <RoundedImage
               onClick={() => router.push(articleUri)}
               src={imgUrl}
-              width="180"
-              height="120"
+              width={width}
+              height={height}
               alt={title}
             />
           </Suspense>

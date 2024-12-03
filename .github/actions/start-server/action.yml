@@ -1,4 +1,4 @@
-name: "Start Server"
+name: 'Start Server'
 description: 'Starts the server and seeds the database'
 runs:
   using: 'composite'
@@ -22,7 +22,7 @@ runs:
         npm run migrate
         npm run seed 
         pm2 restart "server" || pm2 start npm --name "server" -- start
-        pm2 save 
+        pm2 save
       working-directory: ./server
       shell: bash
       env:

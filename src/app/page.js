@@ -34,6 +34,8 @@ export default async function Home({ searchParams }) {
                 description={article.description}
                 imgUrl={article.featuredImg}
                 timeAgo={timeAgo(article.createdAt)}
+                width={180}
+                height={120}
               />
             );
           })}

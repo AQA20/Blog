@@ -18,27 +18,16 @@
     "next/core-web-vitals",
     "prettier"
   ],
-  "plugins": [
-    "react",
-    "prettier"
-  ],
+  "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
-    "quotes": [
-      "warn",
-      "single"
-    ],
+    "prettier/prettier": "warn",
+    "quotes": ["warn", "single"],
     "react/react-in-jsx-scope": "off",
     "react/jsx-uses-react": "off",
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     ],
     "no-unused-vars": "warn"

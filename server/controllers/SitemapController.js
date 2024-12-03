@@ -1,12 +1,12 @@
 import Article from '../models/Article.js';
 import Tag from '../models/Tag.js';
-import ArticleService from '../services/ArticleService.js';
+import ArticleController from './ArticleController.js';
 
 export default class SitemapController {
   static async getSitemap(req, res) {
-    const paginatedArticles = await ArticleService.paginatedArticles(req);
+    const paginatedArticles = await ArticleController.paginatedArticles(req);
 
-    const baseUrl = 'https://500kalima.com';
+    const baseUrl = 'http://localhost:8080/api';
     // Generate page urls
     const pageUrls = [];
     for (let i = 1; i <= paginatedArticles.totalPages; i++) {

@@ -3,10 +3,11 @@ import DOMPurify from 'isomorphic-dompurify';
 import { validateWordsLength } from '../../../utils/validations.js';
 import { existsInDatabase } from '../../../utils/joiCustomValidations.js';
 import Category from '../../../models/Category.js';
+import Article from '../../../models/Article.js';
 
 // Custom validation function to count the number of words
 const wordsCount = (value, helpers) => {
-  if (!validateWordsLength(value, 300, 5000)) {
+  if (!validateWordsLength(value, Article.CT_WD_MIN, Article.CT_WD_MAX)) {
     return helpers.error(
       'Article content must be minimum of 300 words and max of 5000 words',
     );
@@ -15,8 +16,16 @@ const wordsCount = (value, helpers) => {
 };
 
 const createArticleRequest = Joi.object({
-  title: Joi.string().trim().min(40).max(60).required(),
-  description: Joi.string().trim().min(160).max(300).required(),
+  title: Joi.string()
+    .trim()
+    .min(Article.TITLE_CHAR_MIN)
+    .max(Article.TITLE_CHAR_MAX)
+    .required(),
+  description: Joi.string()
+    .trim()
+    .min(Article.DES_CHAR_MIN)
+    .max(Article.DES_CHAR_MAX)
+    .required(),
   content: Joi.string()
     .custom(wordsCount)
     .custom((value) => {
@@ -31,11 +40,11 @@ const createArticleRequest = Joi.object({
 });
 
 // Middleware function to validate the article creation request
-const createArticleRequestMiddleware = (req, res, next) => {
+const createArticleRequestMiddleware = async (req, res, next) => {
   try {
     // Validate the incoming request body using the validateAsync method.
     // This method is used because the validation logic might involve asynchronous operations.
-    const { error } = createArticleRequest.validateAsync(req.body);
+    const { error } = await createArticleRequest.validateAsync(req.body);
 
     // If validation fails (i.e., there are validation errors), pass the error to the next middleware.
     // This ensures that the error is handled in the appropriate error-handling middleware.

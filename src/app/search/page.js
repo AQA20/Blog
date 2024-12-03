@@ -3,12 +3,14 @@ import { fetchArticles, timeAgo } from '@/lib';
 import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
 
-export default async function Home({ searchParams }) {
+export default async function Page({ searchParams }) {
+  const urlSearchParams = await searchParams;
+  const { orderBy, order, page, search } = urlSearchParams;
   const { articles, totalPages } = await fetchArticles({
-    orderBy: searchParams?.orderBy,
-    order: searchParams?.order,
-    page: searchParams?.page,
-    search: searchParams?.search,
+    orderBy,
+    order,
+    page,
+    search,
   });
 
   return (
@@ -28,6 +30,8 @@ export default async function Home({ searchParams }) {
               description={article.description}
               imgUrl={article.featuredImg}
               timeAgo={timeAgo(article.createdAt)}
+              width={180}
+              height={120}
             />
           );
         })}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, lazy } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Hug from './Hug';
 import Search from './Search/Search';
 import Menu from './Menu';
@@ -57,7 +57,12 @@ const Navbar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
   const path = usePathname();
-  const { setTheme, theme } = useTheme();
+  const { setTheme, theme, systemTheme, resolvedTheme } = useTheme();
+
+  // if theme is system get systemTheme value (dark or light) else get value of
+  // the theme
+  const currentTheme = theme === 'system' ? systemTheme : theme;
+
   const isHomePage = path === '/';
   const subMenuItemsMemo = useMemo(
     () => subMenuItems(setTheme, theme),
@@ -81,20 +86,23 @@ const Navbar = () => {
     };
   }, [searchQuery, path]);
 
+  const renderLogo = () => {
+    if (isHomePage && !showSearch && !resolvedTheme) {
+      return <p>جاري التحميل....</p>;
+    } else if (isHomePage && !showSearch) {
+      return (
+        <a href="/" className="text-2xl" aria-label="Home Page Link">
+          <Logo fill={currentTheme === 'light' ? 'black' : 'white'} />
+        </a>
+      );
+    }
+  };
+
   return (
-    <div className="w-full xl:w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-surface">
+    <div className="w-full xl:max-w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-surface">
       <nav className="flex justify-between items-center">
         <div>
-          {/* If home page and search is hidden */}
-          {isHomePage &&
-            !showSearch &&
-            (!theme ? (
-              <p>Logo</p>
-            ) : (
-              <a href="/" className="text-2xl" aria-label="Home Page Link">
-                <Logo fill={theme === 'light' || !theme ? 'black' : 'white'} />
-              </a>
-            ))}
+          {renderLogo()}
           {/* Show back button instead of logo on other pages */}
           {!showSearch && !isHomePage && (
             <Hug onClick={handleBackClick} label="Back Button">

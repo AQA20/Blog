@@ -1,4 +1,4 @@
-import RoundedImage from '@/components/RoundedImage';
+import Image from 'next/image';
 import Tag from '@/components/Tag';
 import { notFound } from 'next/navigation';
 import DOMPurify from 'isomorphic-dompurify';
@@ -59,6 +59,7 @@ export default async function Page({ params }) {
   const article = await fetchArticle(routeParams.slug);
   !article && notFound();
 
+  // Todo fix iframe and content issue if you allow iframe
   const cleanHtml = DOMPurify.sanitize(article.content, {
     FORBID_TAGS: ['h1'], // Remove h1 tags
     KEEP_CONTENT: false, // Remove tags content when they're removed
@@ -75,13 +76,14 @@ export default async function Page({ params }) {
         <header>
           <h1 className="mb-2">{article.title}</h1>
         </header>
-        <figure>
-          <RoundedImage
+        <figure className="block w-full h-full md:w-[680px] md:h-[510px] overflow-hidden">
+          <Image
             onClick={null}
             src={article.featuredImg}
             alt={article.title}
             width={680}
             height={510}
+            className="rounded-2xl h-full w-full object-cover shrink-0 cursor-pointer"
           />
         </figure>
         <section className="mt-4 mb-2">
@@ -95,7 +97,7 @@ export default async function Page({ params }) {
         </section>
         <section
           id="articleContent"
-          dangerouslySetInnerHTML={{ __html: cleanHtml }}
+          dangerouslySetInnerHTML={{ __html: article.content }}
         ></section>
       </article>
     </ArticleLayout>

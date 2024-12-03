@@ -35,7 +35,7 @@ app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-kno
 app.use(cors(corsOptions)); // Use the configured CORS middleware
 
 // Other middlewares
-app.use(express.json()); // A middleware to parse JSON payloads
+app.use(express.json({ limit: '5mb' })); // A middleware to parse JSON payloads
 app.use(cookieParser(process.env.COOKIE_SECRET)); // Use cookie-parser middleware
 
 // Register routers

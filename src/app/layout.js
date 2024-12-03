@@ -58,7 +58,7 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
-      <body className="w-full xl:w-[680px] font-noto bg-surface">
+      <body className="w-full font-noto bg-surface">
         <NextThemesProvider
           attribute="class"
           defaultTheme="system"
@@ -70,7 +70,7 @@ export default async function RootLayout({ children }) {
                 <Suspense>
                   <Navbar />
                 </Suspense>
-                <div className="px-3 xl:w-[680px]">
+                <div className="px-3 xl:w-[680px] xl:px-0">
                   <section className="mb-6">
                     <Suspense>{children}</Suspense>
                   </section>
