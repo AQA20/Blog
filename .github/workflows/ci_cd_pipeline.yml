@@ -25,6 +25,11 @@ jobs:
           cd server
           npm ci
 
+      - name: Debug JWT_REFRESH_SECRET
+        run: echo "JWT_REFRESH_SECRET is $JWT_REFRESH_SECRET"
+        env:
+          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+
       - name: Seed Database and Start Server
         run: |
           cd server
