@@ -158,7 +158,6 @@ export default class UserController {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
       secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
     });
   }
