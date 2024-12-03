@@ -3,6 +3,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   'https://www.500kalima.com',
+  'https://admin.500kalima.com',
 ];
 
 const corsOptions = {
