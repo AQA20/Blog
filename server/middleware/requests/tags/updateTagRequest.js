@@ -8,7 +8,11 @@ const updateTagRequest = Joi.object({
     .external(async (value, helpers) => {
       return existsInDatabase(Tag, value, helpers, 'Invalid Tag id');
     }),
-  name: Joi.string().trim().min(10).max(20).required(),
+  name: Joi.string()
+    .trim()
+    .min(Tag.NAME_CH_MIN)
+    .max(Tag.NAME_CH_MAX)
+    .required(),
 });
 
 const updateTagRequestMiddleware = async (req, res, next) => {

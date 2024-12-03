@@ -1,6 +1,7 @@
 const allowedOrigins = [
   'https://500kalima.com',
   'http://localhost:3000',
+  'http://localhost:3001',
   'https://www.500kalima.com',
 ];
 

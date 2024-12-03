@@ -14,15 +14,17 @@ const Hero = ({ article }) => {
   return (
     <article className="mt-4 mb-6">
       <Suspense fallback={<p>...loading</p>}>
-        <Image
-          onClick={() => router.push(`/${article.slug}`)}
-          className="rounded-lg cursor-pointer"
-          src={article.featuredImg}
-          width="680"
-          height="510"
-          alt={article.title}
-          priority
-        />
+        <div className="w-full h-full md:w-[680px] md:h-[510px] overflow-hidden">
+          <Image
+            onClick={() => router.push(`/${article.slug}`)}
+            className="rounded-lg cursor-pointer h-full w-full object-cover"
+            src={article.featuredImg}
+            width="680"
+            height="510"
+            alt={article.title}
+            priority
+          />
+        </div>
       </Suspense>
 
       <section className="my-5">

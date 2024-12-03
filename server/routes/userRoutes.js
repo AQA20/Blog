@@ -1,5 +1,5 @@
 import express from 'express';
-import authenticate from '../middleware/authenticate.js';
+import auth from '../middleware/auth.js';
 import UserController from '../controllers/UserController.js';
 import loginRequest from '../middleware/requests/users/loginRequest.js';
 import signupRequest from '../middleware/requests/users/signupRequest.js';
@@ -14,12 +14,24 @@ router.post(
   handleAsyncApiError(UserController.signup),
 );
 
+// Refresh access token
+router.post(
+  '/token/refresh',
+  handleAsyncApiError(UserController.refreshAccessToken),
+);
+
+// Get user profile
+router.get('/profile', handleAsyncApiError(UserController.profile));
+
 // User login route
 router.post(
   '/login',
   loginRequest,
-  authenticate,
+  auth,
   handleAsyncApiError(UserController.login),
 );
+
+// User logout route
+router.post('/logout', handleAsyncApiError(UserController.logout));
 
 export default router;

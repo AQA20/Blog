@@ -9,7 +9,7 @@ import db from '../config/databaseConnection.js';
 
 export default class TagController {
   static #s3Service = new S3Service();
-  static #pageSize = 2;
+  static #pageSize = 5;
 
   static async getTags(req, res) {
     const query = req.query;
@@ -34,6 +34,7 @@ export default class TagController {
       RIGHT JOIN (
         SELECT tagId, COUNT(tagId) AS totalCount
         FROM ArticleTags
+        WHERE ArticleTags.deletedAt IS NULL
         GROUP BY tagId
       ) AS articleCounts ON Tags.id = articleCounts.tagId
       WHERE Tags.deletedAt IS NULL
@@ -158,7 +159,7 @@ export default class TagController {
         INNER JOIN ArticleTags ON Articles.id = ArticleTags.articleId
         WHERE ArticleTags.tagId = :tagId
       ) AS totalCount
-      WHERE ArticleTags.tagId = :tagId AND Tags.id = :tagId
+      WHERE ArticleTags.tagId = :tagId AND Tags.id = :tagId AND ArticleTags.deletedAt IS NULL
       ORDER BY 
           CASE WHEN :orderBy = 'views' THEN views_count
                WHEN :orderBy = 'shares' THEN shares_count

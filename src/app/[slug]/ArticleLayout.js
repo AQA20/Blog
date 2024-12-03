@@ -27,6 +27,7 @@ export default async function ArticleLayout({ article, children }) {
         imgUrl={article.featuredImg}
         timeAgo={timeAgo(article.createdAt)}
         isSmall={true}
+        animate={false}
         footer={true}
       />
     );
@@ -88,15 +89,15 @@ export default async function ArticleLayout({ article, children }) {
         </section>
       </section>
 
-      <section className="hidden sm:flex mt-4 gap-6  xl:w-[630px]">
-        <section className="w-[50%]">
+      <section className="hidden  xl:flex justify-between mt-4 gap-6 w-full overflow-x-auto">
+        <section className="w-full md:w-[320px]">
           {articles?.slice(0, 3).map((article) => card(article))}
         </section>
-        <section className="w-[50%]">
+        <section className="w-full md:w-[320px]">
           {articles?.slice(3).map((article) => card(article))}
         </section>
       </section>
-      <section className="sm:hidden mt-4">
+      <section className="xl:hidden mt-4">
         <SwapIt slidesPerView={1.3} spaceBetween="40">
           <section className="w-full">
             {articles?.slice(0, 3).map((article) => card(article))}

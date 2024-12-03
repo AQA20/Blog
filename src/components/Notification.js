@@ -16,18 +16,18 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
     // Automatically hide the notification after specified ms;
     const hideAuto = debounce(onClose, 5000);
     isShow && autoHide && hideAuto();
-  }, [isShow]);
+  }, [autoHide, isShow, onClose]);
 
   const Icon = () => {
     switch (type) {
       case 'warning':
-        return <ErrorWarningLine size={24} className="text-inverseOnSurface" />;
+        return <ErrorWarningLine size={24} className="text-onSurface" />;
       case 'error':
-        return <ErrorWarningLine size={24} className="text-inverseOnSurface" />;
+        return <ErrorWarningLine size={24} className="text-onSurface" />;
       case 'success':
-        return <CheckLine size={24} className="text-inverseOnSurface" />;
+        return <CheckLine size={24} className="text-onSurface" />;
       case 'copy':
-        return <FileCopyLine size={24} className="text-inverseOnSurface" />;
+        return <FileCopyLine size={24} className="text-onSurface" />;
     }
   };
 
@@ -40,7 +40,7 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
           'bg-[#c7ad6b]': type === 'warning',
           'bg-[#dc2626]': type === 'error',
           'bg-[#15803d]': type === 'success',
-          'bg-inverseSurface': type === 'copy',
+          'bg-surfaceContainer': type === 'copy',
           'visible translate-y-0': isShow,
           'invisible translate-y-[200px]': !isShow,
         },
@@ -51,11 +51,11 @@ const Notification = ({ isShow, onClose, text, type, autoHide = true }) => {
           <div>
             <Icon />
           </div>
-          <p className="text-inverseOnSurface">{text}</p>
+          <p>{text}</p>
         </div>
         <div>
           <Hug onClick={onClose}>
-            <CloseFill size={24} className="fill-inverseOnSurface" />
+            <CloseFill size={24} className="fill-onSurface" />
           </Hug>
         </div>
       </div>

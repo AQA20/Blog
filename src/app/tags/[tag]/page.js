@@ -29,6 +29,8 @@ export default async function Page({ searchParams, params }) {
           imgUrl={article.featuredImg}
           tags={[{ name: article.tagName, id: article.tagId }]}
           timeAgo={timeAgo(article.createdAt)}
+          width={180}
+          height={120}
         />
       ))}
       <Paginate pages={totalPages} />

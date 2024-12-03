@@ -12,6 +12,12 @@ class Article extends Model {
   static PENDING = 'Pending';
   static REJECTED = 'Rejected';
   static TRASHED = 'Trashed';
+  static TITLE_CHAR_MIN = 50;
+  static TITLE_CHAR_MAX = 100;
+  static DES_CHAR_MIN = 160;
+  static DES_CHAR_MAX = 300;
+  static CT_WD_MIN = 300;
+  static CT_WD_MAX = 5000;
 }
 
 Article.init(
@@ -23,7 +29,7 @@ Article.init(
       allowNull: false,
     },
     title: {
-      type: DataTypes.STRING(60),
+      type: DataTypes.STRING(Article.TITLE_CHAR_MAX),
       unique: true,
       allowNull: false,
     },
@@ -33,7 +39,7 @@ Article.init(
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING(300),
+      type: DataTypes.STRING(Article.DES_CHAR_MAX),
       allowNull: false,
     },
     content: {
@@ -108,7 +114,7 @@ Article.associate = (models) => {
   });
 };
 
-Article.afterFind(async (data) => {
+Article.afterFind(async (data, options) => {
   // Initialize the ImageService instance to handle image URL retrieval
   const imgService = new ImageService();
 
@@ -140,6 +146,7 @@ Article.afterFind(async (data) => {
         {
           type: Image.ARTICLE, // Image type (specific to the ImageService logic)
           imgLinkProperty: 'featuredImg', // The property to set the image URL
+          paranoid: options.paranoid,
         },
       );
 
@@ -160,6 +167,7 @@ Article.afterFind(async (data) => {
 
 // Hook to clean up by soft deleting associated records when an Article is updated
 Article.afterUpdate(async (article, options) => {
+  if (!options.context) return;
   const transaction = options.transaction;
   const { categoryId, oldCategoryId } = options.context;
   // If categoryId is being updated

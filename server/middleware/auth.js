@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import bcrypt from 'bcryptjs';
 import ApiError from '../services/ApiError.js';
+import UserController from '../controllers/UserController.js';
 
 // Todo: Implement Rate Limiting to Track Failed Login Attempts using redis
 // Route for user login
-const authenticate = async (req, res, next) => {
+const auth = async (req, res, next) => {
   try {
     const errorMessage = 'Invalid credentials';
     // Find user by email
@@ -18,7 +18,7 @@ const authenticate = async (req, res, next) => {
       throw new ApiError(errorMessage, 400);
     }
     // Verify password
-    const isPasswordValid = bcrypt.compareSync(
+    const isPasswordValid = await bcrypt.compare(
       req.body.password,
       user.dataValues.password,
     );
@@ -29,14 +29,16 @@ const authenticate = async (req, res, next) => {
       throw new ApiError(errorMessage, 400);
     }
 
-    // Generate JWT token
-    const token = jwt.sign(
-      { user: { id: user.id, email: user.email } },
-      process.env.JWT_SECRET,
-      { expiresIn: '24h' },
+    // Generate new tokens
+    const { accessToken, refreshToken } = UserController.generateAccessTokens(
+      user.id,
+      user.email,
     );
-    user.setDataValue('token', token);
-    user.setDataValue('password', null);
+
+    // Set accessToken and refreshToken cookies
+    UserController.setHttpOnlyTokenCookies(res, accessToken, refreshToken);
+
+    // Store user in req.user
     req.user = user;
     next();
   } catch (error) {
@@ -44,4 +46,4 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-export default authenticate;
+export default auth;

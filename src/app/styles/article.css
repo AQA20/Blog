@@ -1,25 +1,27 @@
 @tailwind components;
 
-#articleContent p {
-  margin: 1rem auto;
-}
-
 #articleContent ul {
   margin: 1rem auto;
 }
 
-#articleContent img {
+#articleContent img, #articleContent iframe{
   border-radius: 1rem;
-  margin: 0.5rem 0;
+  margin: 1rem 0 1rem 0;
+  max-width: 100% !important;
+  object-fit: cover;
+  @apply h-[270px] sm:h-[400px];
 }
+
 
 
 @layer components {
   #articleContent a {
     @apply text-primary;
   }
-  #articleContent p, #articleContent h1, #articleContent h2, #articleContent h3 {
+  #articleContent p,
+  #articleContent h1,
+  #articleContent h2,
+  #articleContent h3 {
     @apply py-2;
   }
 }
-

@@ -11,8 +11,8 @@ const FilterBadge = ({ title, link }) => {
   );
 };
 
-const FilterBadges = ({ urlSearchParams }) => {
-  const params = new URLSearchParams(urlSearchParams);
+const FilterBadges = ({ searchParams }) => {
+  const params = new URLSearchParams(searchParams);
   return (
     <>
       <div className="hidden md:flex flex-wrap">

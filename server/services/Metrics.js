@@ -31,7 +31,10 @@ export default class Metrics {
     // Calculate the timestamp for 24 hours ago
     const twentyFourHoursAgo = new Date(new Date() - 24 * 60 * 60 * 1000);
 
-    // Perform database operations within a transaction for data integrity
+    // Use transaction so if something went wrong it rolls back all database
+    // operations, note we're automatically pass transactions to all queries in
+    // server/config/databaseConnection.js so we don't need to manually pass it
+    // to each query.
     return db.sequelize.transaction(async (t) => {
       // Check if the metric for this article and user (IP or UUID) already exists in the last 24 hours
       const existingMetric = await model.findOne({
