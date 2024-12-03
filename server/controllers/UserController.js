@@ -68,7 +68,7 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none', // Allow cross-site cookies
       secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
     });
@@ -84,12 +84,12 @@ export default class UserController {
     res.clearCookie('accessToken', {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
     });
     res.status(200).send('Logged out');
   }
@@ -148,7 +148,7 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none', // Allow cross-site cookies
       secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
     });
@@ -156,7 +156,7 @@ export default class UserController {
     // Set new refresh token in HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none', // Allow cross-site cookies
       secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
       // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
