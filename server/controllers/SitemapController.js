@@ -5,8 +5,7 @@ import ArticleController from './ArticleController.js';
 export default class SitemapController {
   static async getSitemap(req, res) {
     const paginatedArticles = await ArticleController.paginatedArticles(req);
-
-    const baseUrl = 'http://localhost:8080/api';
+    const baseUrl = process.env.NEXT_JS_URL;
     // Generate page urls
     const pageUrls = [];
     for (let i = 1; i <= paginatedArticles.totalPages; i++) {

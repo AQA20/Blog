@@ -67,6 +67,7 @@ jobs:
           USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
           NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL }}
+          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
 
   build-client:
     runs-on: self-hosted

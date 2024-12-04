@@ -4,7 +4,6 @@
   margin: 1rem auto;
 }
 
-
 #articleContent img,
 #articleContent iframe {
   border-radius: 8px;
@@ -13,7 +12,6 @@
   object-fit: cover;
   @apply h-[229px] w-[406px] md:w-[680px] md:h-[510px];
 }
-
 
 @layer components {
   #articleContent a {
