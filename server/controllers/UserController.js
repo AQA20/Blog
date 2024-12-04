@@ -11,7 +11,10 @@ import {
   REFRESH_TOKEN_MAX_AGE_MS,
 } from '../utils/constants.js';
 
-const domain = process.env.NODE_ENV === 'production' ? '.500kalima.com' : undefined;
+const domain =
+  process.env.NODE_ENV === 'production' ? '.500kalima.com' : '.localhost';
+
+const secure = process.env.NODE_ENV === 'production' ? true : false;
 
 export default class UserController {
   static s3client = new S3Client();
@@ -84,13 +87,13 @@ export default class UserController {
   static async logout(req, res) {
     res.clearCookie('accessToken', {
       httpOnly: true,
-      secure: true,
+      secure,
       sameSite: 'none',
       domain,
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
-      secure: true,
+      secure,
       sameSite: 'none',
       domain,
     });
@@ -152,7 +155,7 @@ export default class UserController {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
-      secure: true,
+      secure,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
       domain,
     });
@@ -161,7 +164,7 @@ export default class UserController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite: 'none', // Allow cross-site cookies
-      secure: true,
+      secure,
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
       domain,
     });
