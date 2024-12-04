@@ -9,6 +9,7 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   env: {
     API_URL: process.env.API_URL,
+    REVALIDATION_SECRET: process.env.REVALIDATION_SECRET,
   },
   images: {
     remotePatterns: [

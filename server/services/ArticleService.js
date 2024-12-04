@@ -218,4 +218,25 @@ export default class ArticleService {
       });
     }
   }
+
+  static async revalidateNextjsArticle(slug) {
+    const revalidationUrl = `${process.env.NEXT_JS_API_URL}/revalidate`;
+
+    const response = await fetch(revalidationUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        secret: process.env.REVALIDATION_SECRET,
+        slug,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Revalidation failed: ${response.statusText}`);
+    }
+
+    console.info(`Revalidation triggered for slug: ${slug}`);
+  }
 }

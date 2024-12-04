@@ -227,6 +227,9 @@ export default class ArticleController {
         ],
       });
 
+      // Revalidate nextjs article so it reflects new updates
+      await ArticleService.revalidateNextjsArticle(article.slug);
+
       // Return the updated article
       return resHandler(201, article, res);
     });

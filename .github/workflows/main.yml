@@ -65,6 +65,8 @@ jobs:
           USER3_PASSWORD: ${{ secrets.USER3_PASSWORD }}
           USER4_EMAIL: ${{ secrets.USER4_EMAIL }}
           USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
+          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
+          NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL }}
 
   build-client:
     runs-on: self-hosted
@@ -105,6 +107,7 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL }}
           ANALYZE: ${{ secrets.ANALYZE }}
+          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
 
   deploy:
     runs-on: self-hosted
