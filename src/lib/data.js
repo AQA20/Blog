@@ -25,7 +25,11 @@ const handleAsyncError = (func) => {
 export const fetchArticle = handleAsyncError(async (slug) => {
   const {
     data: { data },
-  } = await apiClient.get(`/article/${slug}`);
+  } = await apiClient.get(`/article/${slug}`, {
+    headers: {
+      'Cache-Control': 'no-store',
+    },
+  });
   return data;
 });
 
