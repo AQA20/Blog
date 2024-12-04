@@ -27,7 +27,7 @@ export const fetchArticle = cache(
   handleAsyncError(async (slug) => {
     const {
       data: { data },
-    } = await apiClient.get(`/api/article/${slug}`);
+    } = await apiClient.get(`/article/${slug}`);
     return data;
   }),
 );
@@ -46,7 +46,7 @@ export const fetchArticles = cache(
     const {
       data: { data },
     } = await apiClient.get(
-      `/api/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
+      `/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
     );
 
     return data;
@@ -58,7 +58,7 @@ export const fetchArticles = cache(
 export const fetchArticleSlugs = handleAsyncError(async () => {
   const {
     data: { data },
-  } = await apiClient.get('/api/article/slugs');
+  } = await apiClient.get('/article/slugs');
 
   return data;
 });
@@ -68,7 +68,7 @@ export const fetchSuggestions = handleAsyncError(async (search) => {
 
   const {
     data: { data },
-  } = await apiClient.get(`/api/articles/suggestions?search=${term}`);
+  } = await apiClient.get(`/articles/suggestions?search=${term}`);
   return data;
 });
 
@@ -76,7 +76,7 @@ export const fetchTags = cache(
   handleAsyncError(async (limit = 6) => {
     const {
       data: { data },
-    } = await apiClient.get(`/api/tags/?limit=${limit}`);
+    } = await apiClient.get(`/tags/?limit=${limit}`);
 
     return data;
   }),
@@ -90,11 +90,11 @@ export const fetchTagArticles = handleAsyncError(async (tag, options) => {
   const {
     data: { data },
   } = await apiClient.get(
-    `/api/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
+    `/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
   );
   return data;
 });
 
 export const updateArticleShare = handleAsyncError(async (id) => {
-  await apiClient.put(`/api/article/share/${id}`);
+  await apiClient.put(`/article/share/${id}`);
 });
