@@ -36,6 +36,7 @@ export default async function Home({ searchParams }) {
                 timeAgo={timeAgo(article.createdAt)}
                 width={180}
                 height={120}
+                animate={false}
               />
             );
           })}

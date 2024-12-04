@@ -31,6 +31,7 @@ export default async function Page({ searchParams, params }) {
           timeAgo={timeAgo(article.createdAt)}
           width={180}
           height={120}
+          animate={false}
         />
       ))}
       <Paginate pages={totalPages} />
