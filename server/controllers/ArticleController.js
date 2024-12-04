@@ -181,6 +181,7 @@ export default class ArticleController {
     // operations, note we're automatically pass transactions to all queries in
     // server/config/databaseConnection.js so we don't need to manually pass it
     // to each query.
+    let article;
     await db.sequelize.transaction(async (t) => {
       // Fetch the article instance first
       const existedArticle = await Article.findByPk(articleId, {
@@ -218,7 +219,7 @@ export default class ArticleController {
       });
 
       // Refetch the updated article
-      const article = await Article.findByPk(articleId, {
+      article = await Article.findByPk(articleId, {
         include: [
           { model: User, as: 'author', attributes: ['id', 'name'] },
           { model: Category, attributes: ['id', 'name'] },
@@ -226,13 +227,13 @@ export default class ArticleController {
           { model: Tag, attributes: ['id', 'name'] },
         ],
       });
-
-      // Revalidate nextjs article so it reflects new updates
-      await ArticleService.revalidateNextjsArticle(article.slug);
-
-      // Return the updated article
-      return resHandler(201, article, res);
     });
+
+    // Revalidate nextjs article so it reflects new updates
+    await ArticleService.revalidateNextjsArticle(article.slug);
+
+    // Return the updated article
+    return resHandler(201, article, res);
   }
 
   static async updateArticleStatus(req, res) {
