@@ -7,11 +7,11 @@
 
 #articleContent img,
 #articleContent iframe {
-  border-radius: 1rem;
+  border-radius: 8px;
   margin: 1rem 0 1rem 0;
   max-width: 100% !important;
   object-fit: cover;
-  @apply h-[270px] w-[400px] md:w-[680px] md:h-[510px];
+  @apply h-[229px] w-[406px] md:w-[680px] md:h-[510px];
 }
 
 

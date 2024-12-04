@@ -45,7 +45,7 @@ const Footer = () => {
           <li>
             <a
               className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=3')}`}
-              href="/api/sitemap.xml"
+              href="/node-api/sitemap.xml"
             >
               خريطة الموقع
             </a>
