@@ -99,7 +99,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full xl:max-w-[680px] h-14 px-3 py-2 sticky top-0 z-30 bg-surface">
+    <div className="w-full xl:max-w-[680px] h-14 py-2 sticky top-0 z-30 bg-surface px-3 md:px-0">
       <nav className="flex justify-between items-center">
         <div>
           {renderLogo()}

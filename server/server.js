@@ -36,14 +36,16 @@ app.use(cookieParser(process.env.COOKIE_SECRET)); // Use cookie-parser middlewar
 app.use(cors(corsOptions)); // Use the configured CORS middleware
 app.use(express.json({ limit: '5mb' })); // A middleware to parse JSON payloads
 
+const nodeApiRoute = '/node-api';
+
 // Register routers
-app.use('/api', userRoutes);
-app.use('/api', articleRoutes);
-app.use('/api', imageRoutes);
-app.use('/api', categoryRoutes);
-app.use('/api', tagRoutes);
-app.use('/api', articleTagRoutes);
-app.use('/api', sitemapRoutes);
+app.use(nodeApiRoute, userRoutes);
+app.use(nodeApiRoute, articleRoutes);
+app.use(nodeApiRoute, imageRoutes);
+app.use(nodeApiRoute, categoryRoutes);
+app.use(nodeApiRoute, tagRoutes);
+app.use(nodeApiRoute, articleTagRoutes);
+app.use(nodeApiRoute, sitemapRoutes);
 
 // Handle not found routes
 app.all('*', (req, res, next) => {
