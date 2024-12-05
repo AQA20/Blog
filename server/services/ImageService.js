@@ -182,7 +182,7 @@ export default class ImageService {
   async createImageable(
     imageableId,
     type,
-    { file, buffer, mimetype, imgLinkProperty = 'imgUrl', capture = '' },
+    { file, buffer, mimetype, imgLinkProperty = 'imgUrl', capture = null },
   ) {
     // Validate required parameters and ensure necessary properties are present
     this.#validateParameters(imageableId, type, file, buffer, mimetype);

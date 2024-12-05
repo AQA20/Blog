@@ -43,7 +43,7 @@ const updateArticleRequest = Joi.object({
     if (!value) return;
     return existsInDatabase(Image, value, helpers, 'Invalid thumbnailId');
   }),
-  tags: Joi.array().items(Joi.string().trim()).min(1).max(5).optional(),
+  tags: Joi.array().items(Joi.string().trim()).min(1).max(5),
 });
 
 const updateArticleRequestMiddleware = async (req, res, next) => {

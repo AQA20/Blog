@@ -155,7 +155,7 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      sameSite, // Allow cross-site cookies
+      sameSite,
       secure,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
       domain,
@@ -164,7 +164,7 @@ export default class UserController {
     // Set new refresh token in HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite: 'none', // Allow cross-site cookies
+      sameSite,
       secure,
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
       domain,

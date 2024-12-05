@@ -4,7 +4,7 @@ import User from '../models/User.js';
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 70,
+  max: 150,
   message: 'Too many requests, please try again later',
   standardHeaders: true,
   legacyHeaders: false,

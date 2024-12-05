@@ -181,7 +181,12 @@ export default class ArticleService {
       imageables.push(imageable);
     }
 
-    return { sanitizedHtml: dom.serialize(), imageables };
+    let sanitizedHtml = dom.serialize();
+    sanitizedHtml = sanitizedHtml.replace(/<\/?html.*?>/g, ''); // Remove <html> and </html>
+    sanitizedHtml = sanitizedHtml.replace(/<\/?head.*?>/g, ''); // Remove <head> and </head>
+    sanitizedHtml = sanitizedHtml.replace(/<\/?body.*?>/g, ''); // Remove <body> and </body>
+
+    return { sanitizedHtml, imageables };
   }
 
   static async deleteArticleTags(oldTags, newTags, transaction) {
@@ -234,7 +239,7 @@ export default class ArticleService {
     });
 
     if (!response.ok) {
-      throw new Error(`Revalidation failed: ${response.statusText}`);
+      console.info(`Revalidation failed: ${response.statusText}`);
     }
 
     console.info(`Revalidation triggered for slug: ${slug}`);

@@ -181,30 +181,31 @@ export default class ArticleController {
     // operations, note we're automatically pass transactions to all queries in
     // server/config/databaseConnection.js so we don't need to manually pass it
     // to each query.
-    let article;
     await db.sequelize.transaction(async (t) => {
       // Fetch the article instance first
       const existedArticle = await Article.findByPk(articleId, {
         include: Tag,
       });
 
-      // Replace base46 src with a AWS s3 URL
-      const { sanitizedHtml } = await ArticleService.processHtmlImages(
-        existedArticle.id,
-        req.body.content,
-      );
-      // Update the article html content;
-      req.body.content = sanitizedHtml;
+      if (req.body.content) {
+        // Replace base46 src with the actual AWS s3 URL
+        const { sanitizedHtml } = await ArticleService.processHtmlImages(
+          existedArticle.id,
+          req.body.content,
+        );
+        // Update the article html content;
+        req.body.content = sanitizedHtml;
+      }
 
       // Save old tags for further processing
       const oldTags = existedArticle.Tags;
       const newTags = req.body.tags || [];
-
-      // Create article tags
-      await ArticleService.createArticleTags(newTags, existedArticle.id, t);
-
-      // Delete unused tags
-      await ArticleService.deleteArticleTags(oldTags, newTags, t);
+      if (newTags.length > 0) {
+        // Create article tags
+        await ArticleService.createArticleTags(newTags, existedArticle.id, t);
+        // Delete unused tags
+        await ArticleService.deleteArticleTags(oldTags, newTags, t);
+      }
 
       // Save the old categoryId to pass it to the hooks
       const oldCategoryId = existedArticle.categoryId;
@@ -217,16 +218,16 @@ export default class ArticleController {
           oldCategoryId,
         },
       });
+    });
 
-      // Refetch the updated article
-      article = await Article.findByPk(articleId, {
-        include: [
-          { model: User, as: 'author', attributes: ['id', 'name'] },
-          { model: Category, attributes: ['id', 'name'] },
-          { model: Image, attributes: ['id', 'name'] },
-          { model: Tag, attributes: ['id', 'name'] },
-        ],
-      });
+    // Refetch the updated article
+    const article = await Article.findByPk(articleId, {
+      include: [
+        { model: User, as: 'author', attributes: ['id', 'name'] },
+        { model: Category, attributes: ['id', 'name'] },
+        { model: Image, attributes: ['id', 'name'] },
+        { model: Tag, attributes: ['id', 'name'] },
+      ],
     });
 
     // Revalidate nextjs article so it reflects new updates

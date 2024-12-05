@@ -21,7 +21,7 @@ export default class ImageController {
     return res.status(200).send(url);
   }
 
-  // Upload Image to amazon s3
+  // Create imageable and upload it to amazon s3
   static async uploadImage(req, res) {
     const file = req.file;
     const imageableId = req.params.imageableId;
