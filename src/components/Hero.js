@@ -17,7 +17,7 @@ const Hero = ({ article }) => {
         <div className="w-full h-full md:w-[680px] md:h-[510px] overflow-hidden">
           <Image
             onClick={() => router.push(`/${article.slug}`)}
-            className="rounded-lg cursor-pointer h-full w-full object-cover"
+            className="rounded-[8px] cursor-pointer h-full w-full object-cover"
             src={article.featuredImg}
             width="680"
             height="510"

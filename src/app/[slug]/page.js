@@ -38,8 +38,8 @@ export async function generateMetadata({ params }) {
       images: [
         {
           url: featuredImg, // Must be an absolute URL
-          width: 680,
-          height: 510,
+          width: 940,
+          height: 788,
         },
       ],
       locale: 'ar_AR',
@@ -59,10 +59,23 @@ export default async function Page({ params }) {
   const article = await fetchArticle(routeParams.slug);
   !article && notFound();
 
-  // Todo fix iframe and content issue if you allow iframe
   const cleanHtml = DOMPurify.sanitize(article.content, {
     FORBID_TAGS: ['h1'], // Remove h1 tags
-    KEEP_CONTENT: false, // Remove tags content when they're removed
+    ALLOWED_TAGS: [
+      'h2',
+      'h3',
+      'p',
+      'iframe',
+      'link',
+      'a',
+      'footer',
+      'ul',
+      'li',
+      'img',
+      'strong',
+      'cite',
+      'quote',
+    ],
   });
 
   return (
@@ -83,7 +96,7 @@ export default async function Page({ params }) {
             alt={article.title}
             width={680}
             height={510}
-            className="rounded-2xl h-full w-full object-cover shrink-0 cursor-pointer"
+            className="rounded-[8px] h-full w-full object-cover shrink-0 cursor-pointer"
           />
         </figure>
         <section className="mt-4 mb-2">
@@ -97,7 +110,7 @@ export default async function Page({ params }) {
         </section>
         <section
           id="articleContent"
-          dangerouslySetInnerHTML={{ __html: article.content }}
+          dangerouslySetInnerHTML={{ __html: cleanHtml }}
         ></section>
       </article>
     </ArticleLayout>
