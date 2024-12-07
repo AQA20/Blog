@@ -52,16 +52,9 @@ export default class UserController {
     );
   }
 
-  static async refreshAccessToken(req, res) {
-    // Get refresh token from the cookie
-    const oldRefreshToken = req.cookies.refreshToken;
-    // Check if the refresh token exists
-    if (!oldRefreshToken) {
-      throw new ApiError('Refresh token not found', 401);
-    }
-
+  static generateAccessTokenFromRefresh(res, refreshToken) {
     // Verify the refresh token
-    const decoded = jwt.verify(oldRefreshToken, process.env.JWT_REFRESH_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
 
     // Generate new tokens
     const { accessToken } = UserController.generateAccessTokens(
@@ -70,16 +63,27 @@ export default class UserController {
     );
 
     // Set new access token in HTTP-only cookie
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      sameSite,
-      secure,
-      maxAge: ACCESS_TOKEN_MAX_AGE_MS,
-      domain,
-    });
+    UserController.setAccessTokenCookie(res, accessToken);
+
+    return decoded.user;
+  }
+
+  static async refreshAccessToken(req, res) {
+    // Get refresh token from the cookie
+    const oldRefreshToken = req.cookies.refreshToken;
+    // Check if the refresh token exists
+    if (!oldRefreshToken) {
+      throw new ApiError('Refresh token not found', 401);
+    }
+    // Generate new access token using a valid refresh token and returns decoded
+    // user info
+    const decodedUser = UserController.generateAccessTokenFromRefresh(
+      res,
+      oldRefreshToken,
+    );
 
     // If the token is valid, refetch user by it's decoded id
-    const user = await UserController.#fetchUserById(decoded.user.id);
+    const user = await UserController.#fetchUserById(decodedUser.id);
 
     // Return the response
     return resHandler(200, user, res);
@@ -128,15 +132,22 @@ export default class UserController {
   }
 
   static generateAccessTokens(id, email) {
-    // Generate a new access token
-    const newAccessToken = jwt.sign(
-      { user: { id, email } },
-      process.env.JWT_SECRET,
-      { expiresIn: ACCESS_TOKEN_EXPIRATION_TIME },
-    );
+    const accessToken = UserController.generateAccessToken(id, email);
+    const refreshToken = UserController.generateRefreshToken(id, email);
 
+    return { accessToken, refreshToken };
+  }
+
+  static generateAccessToken(id, email) {
+    // Generate a new access token
+    return jwt.sign({ user: { id, email } }, process.env.JWT_SECRET, {
+      expiresIn: ACCESS_TOKEN_EXPIRATION_TIME,
+    });
+  }
+
+  static generateRefreshToken(id, email) {
     // Generate a new refresh token
-    const newRefreshToken = jwt.sign(
+    return jwt.sign(
       {
         user: {
           id,
@@ -147,11 +158,14 @@ export default class UserController {
       process.env.JWT_REFRESH_SECRET,
       { expiresIn: REFRESH_TOKEN_EXPIRATION_TIME },
     );
-
-    return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   }
 
   static setHttpOnlyTokenCookies(res, accessToken, refreshToken) {
+    UserController.setAccessTokenCookie(res, accessToken);
+    UserController.setRefreshTokenCookie(res, refreshToken);
+  }
+
+  static setAccessTokenCookie(res, accessToken) {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
@@ -160,8 +174,10 @@ export default class UserController {
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
       domain,
     });
+  }
 
-    // Set new refresh token in HTTP-only cookie
+  static setRefreshTokenCookie(res, refreshToken) {
+    // Set new access token in HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       sameSite,

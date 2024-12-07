@@ -170,7 +170,8 @@ export default class ArticleController {
       // Set first image as article thumbnail Image
       article.thumbnailId = imageables[0].dataValues.id;
       await article.save();
-
+      // Revalidate nextjs article so it reflects new updates
+      await ArticleService.revalidateNextjsArticle(article.slug);
       return resHandler(201, article, res);
     });
   }
