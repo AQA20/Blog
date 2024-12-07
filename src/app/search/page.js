@@ -36,8 +36,11 @@ export default async function Page({ searchParams }) {
             />
           );
         })}
+        {articles?.length === 0 && (
+          <div dir="rtl">لا يوجد نتائج, قم بالبحث عن شيء اخر</div>
+        )}
       </section>
-      <Paginate pages={totalPages} />
+      {articles?.length > 0 && <Paginate pages={totalPages} />}
     </article>
   );
 }

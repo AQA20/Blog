@@ -40,6 +40,9 @@ export default async function Home({ searchParams }) {
               />
             );
           })}
+          {data.articles.length === 0 && (
+            <div dir="rtl">لا يوجد مقالات حاليا!</div>
+          )}
         </section>
         <Paginate pages={data.totalPages} />
       </article>

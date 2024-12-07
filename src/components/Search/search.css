@@ -3,7 +3,7 @@
     width: 0;
   }
   100% {
-    width: 608px;
+    width: 632px;
   }
 }
 
@@ -60,7 +60,7 @@
 .suggestions {
   animation: expandHeight 0.3s 0.4s forwards;
   position: absolute;
-  width: 608px;
+  width: 632px;
 }
 
 @media (max-width: 640px) {

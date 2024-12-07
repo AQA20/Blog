@@ -167,13 +167,13 @@ const Search = ({ isShow, onHideSearch }) => {
           </ul>
         )}
 
-        <div className="absolute top-[16%] right-4">
+        <div className="absolute top-[16%] right-2">
           <Hug onClick={onHideSearch}>
             <ArrowRightLine size={20} className="fill-onSurfaceVariant" />
             {''}
           </Hug>
         </div>
-        <div className="z-11 absolute top-[16%] left-3 md:left-16">
+        <div className="z-11 absolute top-[16%] left-3 md:left-14">
           {inputValue && (
             <Hug onClick={onHideSearch}>
               <CloseFill size={20} className="fill-onSurfaceVariant" />
