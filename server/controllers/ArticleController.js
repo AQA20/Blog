@@ -239,11 +239,15 @@ export default class ArticleController {
   }
 
   static async updateArticleStatus(req, res) {
-    // Update article status on accessible by admins
-    await Article.update(
+    // Update article status
+    const article = await Article.findOne(
       { status: req.body.status },
       { where: { id: req.params.id } },
     );
+    article.status = req.body.status;
+    await article.save();
+    // Revalidate nextjs article so it reflects new updates
+    await ArticleService.revalidateNextjsArticle(article.slug);
     return resHandler(201, 'Article status has been updated', res);
   }
 
