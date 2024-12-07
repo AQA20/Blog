@@ -124,7 +124,12 @@ export default class CategoryController {
       where: {
         name: req.params.name,
       },
+      paranoid: false, // Include soft deleted rows
     });
+
+    if (category?.deletedAt) {
+      await category.restore();
+    }
     // Return the response
     return resHandler(201, category, res);
   }

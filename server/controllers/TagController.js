@@ -198,7 +198,12 @@ export default class TagController {
       where: {
         name: req.params.name,
       },
+      paranoid: false, // Include soft deleted row
     });
+
+    if (tag?.deletedAt) {
+      await tag.restore();
+    }
     return resHandler(201, tag, res);
   }
   static async updateTag(req, res, next) {
