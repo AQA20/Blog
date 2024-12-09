@@ -240,10 +240,7 @@ export default class ArticleController {
 
   static async updateArticleStatus(req, res) {
     // Update article status
-    const article = await Article.findOne(
-      { status: req.body.status },
-      { where: { id: req.params.id } },
-    );
+    const article = await Article.findOne({ where: { id: req.params.id } });
     article.status = req.body.status;
     await article.save();
     // Revalidate nextjs article so it reflects new updates

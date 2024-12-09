@@ -5,7 +5,9 @@ import DOMPurify from 'isomorphic-dompurify';
 import ShareButton from '@/components/ShareButton';
 import ArticleLayout from './ArticleLayout';
 import { fetchArticle, fetchArticleSlugs } from '@/lib';
+import parse from 'html-react-parser';
 import moment from 'moment';
+import { TweetComponent } from '@/components/TweetComponent';
 
 // This function generates static parameters for each article
 export async function generateStaticParams() {
@@ -59,7 +61,7 @@ export default async function Page({ params }) {
   const article = await fetchArticle(routeParams.slug);
   !article && notFound();
 
-  const cleanHtml = DOMPurify.sanitize(article.content, {
+  let cleanHtml = DOMPurify.sanitize(article.content, {
     FORBID_TAGS: ['h1'], // Remove h1 tags
     ALLOWED_TAGS: [
       'h2',
@@ -75,7 +77,24 @@ export default async function Page({ params }) {
       'strong',
       'cite',
       'quote',
+      'div',
     ],
+  });
+
+  // Replace <div data-tweet> with <Tweet> component
+  const processedContent = parse(cleanHtml, {
+    replace: (domNode) => {
+      if (
+        domNode.name === 'div' &&
+        domNode.attribs &&
+        domNode.attribs['data-tweet']
+      ) {
+        const id = domNode.attribs['data-tweet'];
+
+        return <TweetComponent id={id} />;
+      }
+      return null; // Default to rendering other nodes as-is
+    },
   });
 
   return (
@@ -108,10 +127,7 @@ export default async function Page({ params }) {
             clipboardContent={article.slug}
           />
         </section>
-        <section
-          id="articleContent"
-          dangerouslySetInnerHTML={{ __html: cleanHtml }}
-        ></section>
+        <section id="articleContent">{processedContent}</section>
       </article>
     </ArticleLayout>
   );
