@@ -89,15 +89,15 @@ export default class UserController {
   static async logout(req, res) {
     res.clearCookie('accessToken', {
       httpOnly: true,
-      secure: DOMAIN,
-      sameSite: SECURE,
-      domain: SAME_SITE,
+      secure: SECURE,
+      sameSite: SAME_SITE,
+      domain: DOMAIN,
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
-      secure: DOMAIN,
-      sameSite: SECURE,
-      domain: SAME_SITE,
+      secure: SECURE,
+      sameSite: SAME_SITE,
+      domain: DOMAIN,
     });
     res.status(200).send('Logged out');
   }
@@ -166,9 +166,9 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      secure: DOMAIN,
-      sameSite: SECURE,
-      domain: SAME_SITE,
+      secure: SECURE,
+      sameSite: SAME_SITE,
+      domain: DOMAIN,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
     });
   }
@@ -177,9 +177,9 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      secure: DOMAIN,
-      sameSite: SECURE,
-      domain: SAME_SITE,
+      secure: SECURE,
+      sameSite: SAME_SITE,
+      domain: DOMAIN,
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
     });
   }

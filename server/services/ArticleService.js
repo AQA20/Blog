@@ -29,16 +29,15 @@ export default class ArticleService {
     // Default cookie
     const cookie = {
       httpOnly: true,
-      secure: DOMAIN,
-      sameSite: SECURE,
-      domain: SAME_SITE,
+      secure: SECURE,
+      sameSite: SAME_SITE,
+      domain: DOMAIN,
       maxAge: 86400000, // One day In ms
     };
     // Get the user's ip address
     const ipAddress =
       req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.ip;
 
-    console.log('\nreq.cookies', req.cookies, '\n');
     // Get uuid from cookies if it was set previously
     const uuid = req.cookies?.[metricName];
 
