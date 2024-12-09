@@ -1,5 +1,3 @@
-import '../app/styles/article.css';
-
 const CookiesPolicy = () => {
   return (
     <article id="articleContent">

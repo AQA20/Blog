@@ -5,6 +5,7 @@ import TermOfUse from '@/components/TermOfUse';
 import PrivacyPolicy from '@/components/PrivacyPolicy';
 import CookiesPolicy from '@/components/CookiesPolicy';
 import { useSearchParams } from 'next/navigation';
+import '@/components/Article/style.css';
 
 const tabs = {
   'شروط الخدمة': <TermOfUse />,

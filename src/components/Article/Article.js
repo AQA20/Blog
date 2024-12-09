@@ -3,7 +3,7 @@
 import parse from 'html-react-parser';
 import { TweetComponent } from '@/components/Embeds/TweetComponent';
 import { FacebookPostEmbed } from '@/components/Embeds/FacebookPostEmbed';
-import './article.css';
+import './style.css';
 
 const Article = ({ content }) => {
   const processedContent = parse(content, {
