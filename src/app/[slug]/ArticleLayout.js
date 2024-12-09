@@ -5,7 +5,6 @@ import Card from '@/components/Card';
 import ShareButton from '@/components/ShareButton';
 import { fetchTags, fetchArticles } from '@/lib';
 import timeAgo from '@/lib/timeAgo';
-import '../styles/article.css';
 
 export default async function ArticleLayout({ article, children }) {
   const { tags } = await fetchTags();

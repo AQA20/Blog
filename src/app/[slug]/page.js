@@ -5,9 +5,8 @@ import DOMPurify from 'isomorphic-dompurify';
 import ShareButton from '@/components/ShareButton';
 import ArticleLayout from './ArticleLayout';
 import { fetchArticle, fetchArticleSlugs } from '@/lib';
-import parse from 'html-react-parser';
 import moment from 'moment';
-import { TweetComponent } from '@/components/TweetComponent';
+import Article from '@/components/Article/Article';
 
 // This function generates static parameters for each article
 export async function generateStaticParams() {
@@ -81,22 +80,6 @@ export default async function Page({ params }) {
     ],
   });
 
-  // Replace <div data-tweet> with <Tweet> component
-  const processedContent = parse(cleanHtml, {
-    replace: (domNode) => {
-      if (
-        domNode.name === 'div' &&
-        domNode.attribs &&
-        domNode.attribs['data-tweet']
-      ) {
-        const id = domNode.attribs['data-tweet'];
-
-        return <TweetComponent id={id} />;
-      }
-      return null; // Default to rendering other nodes as-is
-    },
-  });
-
   return (
     <ArticleLayout article={article}>
       <article>
@@ -127,7 +110,7 @@ export default async function Page({ params }) {
             clipboardContent={article.slug}
           />
         </section>
-        <section id="articleContent">{processedContent}</section>
+        <Article content={cleanHtml} />
       </article>
     </ArticleLayout>
   );
