@@ -10,6 +10,7 @@ import { Op } from 'sequelize';
 import ImageService from './ImageService.js';
 import softDelete from '../utils/softDelete.js';
 import { JSDOM } from 'jsdom';
+import { DOMAIN, SECURE, SAME_SITE } from '../utils/constants.js';
 
 export default class ArticleService {
   // Update article shares or views
@@ -27,14 +28,17 @@ export default class ArticleService {
 
     // Default cookie
     const cookie = {
-      secure: process.env.NODE_ENV === 'production', // Cookie will only be sent over HTTPS
-      httpOnly: true, // Cookie cannot be accessed by client-side JavaScript
-      origin: 'strict', // Restricts cookie to same-site requests
+      httpOnly: true,
+      secure: DOMAIN,
+      sameSite: SECURE,
+      domain: SAME_SITE,
       maxAge: 86400000, // One day In ms
     };
     // Get the user's ip address
     const ipAddress =
       req.headers['x-forwarded-for'] || req.connection.remoteAddress || req.ip;
+
+    console.log('\nreq.cookies', req.cookies, '\n');
     // Get uuid from cookies if it was set previously
     const uuid = req.cookies?.[metricName];
 

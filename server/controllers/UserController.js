@@ -9,13 +9,10 @@ import {
   REFRESH_TOKEN_EXPIRATION_TIME,
   ACCESS_TOKEN_MAX_AGE_MS,
   REFRESH_TOKEN_MAX_AGE_MS,
+  DOMAIN,
+  SECURE,
+  SAME_SITE,
 } from '../utils/constants.js';
-
-const domain =
-  process.env.NODE_ENV === 'production' ? '.500kalima.com' : '.localhost';
-
-const secure = process.env.NODE_ENV === 'production' ? true : false;
-const sameSite = process.env.NODE_ENV === 'production' ? 'none' : 'strict';
 
 export default class UserController {
   static s3client = new S3Client();
@@ -92,15 +89,15 @@ export default class UserController {
   static async logout(req, res) {
     res.clearCookie('accessToken', {
       httpOnly: true,
-      secure,
-      sameSite,
-      domain,
+      secure: DOMAIN,
+      sameSite: SECURE,
+      domain: SAME_SITE,
     });
     res.clearCookie('refreshToken', {
       httpOnly: true,
-      secure,
-      sameSite,
-      domain,
+      secure: DOMAIN,
+      sameSite: SECURE,
+      domain: SAME_SITE,
     });
     res.status(200).send('Logged out');
   }
@@ -169,10 +166,10 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      sameSite,
-      secure,
+      secure: DOMAIN,
+      sameSite: SECURE,
+      domain: SAME_SITE,
       maxAge: ACCESS_TOKEN_MAX_AGE_MS,
-      domain,
     });
   }
 
@@ -180,10 +177,10 @@ export default class UserController {
     // Set new access token in HTTP-only cookie
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
-      sameSite,
-      secure,
+      secure: DOMAIN,
+      sameSite: SECURE,
+      domain: SAME_SITE,
       maxAge: REFRESH_TOKEN_MAX_AGE_MS,
-      domain,
     });
   }
 
