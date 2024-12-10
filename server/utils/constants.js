@@ -11,4 +11,5 @@ export const SECURE = process.env.NODE_ENV === 'production' ? true : false;
 //providing security for the cookie. Without 'SameSite=None', the cookie won't
 //be sent in cross-site requests, which is necessary for scenarios like
 //authentication with third-party services.
-export const SAME_SITE = 'none';
+export const SAME_SITE =
+  process.env.NODE_ENV === 'production' ? 'none' : 'strict';
