@@ -229,22 +229,23 @@ export default class ArticleService {
 
   static async revalidateNextjsArticle(slug) {
     const revalidationUrl = `${process.env.NEXT_JS_API_URL}/revalidate`;
+    try {
+      const response = await fetch(revalidationUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          secret: process.env.REVALIDATION_SECRET,
+          slug,
+        }),
+      });
 
-    const response = await fetch(revalidationUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        secret: process.env.REVALIDATION_SECRET,
-        slug,
-      }),
-    });
-
-    if (!response.ok) {
-      console.info(`Revalidation failed: ${response.statusText}`);
+      if (response.ok) {
+        console.info(`Revalidation triggered for slug: ${slug}`);
+      }
+    } catch (error) {
+      console.error(`Revalidation failed: ${error.message}`);
     }
-
-    console.info(`Revalidation triggered for slug: ${slug}`);
   }
 }
