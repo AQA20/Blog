@@ -9,7 +9,7 @@ export const TweetComponent = ({ id }) => {
     MediaImg: (props) => <Image {...props} fill unoptimized />,
   };
   return (
-    <div className="tweet-container">
+    <div>
       <Tweet id={id} components={components} />
     </div>
   );

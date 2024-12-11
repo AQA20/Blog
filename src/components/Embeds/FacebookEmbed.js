@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import { createBreakpoint } from 'react-use';
 
@@ -15,7 +13,7 @@ const useBreakpoint = createBreakpoint({
   '2xl': 1536,
 });
 
-export const FacebookPostEmbed = ({ postUrl }) => {
+export const FacebookEmbed = ({ postUrl }) => {
   const breakpoint = useBreakpoint();
   const [key, setKey] = useState(0); // Key to force re-render
   useEffect(() => {

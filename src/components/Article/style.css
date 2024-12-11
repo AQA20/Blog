@@ -4,21 +4,15 @@
   margin: 1rem auto;
 }
 
-#articleContent img,
+#articleContent img {
+  @apply h-[229px] w-[406px] md:w-[680px] md:h-[510px] rounded-[8px] my-4 object-cover;
+}
+
 #articleContent iframe {
-  border-radius: 8px;
-  margin: 1rem 0 1rem 0;
-  max-width: 100% !important;
-  object-fit: cover;
-  @apply h-[229px] w-[406px] md:w-[680px] md:h-[510px];
+  @apply my-4 rounded-[8px];
 }
-
-#articleContent .fb-post iframe {
-  @apply my-0;
-}
-
 #articleContent .fb_iframe_widget {
-  @apply my-4;
+  @apply mt-0 mb-4 rounded-[8px];
 }
 
 /* This selector targets any class that contains "tweet-container_root"  */
