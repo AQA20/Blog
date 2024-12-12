@@ -9,7 +9,7 @@ import Article from '../../../models/Article.js';
 const wordsCount = (value, helpers) => {
   if (!validateWordsLength(value, Article.CT_WD_MIN, Article.CT_WD_MAX)) {
     return helpers.error(
-      'Article content must be minimum of 300 words and max of 5000 words',
+      'Article content must be minimum of 140 words and max of 5000 words',
     );
   }
   return value;

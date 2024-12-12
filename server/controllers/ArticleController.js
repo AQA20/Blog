@@ -232,7 +232,7 @@ export default class ArticleController {
     });
 
     // Revalidate nextjs article so it reflects new updates
-    await ArticleService.revalidateNextjsArticle(article.slug);
+    ArticleService.revalidateNextjsArticle(article.slug);
 
     // Return the updated article
     return resHandler(201, article, res);
@@ -244,7 +244,7 @@ export default class ArticleController {
     article.status = req.body.status;
     await article.save();
     // Revalidate nextjs article so it reflects new updates
-    await ArticleService.revalidateNextjsArticle(article.slug);
+    ArticleService.revalidateNextjsArticle(article.slug);
     return resHandler(201, 'Article status has been updated', res);
   }
 

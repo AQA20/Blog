@@ -16,7 +16,7 @@ class Article extends Model {
   static TITLE_CHAR_MAX = 100;
   static DES_CHAR_MIN = 160;
   static DES_CHAR_MAX = 300;
-  static CT_WD_MIN = 300;
+  static CT_WD_MIN = 140;
   static CT_WD_MAX = 5000;
 }
 
