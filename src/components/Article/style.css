@@ -1,6 +1,18 @@
 @tailwind components;
 
 #articleContent {
+  a {
+    @apply text-primary;
+  }
+  p {
+    @apply py-2;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply py-3;
+  }
+
   ul {
     @apply list-disc space-y-2 pr-5;
   }
@@ -47,16 +59,8 @@
     min-width: auto !important;
     border-radius: 8px !important;
   }
-}
 
-@layer components {
-  #articleContent a {
-    @apply text-primary;
-  }
-  #articleContent p,
-  #articleContent h1,
-  #articleContent h2,
-  #articleContent h3 {
-    @apply py-2;
+  div[data-youtube-video] iframe {
+    @apply my-2 max-w-full max-h-[240px] sm:w-[680px] sm:min-h-[510px] rounded-[8px];
   }
 }
