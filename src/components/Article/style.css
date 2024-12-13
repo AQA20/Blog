@@ -2,7 +2,11 @@
 
 #articleContent {
   ul {
-    margin: 1rem auto;
+    @apply list-disc space-y-2 pr-5;
+  }
+
+  ol {
+    @apply list-decimal space-y-2 pr-5;
   }
 
   img {

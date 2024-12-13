@@ -70,6 +70,7 @@ export default async function Page({ params }) {
       'link',
       'a',
       'footer',
+      'ol',
       'ul',
       'li',
       'img',
@@ -77,6 +78,8 @@ export default async function Page({ params }) {
       'cite',
       'quote',
       'div',
+      'br',
+      'blockquote',
     ],
   });
 
