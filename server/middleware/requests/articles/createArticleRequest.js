@@ -52,6 +52,9 @@ const createArticleRequestMiddleware = async (req, res, next) => {
       return next(error);
     }
 
+    // Replace empty p tags with br
+    req.body.content = req.body.content.replace(/<p>\s*<\/p>/g, '');
+
     // If validation is successful, proceed to the next middleware or route handler
     next();
   } catch (error) {
