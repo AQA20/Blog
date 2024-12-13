@@ -36,7 +36,7 @@ export const InstagramEmbed = ({ postUrl }) => {
     setKey((prev) => prev + 1);
   }, [breakpoint]);
 
-  const width = breakpoint === 'sm' ? '100vw' : '680px';
+  const width = breakpoint === 'sm' ? '100%' : '680px';
 
   return (
     <div key={key}>

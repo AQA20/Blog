@@ -5,6 +5,7 @@ import { TweetComponent } from '@/components/Embeds/TweetComponent';
 import { FacebookEmbed } from '@/components/Embeds/FacebookEmbed';
 import { InstagramEmbed } from '../Embeds/InstagramEmbed';
 import { Blockquote } from '../Blockquote';
+import Image from 'next/image';
 import './style.css';
 
 const Article = ({ content }) => {
@@ -37,6 +38,16 @@ const Article = ({ content }) => {
         const quote = domNode.attribs['data-quote-content'];
         const quoteBy = domNode.attribs['data-quote-by'];
         return <Blockquote quote={quote} quoteBy={quoteBy} />;
+      } else if (domNode.name === 'img') {
+        // Replace img with next Image component
+        const alt = domNode.attribs['alt'];
+        const src = domNode.attribs['src'];
+        return (
+          <figure className="my-4">
+            <Image alt={alt} src={src} width={680} height={510} />
+            <figcaption className="mt-[-12px] text-primary">{alt}</figcaption>
+          </figure>
+        );
       }
 
       return null; // Default to rendering other nodes as-is
