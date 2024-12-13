@@ -54,8 +54,12 @@ const updateArticleRequestMiddleware = async (req, res, next) => {
     if (error) {
       return next(error);
     }
-    // Replace empty p tags with br
-    req.body.content = req.body.content.replace(/<p>\s*<\/p>/g, '');
+
+    if (req.body.content) {
+      // Replace empty p tags with br
+      req.body.content = req.body.content.replace(/<p>\s*<\/p>/g, '');
+    }
+
     next();
   } catch (error) {
     next(error);
