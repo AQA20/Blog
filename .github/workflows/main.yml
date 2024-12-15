@@ -44,8 +44,6 @@ jobs:
           if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             pm2 restart "server" || pm2 start npm --name "server" -- start
           else
-            echo env.STAGE
-            echo steps.set-env.output.STAGE
             pm2 restart "test-server" || pm2 start npm --name "test-server" -- start
           fi
           pm2 save
@@ -85,6 +83,12 @@ jobs:
           REVALIDATION_SECRET: ${{ env.STAGE == 'prod' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
           NEXT_JS_API_URL: ${{ env.STAGE == 'prod' && secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
           NEXT_JS_URL: ${{ env.STAGE == 'prod' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+
+      - name: Debug STAGE value
+        run: echo "STAGE is ${{ env.STAGE }}"
+
+      - name: Debug set env variables step
+        run: echo "ROOT STAGE is ${{ steps.set-env.outputs.STAGE }}"
 
   build-client:
     runs-on: self-hosted
