@@ -23,7 +23,7 @@ const nextConfig = {
     ],
   },
   staticPageGenerationTimeout: 300,
-  reactStrictMode: process.env.NODE_ENV !== 'production',
+  reactStrictMode: process.env.NODE_ENV === 'production',
 };
 
 export default withBundleAnalyzer(nextConfig);

@@ -175,23 +175,29 @@ jobs:
           pm2 restart "client" || pm2 start npm --name "client" -- start
           pm2 save
         env:
+          NODE_ENV: 'production'
           API_URL: ${{ secrets.API_URL }}
           ANALYZE: ${{ secrets.ANALYZE }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
+          PM2_NAME: ${{ secrets.PM2_NAME }}
+          CLIENT_PORT: ${{ secrets.CLIENT_PORT }}
 
       - name: Build Client Application to Test Environment
         if: ${{ github.ref == 'refs/heads/test' }}
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          pm2 restart "test" || pm2 start npm --name "test" -- start --port 3002
+          pm2 restart "test" || pm2 start pm2.config.cjs
           pm2 save
         env:
+          NODE_ENV: 'testing'
           API_URL: ${{ secrets.API_URL_TEST }}
           ANALYZE: ${{ secrets.ANALYZE_TEST }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET_TEST }}
+          PM2_NAME: ${{ secrets.PM2_NAME_TEST }}
+          CLIENT_PORT: ${{ secrets.CLIENT_PORT_TEST }}
 
   deploy:
     runs-on: self-hosted
