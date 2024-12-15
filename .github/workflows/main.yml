@@ -41,9 +41,11 @@ jobs:
           cd server
           npm run migrate
           npm run seed 
-          if [ "${{ github.ref }}" == "refs/heads/test" ]; then
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
             pm2 restart "server" || pm2 start npm --name "server" -- start
           else
+            echo env.STAGE
+            echo steps.set-env.output.STAGE
             pm2 restart "test-server" || pm2 start npm --name "test-server" -- start
           fi
           pm2 save

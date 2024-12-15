@@ -34,7 +34,7 @@ export async function generateMetadata({ params }) {
       // Open Graph (OG) tags
       title,
       description,
-      url: `https://500kalima.com/${slug}`,
+      url: `${process.nev.NEXT_JS_URL}/${slug}`,
       siteName: '500kalima',
       images: [
         {
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }) {
       type: 'website',
     },
     // Other metadata
-    canonicalUrl: `https://500kalima.com/${slug}`,
+    canonicalUrl: `${process.nev.NEXT_JS_URL}/${slug}`,
     author: author.name,
     publicationDate: moment(createdAt).format('MMMM Do YYYY, h:mm:ss a'),
     keywords: Tags.map((tag) => tag.name).join(', '),
