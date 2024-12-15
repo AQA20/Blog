@@ -185,7 +185,7 @@ jobs:
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          PORT=3002 pm2 restart "test" || PORT=3002 pm2 start npm --name "test" -- start
+          pm2 restart "test" || pm2 start npm --name "test" -- start --port 3002
           pm2 save
         env:
           API_URL: ${{ secrets.API_URL_TEST }}
