@@ -36,6 +36,14 @@ jobs:
           cd server
           npm ci
 
+      - name: set port value
+        run: echo "ROOT STAGE is ${{ steps.set-env.outputs.STAGE }}"
+        env:
+          PORT: ${{ env.STAGE == 'prod' && secrets.PORT || secrets.PORT_TEST }}
+
+      - name: Debug port value
+        run: echo "PORT VALUE is ${{ env.PORT }}"
+
       - name: Seed Database and Start Server
         run: |
           cd server
@@ -48,41 +56,48 @@ jobs:
           fi
           pm2 save
         env:
-          NODE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'testing' }}
-          DB_USERNAME: ${{ github.ref == 'refs/heads/main' && secrets.DB_USERNAME || secrets.DB_USERNAME_TEST }}
-          DB_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.DB_PASSWORD || secrets.DB_PASSWORD_TEST }}
+          NODE_ENV: ${{ env.STAGE == 'prod' && 'production' || 'testing' }}
+          DB_USERNAME: ${{ env.STAGE == 'prod' && secrets.DB_USERNAME || secrets.DB_USERNAME_TEST }}
+          DB_PASSWORD: ${{ env.STAGE == 'prod' && secrets.DB_PASSWORD || secrets.DB_PASSWORD_TEST }}
           DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-          DB_NAME: ${{ github.ref == 'refs/heads/main' && secrets.DB_NAME || secrets.DB_NAME_TEST }}
+          DB_NAME: ${{ env.STAGE == 'prod' && secrets.DB_NAME || secrets.DB_NAME_TEST }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          MYSQL_SSL_CA: ${{ github.ref == 'refs/heads/main' && secrets.MYSQL_SSL_CA || secrets.MYSQL_SSL_CA_TEST }}
-          MYSQL_SSL_CERT: ${{ github.ref == 'refs/heads/main' && secrets.MYSQL_SSL_CERT || secrets.MYSQL_SSL_CERT_TEST }}
-          MYSQL_SSL_KEY: ${{ github.ref == 'refs/heads/main' && secrets.MYSQL_SSL_KEY || secrets.MYSQL_SSL_KEY_TEST }}
+          MYSQL_SSL_CA: ${{ env.STAGE == 'prod' && secrets.MYSQL_SSL_CA || secrets.MYSQL_SSL_CA_TEST }}
+          MYSQL_SSL_CERT: ${{ env.STAGE == 'prod' && secrets.MYSQL_SSL_CERT || secrets.MYSQL_SSL_CERT_TEST }}
+          MYSQL_SSL_KEY: ${{ env.STAGE == 'prod' && secrets.MYSQL_SSL_KEY || secrets.MYSQL_SSL_KEY_TEST }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          AWS_FILE_BUCKET: ${{ github.ref == 'refs/heads/main' && secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
-          AWS_REGION: ${{ github.ref == 'refs/heads/main' && secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
-          AWS_S3_OBJECT_BASEURL: ${{ github.ref == 'refs/heads/main' && secrets.AWS_S3_OBJECT_BASEURL || secrets.AWS_S3_OBJECT_BASEURL_TEST }}
-          JWT_SECRET: ${{ github.ref == 'refs/heads/main' && secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
-          JWT_REFRESH_SECRET: ${{ github.ref == 'refs/heads/main' && secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
+          AWS_FILE_BUCKET: ${{ env.STAGE == 'prod' && secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
+          AWS_REGION: ${{ env.STAGE == 'prod' && secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
+          AWS_S3_OBJECT_BASEURL: ${{ env.STAGE == 'prod' && secrets.AWS_S3_OBJECT_BASEURL || secrets.AWS_S3_OBJECT_BASEURL_TEST }}
+          JWT_SECRET: ${{ env.STAGE == 'prod' && secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
+          JWT_REFRESH_SECRET: ${{ env.STAGE == 'prod' && secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
           SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
-          PORT: ${{ github.ref == 'refs/heads/main' && secrets.PORT || secrets.PORT_TEST }}
+          PORT: ${{ env.STAGE == 'prod' && secrets.PORT || secrets.PORT_TEST }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-          COOKIE_SECRET: ${{ github.ref == 'refs/heads/main' && secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
-          CLOUDFRONT_BASE_URL: ${{ github.ref == 'refs/heads/main' && secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
+          COOKIE_SECRET: ${{ env.STAGE == 'prod' && secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
+          CLOUDFRONT_BASE_URL: ${{ env.STAGE == 'prod' && secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
           CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID}}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          USER1_EMAIL: ${{ github.ref == 'refs/heads/main' && secrets.USER1_EMAIL || secrets.USER1_EMAIL_TEST }}
-          USER1_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.USER1_PASSWORD || secrets.USER1_PASSWORD_TEST }}
-          USER2_EMAIL: ${{ github.ref == 'refs/heads/main' && secrets.USER2_EMAIL || secrets.USER2_EMAIL_TEST }}
-          USER2_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.USER2_PASSWORD || secrets.USER2_PASSWORD_TEST }}
-          USER3_EMAIL: ${{ github.ref == 'refs/heads/main' && secrets.USER3_EMAIL || secrets.USER3_EMAIL_TEST }}
-          USER3_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.USER3_PASSWORD || secrets.USER3_PASSWORD_TEST }}
-          USER4_EMAIL: ${{ github.ref == 'refs/heads/main' && secrets.USER4_EMAIL || secrets.USER4_EMAIL_TEST }}
-          USER4_PASSWORD: ${{ github.ref == 'refs/heads/main' && secrets.USER4_PASSWORD || secrets.USER4_PASSWORD_TEST }}
-          REVALIDATION_SECRET: ${{ github.ref == 'refs/heads/main' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
-          NEXT_JS_API_URL: ${{ github.ref == 'refs/heads/main' && secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
-          NEXT_JS_URL: ${{ github.ref == 'refs/heads/main' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+          USER1_EMAIL: ${{ env.STAGE == 'prod' && secrets.USER1_EMAIL || secrets.USER1_EMAIL_TEST }}
+          USER1_PASSWORD: ${{ env.STAGE == 'prod' && secrets.USER1_PASSWORD || secrets.USER1_PASSWORD_TEST }}
+          USER2_EMAIL: ${{ env.STAGE == 'prod' && secrets.USER2_EMAIL || secrets.USER2_EMAIL_TEST }}
+          USER2_PASSWORD: ${{ env.STAGE == 'prod' && secrets.USER2_PASSWORD || secrets.USER2_PASSWORD_TEST }}
+          USER3_EMAIL: ${{ env.STAGE == 'prod' && secrets.USER3_EMAIL || secrets.USER3_EMAIL_TEST }}
+          USER3_PASSWORD: ${{ env.STAGE == 'prod' && secrets.USER3_PASSWORD || secrets.USER3_PASSWORD_TEST }}
+          USER4_EMAIL: ${{ env.STAGE == 'prod' && secrets.USER4_EMAIL || secrets.USER4_EMAIL_TEST }}
+          USER4_PASSWORD: ${{ env.STAGE == 'prod' && secrets.USER4_PASSWORD || secrets.USER4_PASSWORD_TEST }}
+          REVALIDATION_SECRET: ${{ env.STAGE == 'prod' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
+          NEXT_JS_API_URL: ${{ env.STAGE == 'prod' && secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
+          NEXT_JS_URL: ${{ env.STAGE == 'prod' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+
+      - name: Debug STAGE value
+        run: echo "STAGE is ${{ env.STAGE }}"
+
+      - name: Debug set env variables step
+        run: echo "ROOT STAGE is ${{ steps.set-env.outputs.STAGE }}"
+
 
   build-client:
     runs-on: self-hosted
@@ -131,9 +146,9 @@ jobs:
           pm2 restart "client" || pm2 start npm --name "client" -- start
           pm2 save
         env:
-          API_URL: ${{ github.ref == 'refs/heads/main' && secrets.API_URL || secrets.API_URL_TEST }}
-          ANALYZE: ${{ github.ref == 'refs/heads/main' && secrets.ANALYZE || secrets.ANALYZE_TEST }}
-          REVALIDATION_SECRET: ${{ github.ref == 'refs/heads/main' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
+          API_URL: ${{ env.STAGE == 'prod' && secrets.API_URL || secrets.API_URL_TEST }}
+          ANALYZE: ${{ env.STAGE == 'prod' && secrets.ANALYZE || secrets.ANALYZE_TEST }}
+          REVALIDATION_SECRET: ${{ env.STAGE == 'prod' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
 
   deploy:
     runs-on: self-hosted
