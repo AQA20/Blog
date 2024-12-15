@@ -19,6 +19,7 @@ Before you start using the project, ensure the following:
 If you plan to use AWS as I do, set up or create an AWS account and configure the following services: an S3 bucket,AWS CloudFront, EC2 instance, Route 53 and IAM. Ensure the correct permissions are in place.
 
 ---
+
 ### Configuring External Image Sources
 
 To ensure that images from external sources are properly optimized in your Next.js project, you need to update your `next.config.mjs` file. Follow the steps below:
