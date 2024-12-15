@@ -28,11 +28,11 @@ export const metadata = {
     // Open Graph (OG) tags
     title: 'تصفح اخر المقالات على موقع 500 كلمة',
     description: webDesc,
-    url: process.nev.NEXT_JS_URL,
+    url: process.env.NEXT_JS_URL,
     siteName: '500kalima',
     images: [
       {
-        url: `${process.nev.NEXT_JS_URL}/default-featured-img.png`, // Must be an absolute URL
+        url: `${process.env.NEXT_JS_URL}/default-featured-img.png`, // Must be an absolute URL
         width: 940,
         height: 788,
       },
@@ -45,7 +45,7 @@ export const metadata = {
       id: '759672193042879',
     },
   },
-  canonicalUrl: process.nev.NEXT_JS_URL,
+  canonicalUrl: process.env.NEXT_JS_URL,
   keywords:
     'مواضيع شيقة، معلومات مفيدة، ثقافة، صحة، تكنولوجيا، أخبار، اقتصاد, رياضة, منوعات, وثائقيات,مقالات عامة',
   language: 'ar',
