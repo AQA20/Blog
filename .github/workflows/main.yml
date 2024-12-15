@@ -146,7 +146,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package.json', 'package-lock.json') }}
+          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
@@ -162,7 +162,7 @@ jobs:
             ~/.npm
             ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          key: ${{ runner.os }}-nextjs-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}}}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ env.CACHE_KEY }}
