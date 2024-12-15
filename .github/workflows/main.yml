@@ -36,13 +36,10 @@ jobs:
           cd server
           npm ci
 
-      - name: set port value
-        run: echo "ROOT STAGE is ${{ steps.set-env.outputs.STAGE }}"
-        env:
-          PORT: ${{ env.STAGE == 'prod' && secrets.PORT || secrets.PORT_TEST }}
-
-      - name: Debug port value
-        run: echo "PORT VALUE is ${{ env.PORT }}"
+      - name: Debug port value using STAGE variable
+        run: echo "PORT VALUE is ${{ env.STAGE == 'prod' && secrets.PORT || secrets.PORT_TEST }}"
+      - name: Debug port value using github branch
+        run: echo "PORT VALUE is ${{ github.ref == 'refs/heads/main' && secrets.PORT || secrets.PORT_TEST }}"
 
       - name: Seed Database and Start Server
         run: |
