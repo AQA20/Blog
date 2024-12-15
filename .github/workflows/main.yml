@@ -177,6 +177,7 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL }}
           ANALYZE: ${{ secrets.ANALYZE }}
+          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
 
       - name: Build Client Application to Test Environment
@@ -189,6 +190,7 @@ jobs:
         env:
           API_URL: ${{ secrets.API_URL_TEST }}
           ANALYZE: ${{ secrets.ANALYZE_TEST }}
+          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET_TEST }}
 
   deploy:
