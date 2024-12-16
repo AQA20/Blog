@@ -18,6 +18,11 @@ const nextConfig = {
         hostname: 'd279et700s7bw3.cloudfront.net',
         pathname: '**',
       },
+      {
+        protocol: 'https',
+        hostname: 'd34tm8zuk6s623.cloudfront.net',
+        pathname: '**',
+      },
       { protocol: 'https', hostname: 'pbs.twimg.com', pathname: '**' },
       { protocol: 'https', hostname: 'abs.twimg.com', pathname: '**' },
     ],

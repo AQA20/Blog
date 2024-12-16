@@ -146,7 +146,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package.json', 'package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
@@ -162,7 +162,7 @@ jobs:
             ~/.npm
             ${{ github.workspace }}/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}}}
+          key: ${{ runner.os }}-nextjs-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ env.CACHE_KEY }}
@@ -175,7 +175,7 @@ jobs:
           pm2 restart "client" || pm2 start npm --name "client" -- start
           pm2 save
         env:
-          NODE_ENV: 'production'
+          NEXT_ENV: 'production'
           API_URL: ${{ secrets.API_URL }}
           ANALYZE: ${{ secrets.ANALYZE }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
@@ -191,7 +191,7 @@ jobs:
           pm2 restart "test" || pm2 start pm2.config.cjs
           pm2 save
         env:
-          NODE_ENV: 'testing'
+          NEXT_ENV: 'testing'
           API_URL: ${{ secrets.API_URL_TEST }}
           ANALYZE: ${{ secrets.ANALYZE_TEST }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
