@@ -50,8 +50,8 @@ const globalErrorHandler = async (err, req, res, next) => {
   // Return a detailed error when in development environment!
   if (process.env.NODE_ENV === 'development') {
     devError(res, err);
-  } else if (process.env.NODE_ENV === 'production') {
-    // Don't leak too much information about the error in production environment
+  } else {
+    // Don't leak too much information about the error in other environments (production, testing...etc)
     prodError(res, err);
   }
 
