@@ -2,6 +2,51 @@ import Card from '@/components/Card';
 import { fetchTagArticles, timeAgo } from '@/lib';
 import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
+import moment from 'moment';
+
+export async function generateMetadata({ searchParams, params }) {
+  const routeParams = await params;
+  const urlSearchParams = await searchParams;
+  const tag = routeParams?.tag.replace(/-/g, ' ').replace('#', '').trim();
+  const { articles } = await fetchTagArticles(tag, {
+    orderBy: urlSearchParams?.orderBy,
+    order: urlSearchParams?.order,
+    page: urlSearchParams?.page,
+    search: urlSearchParams?.search,
+  });
+  const title = `هاشتاغ #${tag} | اكتشف المواضيع المتعلقة بـ #${tag}`;
+  const description = `تصفح جميع المقالات والمواضيع المرتبطة بـ #${tag}. محتوى مميز ومتنوع يغطي أحدث الاتجاهات والأفكار. اكتشف المزيد حول هذا الموضوع الآن!`;
+  return {
+    title,
+    description,
+    openGraph: {
+      // Open Graph (OG) tags
+      title,
+      description,
+      url: `${process.env.NEXT_JS_URL}/tags/${tag}?search=${tag}`,
+      siteName: '500kalima',
+      images: [
+        {
+          url:
+            articles?.featuredImg ||
+            `${process.env.NEXT_JS_URL}/default-featured-img.png`,
+          width: 940,
+          height: 788,
+        },
+      ],
+      locale: 'ar_AR',
+      type: 'website',
+    },
+    // Other metadata
+    canonicalUrl: `${process.env.NEXT_JS_URL}/tags/${tag}?search=${tag}`,
+    author: 'Admin',
+    publicationDate: articles.length
+      ? moment(articles[0].createdAt).format('MMMM Do YYYY, h:mm:ss a')
+      : moment().format('MMMM Do YYYY, h:mm:ss a'),
+    keywords: tag,
+    language: 'ar',
+  };
+}
 
 export default async function Page({ searchParams, params }) {
   const routeParams = await params;
@@ -15,7 +60,7 @@ export default async function Page({ searchParams, params }) {
   });
   return (
     <div>
-      {/* <p className="my-4">تم العثور على 250 نتيجة</p> */}
+      {!articles.length && <p className="my-4">لم يتم العثور على نتائج</p>}
       <div className="my-2">
         <FilterBadges urlSearchParams={urlSearchParams} />
       </div>

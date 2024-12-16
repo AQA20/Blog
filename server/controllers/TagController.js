@@ -25,16 +25,28 @@ export default class TagController {
     // Sub query was used to avoid ALL_MYSQL_GROUP_BY constraint
     const tags = await sequelize.query(
       `
-      SELECT Tags.id, Tags.name, articleCounts.totalCount AS articleCounts,
-      (SELECT COUNT(DISTINCT Tags.id) 
-        FROM Tags 
-        INNER JOIN ArticleTags ON Tags.id = ArticleTags.tagId 
-        WHERE Tags.deletedAt IS NULL AND ArticleTags.deletedAt IS NULL
-      ) AS totalTagsCount FROM Tags
-      RIGHT JOIN (
-        SELECT tagId, COUNT(tagId) AS totalCount
+      SELECT
+        Tags.id,
+        Tags.name,
+        articleCounts.totalCount AS articleCounts,
+        (
+          SELECT COUNT(DISTINCT Tags.id) as count
+          FROM Tags 
+          INNER JOIN ArticleTags ON Tags.id = ArticleTags.tagId 
+          INNER JOIN Articles ON ArticleTags.articleId = Articles.id
+          WHERE Tags.deletedAt IS NULL 
+            AND ArticleTags.deletedAt IS NULL
+            AND Articles.status = 'Approved'
+        ) AS totalTagsCount
+      FROM Tags
+      INNER JOIN (
+        SELECT 
+          tagId, 
+          COUNT(tagId) AS totalCount
         FROM ArticleTags
+        INNER JOIN Articles ON ArticleTags.articleId = Articles.id
         WHERE ArticleTags.deletedAt IS NULL
+          AND Articles.status = 'Approved'
         GROUP BY tagId
       ) AS articleCounts ON Tags.id = articleCounts.tagId
       WHERE Tags.deletedAt IS NULL
