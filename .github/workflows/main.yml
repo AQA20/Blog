@@ -78,8 +78,6 @@ jobs:
         if: ${{ github.ref == 'refs/heads/test' }}
         run: |
           cd server
-          npm run migrate:rollback:all
-          npm run seed:rollback:all
           npm run migrate
           npm run seed 
           pm2 restart "test-server" || pm2 start npm --name "test-server" -- start
