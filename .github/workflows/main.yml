@@ -69,17 +69,10 @@ jobs:
           CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL }}
           CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID}}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          USER1_EMAIL: ${{ secrets.USER1_EMAIL }}
-          USER1_PASSWORD: ${{ secrets.USER1_PASSWORD }}
-          USER2_EMAIL: ${{ secrets.USER2_EMAIL }}
-          USER2_PASSWORD: ${{ secrets.USER2_PASSWORD }}
-          USER3_EMAIL: ${{ secrets.USER3_EMAIL }}
-          USER3_PASSWORD: ${{ secrets.USER3_PASSWORD }}
-          USER4_EMAIL: ${{ secrets.USER4_EMAIL }}
-          USER4_PASSWORD: ${{ secrets.USER4_PASSWORD }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
           NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
+          USERS: ${{ secrets.USERS }}
 
       - name: Migrate, Seed Database and Start Server to Test Environment
         if: ${{ github.ref == 'refs/heads/test' }}
@@ -114,17 +107,10 @@ jobs:
           CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL_TEST }}
           CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID}}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          USER1_EMAIL: ${{ secrets.USER1_EMAIL_TEST }}
-          USER1_PASSWORD: ${{ secrets.USER1_PASSWORD_TEST }}
-          USER2_EMAIL: ${{ secrets.USER2_EMAIL_TEST }}
-          USER2_PASSWORD: ${{ secrets.USER2_PASSWORD_TEST }}
-          USER3_EMAIL: ${{ secrets.USER3_EMAIL_TEST }}
-          USER3_PASSWORD: ${{ secrets.USER3_PASSWORD_TEST }}
-          USER4_EMAIL: ${{ secrets.USER4_EMAIL_TEST }}
-          USER4_PASSWORD: ${{ secrets.USER4_PASSWORD_TEST }}
           REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET_TEST }}
           NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL_TEST }}
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
+          USERS: ${{ secrets.USERS_TEST }}
 
 
   build-client:
