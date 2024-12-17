@@ -16,7 +16,7 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
       return user;
     }),
   );
-  await queryInterface.bulkInsert('Users', processedUsersData);
+  await queryInterface.bulkInsert('Users', processedUsersData.reverse());
 });
 export const down = handleAsyncError(async ({ context: { sequelize } }) => {
   const queryInterface = sequelize.getQueryInterface();

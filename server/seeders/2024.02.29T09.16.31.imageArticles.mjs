@@ -43,6 +43,7 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
   await sequelize.transaction(async (transaction) => {
     const articles = await queryInterface.select(null, 'Articles', {
       attributes: ['id'],
+      order: [['id', 'ASC']],
     });
 
     // Make sure there are enough images for the articles

@@ -15,6 +15,7 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
     // Fetch articles
     const articles = await queryInterface.select(null, 'Articles', {
       attributes: ['id', 'authorId'],
+      order: [['id', 'ASC']],
     });
 
     // Prepare comment data

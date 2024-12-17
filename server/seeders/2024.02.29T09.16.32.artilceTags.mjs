@@ -5,9 +5,11 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
   await sequelize.transaction(async (transaction) => {
     const articles = await queryInterface.select(null, 'Articles', {
       attributes: ['id'],
+      order: [['id', 'ASC']],
     });
     const tags = await queryInterface.select(null, 'Tags', {
       attributes: ['id'],
+      order: [['id', 'ASC']],
     });
 
     // Make sure there are enough tags for the articles
