@@ -6,9 +6,11 @@ export const up = handleAsyncError(async ({ context: { sequelize } }) => {
   await sequelize.transaction(async (transaction) => {
     const users = await queryInterface.select(null, 'Users', {
       attributes: ['id'],
+      order: [['id', 'DESC']],
     });
     const roles = await queryInterface.select(null, 'Roles', {
       attributes: ['id'],
+      order: [['id', 'DESC']],
     });
     // Make sure there are enough roles for the users
     if (roles.length < users.length) {

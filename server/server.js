@@ -31,8 +31,6 @@ const app = express();
 
 // Security middlewares
 app.use(cookieParser(process.env.COOKIE_SECRET)); // Use cookie-parser middleware
-// Capturing the real client IP when the app is behind a proxy
-app.set('trust proxy', true);
 process.env.NODE_ENV === 'production' && app.use(rateLimitConfig);
 process.env.NODE_ENV === 'production' && app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-known web vulnerabilities.
 app.use(cors(corsOptions)); // Use the configured CORS middleware
