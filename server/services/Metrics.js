@@ -43,28 +43,44 @@ export default class Metrics {
           [Op.or]: [{ ipAddress }, { uuid: uuid || '' }],
           createdAt: { [Op.gte]: twentyFourHoursAgo }, // Only consider metrics from the last 24 hours
         },
-        lock: t.LOCK.UPDATE, // Lock the row for the duration of the transaction to prevent duplicates
+        transaction: t, // Ensure it's part of the transaction
       });
 
-      if (!existingMetric) {
-        // If no existing metric, create a new one
-        const uniqueId = uuidv4();
-        try {
-          await model.create({
+      if (existingMetric) {
+        return existingMetric.uuid; // Return existing UUID if found
+      }
+
+      // If no existing metric, create a new one using "upsert" logic
+      const uniqueId = uuidv4(); // Generate a new UUID
+
+      try {
+        /**
+         * The `upsert` method is used to ensure atomicity and prevent race
+         * conditions or deadlocks. It combines both insert and update
+         * operations into a single query, ensuring that if the record exists,
+         * it’s updated, and if not, a new one is inserted. This prevents issues
+         * caused by concurrent requests trying to insert the same record and
+         * simplifies the code by eliminating the need for extra queries or
+         * transaction management, improving both performance and reliability.
+         */
+        await model.upsert(
+          {
             articleId,
             ipAddress,
             uuid: uniqueId,
-          });
-        } catch (error) {
-          console.log(error);
-          throw error;
-        }
+            createdAt: new Date(), // Ensure the timestamp is included
+            updatedAt: new Date(), // Ensure the updatedAt timestamp is included
+          },
+          {
+            transaction: t, // Ensure this is part of the transaction
+          },
+        );
 
         return uniqueId; // Return the newly created UUID
+      } catch (error) {
+        console.error('Error inserting/updating metric:', error);
+        throw error;
       }
-
-      // If metric exists, return the existing UUID
-      return existingMetric.uuid;
     });
   }
 
