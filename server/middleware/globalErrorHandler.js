@@ -46,7 +46,8 @@ const globalErrorHandler = async (err, req, res, next) => {
 
   err.statusCode = statusCode;
   err.status = err?.status || 'error';
-
+  devError(res, err);
+  next(err);
   // Return a detailed error when in development environment!
   if (process.env.NODE_ENV === 'development') {
     devError(res, err);

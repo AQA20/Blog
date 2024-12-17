@@ -49,11 +49,16 @@ export default class Metrics {
       if (!existingMetric) {
         // If no existing metric, create a new one
         const uniqueId = uuidv4();
-        await model.create({
-          articleId,
-          ipAddress,
-          uuid: uniqueId,
-        });
+        try {
+          await model.create({
+            articleId,
+            ipAddress,
+            uuid: uniqueId,
+          });
+        } catch (error) {
+          console.log(error);
+          throw error;
+        }
 
         return uniqueId; // Return the newly created UUID
       }
