@@ -1,5 +1,4 @@
 User-agent: *
-Disallow: /private/
 Allow: /node-api/sitemap.xml
 Allow: /_next/static/
 Allow: /
