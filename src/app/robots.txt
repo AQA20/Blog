@@ -1,2 +1,4 @@
 User-Agent: *
-Disallow: /
+Allow: /
+Disallow: /private/
+Sitemap: https://500kalima.com/node-api/sitemap.xml
