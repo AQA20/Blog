@@ -3,4 +3,4 @@ Allow: /node-api/sitemap.xml
 Allow: /_next/static/
 Allow: /
 
-Sitemap: https://500kalima.com/node-api/sitemap.xml
+Sitemap: https://www.500kalima.com/node-api/sitemap.xml
