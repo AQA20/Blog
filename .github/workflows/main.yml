@@ -158,7 +158,7 @@ jobs:
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          pm2 restart "client" || pm2 start npm --name "client" -- start
+          pm2 restart "${{ secrets.PM2_NAME }}" || pm2 start npm --name "${{ secrets.PM2_NAME }}" -- start
           pm2 save
         env:
           NEXT_ENV: 'production'
@@ -174,7 +174,7 @@ jobs:
         run: |
           rm -rf .next  # Clean up previous build artifacts
           npm run build  # Build the client application
-          pm2 restart "test" || pm2 start pm2.config.cjs
+          pm2 restart "${{ secrets.PM2_NAME_TEST }}" || pm2 start pm2.config.cjs
           pm2 save
         env:
           NEXT_ENV: 'testing'
