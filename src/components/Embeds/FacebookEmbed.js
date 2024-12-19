@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useLayoutEffect, useState } from 'react';
 import { createBreakpoint } from 'react-use';
 
