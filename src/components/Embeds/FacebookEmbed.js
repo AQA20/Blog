@@ -36,7 +36,7 @@ export const FacebookEmbed = ({ postUrl }) => {
     setKey((prev) => prev + 1);
   }, [breakpoint]);
 
-  const width = breakpoint === 'sm' ? '100%' : '680';
+  const width = breakpoint === 'sm' ? '100vw' : '680';
   const height = breakpoint === 'sm' ? '229' : '510';
 
   return (
