@@ -18,7 +18,12 @@ const useBreakpoint = createBreakpoint({
 export const FacebookEmbed = ({ postUrl }) => {
   const breakpoint = useBreakpoint();
   const [key, setKey] = useState(0); // Key to force re-render
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+  const [viewportWidth, setViewportWidth] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth;
+    }
+    return 0; // Default value for SSR
+  });
 
   useEffect(() => {
     if (!window.FB) {
