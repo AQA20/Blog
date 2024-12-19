@@ -192,11 +192,13 @@ jobs:
       - name: Deploy Build to Production
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
+          sudo rm -rf /var/www/.next/
           sudo rsync -a --delete ~/actions-runner/_work/500kalima/500kalima/.next/ /var/www/.next/
 
       - name: Deploy Build to Test Environment
         if: ${{ github.ref == 'refs/heads/test' }}
         run: |
+          sudo rm -rf /var/www/test/.next/
           sudo rsync -a --delete ~/actions-runner/_work/500kalima/500kalima/.next/ /var/www/test/.next/
 
       - name: Restart Nginx Service
