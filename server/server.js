@@ -31,8 +31,8 @@ const app = express();
 
 // Security middlewares
 app.use(cookieParser(process.env.COOKIE_SECRET)); // Use cookie-parser middleware
-process.env.NODE_ENV === 'production' && app.use(rateLimitConfig);
-process.env.NODE_ENV === 'production' && app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-known web vulnerabilities.
+process.env.NODE_ENV !== 'development' && app.use(rateLimitConfig);
+process.env.NODE_ENV !== 'development' && app.use(helmet(helmetConfig)); // Use helmet middleware to prevent some well-known web vulnerabilities.
 app.use(cors(corsOptions)); // Use the configured CORS middleware
 app.use(express.json({ limit: '5mb' })); // A middleware to parse JSON payloads
 
