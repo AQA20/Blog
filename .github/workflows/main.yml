@@ -192,14 +192,26 @@ jobs:
       - name: Deploy Build to Production
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |
-          sudo rm -rf /var/www/.next/
-          sudo rsync -a --delete ~/actions-runner/_work/500kalima/500kalima/.next/ /var/www/.next/
+          # Build the application in a temporary directory to minimize downtime
+          sudo mkdir -p /var/www/next_temp
+          sudo cp -r ~/actions-runner/_work/500kalima/500kalima/.next /var/www/next_temp/
+          sudo rm -rf /var/www/.next
+          # Replace the old version with the new version
+          sudo mv /var/www/next_temp/.next /var/www/.next
+          # Remove temp directory
+          sudo rm -rf /var/www/next_temp
 
       - name: Deploy Build to Test Environment
         if: ${{ github.ref == 'refs/heads/test' }}
         run: |
-          sudo rm -rf /var/www/test/.next/
-          sudo rsync -a --delete ~/actions-runner/_work/500kalima/500kalima/.next/ /var/www/test/.next/
+          # Build the application in a temporary directory to minimize downtime
+          sudo mkdir -p /var/www/test_temp
+          sudo cp -r ~/actions-runner/_work/500kalima/500kalima/.next /var/www/test_temp/
+          sudo rm -rf /var/www/test/.next
+          # Replace the old version with the new version
+          sudo mv /var/www/test_temp/.next /var/www/test/.next
+          # Remove temp directory
+          sudo rm -rf /var/www/test_temp
 
       - name: Restart Nginx Service
         run: |
