@@ -165,7 +165,7 @@ export default class ArticleService {
       const base64Data = img.src.split(',')[1];
       const mimetype = img.src.split(';')[0].split(':')[1]; // Extract MIME type
       const buffer = Buffer.from(base64Data, 'base64');
-      const capture = img.alt;
+      const capture = img.alt || null;
 
       // Create imageable row in database after uploading the file
       const imageable = await imgService.createImageable(
