@@ -112,7 +112,6 @@ jobs:
           NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
           USERS: ${{ secrets.USERS_TEST }}
 
-
   build-client:
     runs-on: self-hosted
     needs: start-server # Ensure the server is started before this job runs

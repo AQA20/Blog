@@ -21,8 +21,21 @@ export default class ImageController {
     return res.status(200).send(url);
   }
 
-  // Create imageable and upload it to amazon s3
+  // Upload image to amazon s3 and return image url and name
   static async uploadImage(req, res) {
+    const file = req.file;
+    // Upload image to S3 and get the file name
+    const fileName = await ImageController.#s3client.uploadFile(
+      file.buffer,
+      file.mimetype,
+    );
+    // Retrieve image url from amazon s3
+    const url = ImageController.#s3client.getFile(fileName);
+    return resHandler(201, { url, name: fileName }, res);
+  }
+
+  // Create imageable and upload it to amazon s3
+  static async uploadImageable(req, res) {
     const file = req.file;
     const imageableId = req.params.imageableId;
     const type = req.query.type;

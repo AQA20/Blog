@@ -162,13 +162,12 @@ export default class ArticleController {
         ],
       });
 
-      // Replace base46 src with a AWS s3 URL
       const { sanitizedHtml, imageables } =
         await ArticleService.processHtmlImages(article.id, req.body.content);
       // Update the article html content;
       article.content = sanitizedHtml;
       // Set first image as article thumbnail Image
-      article.thumbnailId = imageables[0].dataValues.id;
+      article.thumbnailId = imageables[0].id;
       await article.save();
       // Revalidate nextjs article so it reflects new updates
       await ArticleService.revalidateNextjsArticle(article.slug);
@@ -189,7 +188,6 @@ export default class ArticleController {
       });
 
       if (req.body.content) {
-        // Replace base46 src with the actual AWS s3 URL
         const { sanitizedHtml } = await ArticleService.processHtmlImages(
           existedArticle.id,
           req.body.content,

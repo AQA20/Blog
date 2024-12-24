@@ -7,7 +7,6 @@ import Image from '../models/Image.js';
 import Metrics from '../services/Metrics.js';
 import db from '../config/databaseConnection.js';
 import { Op } from 'sequelize';
-import ImageService from './ImageService.js';
 import softDelete from '../utils/softDelete.js';
 import { JSDOM } from 'jsdom';
 import { DOMAIN, SECURE, SAME_SITE } from '../utils/constants.js';
@@ -153,34 +152,26 @@ export default class ArticleService {
 
   static async processHtmlImages(articleId, htmlContent) {
     const dom = new JSDOM(htmlContent);
-    const images = [
-      ...dom.window.document.querySelectorAll('img[src^="data:image/"]'),
-    ];
+    const images = [...dom.window.document.querySelectorAll('img')];
 
     const imageables = [];
-
-    const imgService = new ImageService();
-
     for (const img of images) {
-      const base64Data = img.src.split(',')[1];
-      const mimetype = img.src.split(';')[0].split(':')[1]; // Extract MIME type
-      const buffer = Buffer.from(base64Data, 'base64');
       const capture = img.alt || null;
+      const name = img.getAttribute('data-name');
 
-      // Create imageable row in database after uploading the file
-      const imageable = await imgService.createImageable(
-        articleId,
-        Image.ARTICLE,
-        {
-          buffer,
-          mimetype,
-          capture,
-        },
-      );
+      if (!name) {
+        continue;
+      }
 
-      const imageUrl = imageable.dataValues.imgUrl;
-      // Replace Base64 src with a URL
-      img.src = imageUrl; // Update with the actual public URL
+      // Create the imageable record in the database
+      const imageable = await Image.create({
+        imageableId: articleId,
+        imageableType: Image.ARTICLE,
+        name,
+        capture,
+      });
+
+      // Push image to the array
       imageables.push(imageable);
     }
 
@@ -188,6 +179,7 @@ export default class ArticleService {
     sanitizedHtml = sanitizedHtml.replace(/<\/?html.*?>/g, ''); // Remove <html> and </html>
     sanitizedHtml = sanitizedHtml.replace(/<\/?head.*?>/g, ''); // Remove <head> and </head>
     sanitizedHtml = sanitizedHtml.replace(/<\/?body.*?>/g, ''); // Remove <body> and </body>
+    sanitizedHtml = sanitizedHtml.replace(/<p>\s*<\/p>/g, ''); // Remove empty <p> tags
 
     return { sanitizedHtml, imageables };
   }

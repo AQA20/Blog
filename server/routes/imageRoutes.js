@@ -15,13 +15,23 @@ router.get('/image/:id', handleAsyncApiError(ImageController.getImageUrl));
 
 // Upload Image
 router.post(
+  '/image/upload',
+  authorized,
+  isAdmin,
+  uploadImage.single('file'),
+  uploadImageRequest,
+  handleAsyncApiError(ImageController.uploadImage),
+);
+
+// Upload Imageable
+router.post(
   '/image/:imageableId',
   authorized,
   isAdmin,
   uploadImage.single('file'),
   uploadImageRequest,
   imageRequest,
-  handleAsyncApiError(ImageController.uploadImage),
+  handleAsyncApiError(ImageController.uploadImageable),
 );
 
 // Update user profile picture
