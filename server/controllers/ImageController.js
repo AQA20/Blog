@@ -67,6 +67,12 @@ export default class ImageController {
   static async deleteImage(req, res) {
     const imageableId = req.params.id;
     const imageableType = req.query.type;
+    if (!imageableId) {
+      throw new ApiError('Imageable Id parameter is required', 400);
+    }
+    if (!imageableType) {
+      throw new ApiError('Type query is required', 400);
+    }
     let message;
     if (imageableType === 'ARTICLE') {
       message = ImageController.#imageService.deleteImageable(
@@ -78,5 +84,18 @@ export default class ImageController {
     }
 
     return resHandler(200, message, res);
+  }
+  static async deleteImagePermenanetally(req, res) {
+    const name = req.params.name;
+    const type = req.query.type;
+    if (!name) {
+      throw new ApiError('Name parameter is required', 400);
+    }
+    if (!type) {
+      throw new ApiError('Type query is required', 400);
+    }
+    await ImageController.#s3client.deleteFile(name);
+    await Image.destroy({ where: { name, imageableType: type }, force: true });
+    return resHandler(204, '', res);
   }
 }

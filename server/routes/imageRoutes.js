@@ -44,13 +44,20 @@ router.put(
   handleAsyncApiError(ImageController.updateUserImg),
 );
 
-// Delete Image
+// Delete Imageable
 router.delete(
   '/image/:imageableId',
   authorized,
   isAdmin,
-  imageRequest,
   handleAsyncApiError(ImageController.deleteImage),
+);
+
+// Delete Image and Imageable Permenanetally
+router.delete(
+  '/image/permanent-delete/:name',
+  authorized,
+  isAdmin,
+  handleAsyncApiError(ImageController.deleteImagePermenanetally),
 );
 
 export default router;
