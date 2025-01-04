@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ main, test ]
+    branches: [main, test]
 jobs:
   create_branch_directory:
     runs-on: self-hosted
@@ -58,31 +58,31 @@ jobs:
           pm2 save
         env:
           NODE_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
-          DB_USERNAME: ${{ github.ref_name == 'main' &&  secrets.DB_USERNAME || secrets.DB_USERNAME_TEST }}
-          DB_PASSWORD: ${{ github.ref_name == 'main' &&  secrets.DB_PASSWORD || secrets.DB_PASSWORD_TEST }}
-          DB_NAME: ${{ github.ref_name == 'main' &&  secrets.DB_NAME || secrets.DB_NAME_TEST }}
+          DB_USERNAME: ${{ github.ref_name == 'main' && secrets.DB_USERNAME || secrets.DB_USERNAME_TEST }}
+          DB_PASSWORD: ${{ github.ref_name == 'main' && secrets.DB_PASSWORD || secrets.DB_PASSWORD_TEST }}
+          DB_NAME: ${{ github.ref_name == 'main' && secrets.DB_NAME || secrets.DB_NAME_TEST }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          MYSQL_SSL_CA: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_CA || secrets.MYSQL_SSL_CA_TEST }}
-          MYSQL_SSL_CERT: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_CERT || secrets.MYSQL_SSL_CERT_TEST }}
-          MYSQL_SSL_KEY: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_KEY || secrets.MYSQL_SSL_KEY_TEST }}
+          MYSQL_SSL_CA: ${{ github.ref_name == 'main' && secrets.MYSQL_SSL_CA || secrets.MYSQL_SSL_CA_TEST }}
+          MYSQL_SSL_CERT: ${{ github.ref_name == 'main' && secrets.MYSQL_SSL_CERT || secrets.MYSQL_SSL_CERT_TEST }}
+          MYSQL_SSL_KEY: ${{ github.ref_name == 'main' && secrets.MYSQL_SSL_KEY || secrets.MYSQL_SSL_KEY_TEST }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          AWS_FILE_BUCKET: ${{ github.ref_name == 'main' &&  secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
-          AWS_REGION: ${{ github.ref_name == 'main' &&  secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
-          JWT_SECRET: ${{ github.ref_name == 'main' &&  secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
+          AWS_FILE_BUCKET: ${{ github.ref_name == 'main' && secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
+          AWS_REGION: ${{ github.ref_name == 'main' && secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
+          JWT_SECRET: ${{ github.ref_name == 'main' && secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
           JWT_REFRESH_SECRET: ${{ github.ref_name == 'main' && secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
           SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
-          PORT: ${{ github.ref_name == 'main' &&  secrets.PORT || secrets.PORT_TEST }}
+          PORT: ${{ github.ref_name == 'main' && secrets.PORT || secrets.PORT_TEST }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-          COOKIE_SECRET: ${{ github.ref_name == 'main' &&  secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
-          CLOUDFRONT_BASE_URL: ${{ github.ref_name == 'main' &&  secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
+          COOKIE_SECRET: ${{ github.ref_name == 'main' && secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
+          CLOUDFRONT_BASE_URL: ${{ github.ref_name == 'main' && secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
           CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          REVALIDATION_SECRET: ${{ github.ref_name == 'main' &&  secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
-          NEXT_JS_API_URL: ${{ github.ref_name == 'main' &&  secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
-          NEXT_JS_URL: ${{ github.ref_name == 'main' &&  secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
-          USERS: ${{ github.ref_name == 'main' &&  secrets.USERS || secrets.USERS_TEST }}
+          REVALIDATION_SECRET: ${{ github.ref_name == 'main' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
+          NEXT_JS_API_URL: ${{ github.ref_name == 'main' && secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
+          NEXT_JS_URL: ${{ github.ref_name == 'main' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+          USERS: ${{ github.ref_name == 'main' && secrets.USERS || secrets.USERS_TEST }}
 
   build-client:
     runs-on: self-hosted
@@ -92,7 +92,7 @@ jobs:
     defaults:
       run:
         working-directory: ${{ github.ref_name }}
-  
+
     steps:
       - name: Set Environment Variables
         id: set-env
