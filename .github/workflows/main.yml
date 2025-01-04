@@ -133,12 +133,6 @@ jobs:
           # Clean up previous build outputs but keep the cache
           [ -d ".next" ] && find .next -type f -not -path '*/cache/*' -delete
           npm run build  # Build the client application
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            pm2 restart "${{ secrets.PM2_NAME }}" || pm2 start npm --name "${{ secrets.PM2_NAME }}" -- start
-          else
-            pm2 restart "${{ secrets.PM2_NAME_TEST }}" || pm2 start npm --name "${{ secrets.PM2_NAME_TEST }}" -- start
-          fi
-          pm2 save
         env:
           NEXT_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
           API_URL: ${{ github.ref_name == 'main' && secrets.API_URL || secrets.API_URL_TEST }}
@@ -150,7 +144,7 @@ jobs:
     
       - name: Start  Client Application
         run: |
-          pm2 restart "${{ env.PM2_NAME_ }}" || pm2 start npm --name "${{ env.PM2_NAME }}" -- start
+          pm2 start pm2.config.cjs
           pm2 save
 
   deploy:
