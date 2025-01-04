@@ -131,7 +131,7 @@ jobs:
       - name: Build Client Application
         run: |
           # Clean up previous build outputs but keep the cache
-          find .next -type f -not -path '*/cache/*' -delete
+          [ -d ".next" ] && find .next -type f -not -path '*/cache/*' -delete
           npm run build  # Build the client application
           pm2 restart "${{ secrets.PM2_NAME }}" || pm2 start npm --name "${{ secrets.PM2_NAME }}" -- start
           pm2 save
