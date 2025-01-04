@@ -106,7 +106,7 @@ jobs:
         with:
           path: |
             ${{ github.ref_name }}/node_modules
-          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles(env.PACKAGE_LOCK_PATH) }}
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
