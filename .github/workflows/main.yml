@@ -2,32 +2,43 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches:
-      - main
-      - test
+    branches: [ main, test ]
 jobs:
+  create_branch_directory:
+    runs-on: self-hosted
+    steps:
+      - name: Create and Navigate to Branch Directory
+        run: |
+          mkdir -p ${{ github.ref_name }}
+
   start-server:
     runs-on: self-hosted
+    outputs:
+      cache-hit: ${{ steps.server_node_modules.outputs.cache-hit }}
+    defaults:
+      run:
+        working-directory: ${{ github.ref_name }}
+
     steps:
       - name: Set Environment Variables
         id: set-env
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/test" ]; then
-            echo "STAGE=testing" >> $GITHUB_ENV
-            echo "CACHE_KEY=testing" >> $GITHUB_ENV
-          else
-            echo "STAGE=prod" >> $GITHUB_ENV
-            echo "CACHE_KEY=production" >> $GITHUB_ENV
-          fi
+          echo "CACHE_KEY=${{ github.ref_name == 'main' && 'production' || 'testing' }}" >> $GITHUB_ENV
+          echo "PACKAGE_LOCK_PATH=${{ github.ref_name}}/server/package-lock.json" >> $GITHUB_ENV
+          echo "PM2_SERVER_NAME=${{ github.ref_name == 'main' && 'server' || 'test-server'}}" >> $GITHUB_ENV
+
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          path: ${{ github.ref_name }}
 
       - name: Cache server npm dependencies
+        id: server_node_modules
         uses: actions/cache@v4
         with:
           path: |
-            server/node_modules
-          key: ${{ runner.os }}-npm-server-${{ env.CACHE_KEY }}-${{ hashFiles('server/package-lock.json') }}
+            ${{ github.ref_name }}/server/node_modules
+          key: ${{ runner.os }}-npm-server-${{ env.CACHE_KEY }}-${{ hashFiles(env.PACKAGE_LOCK_PATH) }}
           restore-keys: |
             ${{ runner.os }}-npm-server-${{ env.CACHE_KEY }}
 
@@ -35,105 +46,73 @@ jobs:
         run: |
           cd server
           npm ci
+        if: steps.server_node_modules.outputs.cache-hit != 'true'
 
       - name: Migrate, Seed Database and Start Server to Production
-        if: ${{ github.ref == 'refs/heads/main' }}
         run: |
           cd server
           npm run migrate
           npm run seed 
-          pm2 restart "server" || pm2 start npm --name "server" -- start
+          pm2 restart ${{ env.PM2_SERVER_NAME }} || pm2 start npm --name ${{ env.PM2_SERVER_NAME }} -- start
           pm2 save
         env:
-          NODE_ENV: 'production'
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_NAME: ${{ secrets.DB_NAME }}
+          NODE_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
+          DB_USERNAME: ${{ github.ref_name == 'main' &&  secrets.DB_USERNAME || secrets.DB_USERNAME_TEST }}
+          DB_PASSWORD: ${{ github.ref_name == 'main' &&  secrets.DB_PASSWORD || secrets.DB_PASSWORD_TEST }}
+          DB_NAME: ${{ github.ref_name == 'main' &&  secrets.DB_NAME || secrets.DB_NAME_TEST }}
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
-          MYSQL_SSL_CA: ${{ secrets.MYSQL_SSL_CA }}
-          MYSQL_SSL_CERT: ${{ secrets.MYSQL_SSL_CERT }}
-          MYSQL_SSL_KEY: ${{ secrets.MYSQL_SSL_KEY }}
+          MYSQL_SSL_CA: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_CA || secrets.MYSQL_SSL_CA_TEST }}
+          MYSQL_SSL_CERT: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_CERT || secrets.MYSQL_SSL_CERT_TEST }}
+          MYSQL_SSL_KEY: ${{ github.ref_name == 'main' &&  secrets.MYSQL_SSL_KEY || secrets.MYSQL_SSL_KEY_TEST }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          AWS_FILE_BUCKET: ${{ secrets.AWS_FILE_BUCKET }}
-          AWS_REGION: ${{ secrets.AWS_REGION }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET }}
+          AWS_FILE_BUCKET: ${{ github.ref_name == 'main' &&  secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
+          AWS_REGION: ${{ github.ref_name == 'main' &&  secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
+          JWT_SECRET: ${{ github.ref_name == 'main' &&  secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
+          JWT_REFRESH_SECRET: ${{ github.ref_name == 'main' &&  secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
           SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
-          PORT: ${{ secrets.PORT }}
+          PORT: ${{ github.ref_name == 'main' &&  secrets.PORT || secrets.PORT_TEST }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
-          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-          CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL }}
-          CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID}}
+          COOKIE_SECRET: ${{ github.ref_name == 'main' &&  secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
+          CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL == 'main' &&  secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
+          CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
-          NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL }}
-          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
-          USERS: ${{ secrets.USERS }}
-
-      - name: Migrate, Seed Database and Start Server to Test Environment
-        if: ${{ github.ref == 'refs/heads/test' }}
-        run: |
-          cd server
-          npm run migrate
-          npm run seed 
-          pm2 restart "test-server" || pm2 start npm --name "test-server" -- start
-          pm2 save
-        env:
-          NODE_ENV: 'testing'
-          DB_USERNAME: ${{ secrets.DB_USERNAME_TEST }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD_TEST }}
-          DB_NAME: ${{ secrets.DB_NAME_TEST }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          MYSQL_SSL_CA: ${{ secrets.MYSQL_SSL_CA_TEST }}
-          MYSQL_SSL_CERT: ${{ secrets.MYSQL_SSL_CERT_TEST }}
-          MYSQL_SSL_KEY: ${{ secrets.MYSQL_SSL_KEY_TEST }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
-          AWS_FILE_BUCKET: ${{ secrets.AWS_FILE_BUCKET_TEST }}
-          AWS_REGION: ${{ secrets.AWS_REGION_TEST }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET_TEST }}
-          JWT_REFRESH_SECRET: ${{ secrets.JWT_REFRESH_SECRET_TEST }}
-          SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
-          PORT: ${{ secrets.PORT_TEST }}
-          SERVER_IP: ${{ secrets.SERVER_IP }}
-          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET_TEST }}
-          CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL_TEST }}
-          CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID}}
-          CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
-          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET_TEST }}
-          NEXT_JS_API_URL: ${{ secrets.NEXT_JS_API_URL_TEST }}
-          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
-          USERS: ${{ secrets.USERS_TEST }}
+          REVALIDATION_SECRET: ${{ github.ref_name == 'main' &&  secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
+          NEXT_JS_API_URL: ${{ github.ref_name == 'main' &&  secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
+          NEXT_JS_URL: ${{ github.ref_name == 'main' &&  secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+          USERS: ${{ github.ref_name == 'main' &&  secrets.USERS || secrets.USERS_TEST }}
 
   build-client:
     runs-on: self-hosted
     needs: start-server # Ensure the server is started before this job runs
+    outputs:
+      cache-hit: ${{ steps.client_node_modules.outputs.cache-hit }}
+    defaults:
+      run:
+        working-directory: ${{ github.ref_name }}
+  
     steps:
       - name: Set Environment Variables
         id: set-env
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/test" ]; then
-            echo "STAGE=testing" >> $GITHUB_ENV
-            echo "CACHE_KEY=testing" >> $GITHUB_ENV
-          else
-            echo "STAGE=prod" >> $GITHUB_ENV
-            echo "CACHE_KEY=production" >> $GITHUB_ENV
-          fi
+          echo "CACHE_KEY=${{ github.ref_name == 'main' && 'production' || 'testing' }}" >> $GITHUB_ENV
+          echo "PACKAGE_LOCK_PATH=${{ github.ref_name}}/package-lock.json" >> $GITHUB_ENV
+
       - name: Cache client npm dependencies
         uses: actions/cache@v4
+        id: client_node_modules
         with:
           path: |
             node_modules
-          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package.json', 'package-lock.json') }}
+          key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
       - name: Install client npm dependencies
         run: |
           npm ci
+        if: steps.client_node_modules.outputs.cache-hit != 'true'
 
       - name: Cache Next.js build artifacts
         uses: actions/cache@v4
@@ -141,72 +120,43 @@ jobs:
           # See here for caching with `yarn` https://github.com/actions/cache/blob/main/examples.md#node---yarn or you can leverage caching with actions/setup-node https://github.com/actions/setup-node
           path: |
             ~/.npm
-            ${{ github.workspace }}/.next/cache
+            ${{ github.workspace }}/${{ github.ref_name }}/.next/cache
           # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ env.CACHE_KEY }}-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-${{ github.ref_name }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ env.CACHE_KEY }}
+            ${{ runner.os }}-${{ github.ref_name }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Build Client Application to Production
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Build Client Application
         run: |
-          rm -rf .next  # Clean up previous build artifacts
+          # Clean up previous build outputs but keep the cache
+          find .next -type f -not -path '*/cache/*' -delete
           npm run build  # Build the client application
           pm2 restart "${{ secrets.PM2_NAME }}" || pm2 start npm --name "${{ secrets.PM2_NAME }}" -- start
           pm2 save
         env:
-          NEXT_ENV: 'production'
-          API_URL: ${{ secrets.API_URL }}
-          ANALYZE: ${{ secrets.ANALYZE }}
-          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL }}
-          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
-          PM2_NAME: ${{ secrets.PM2_NAME }}
-          CLIENT_PORT: ${{ secrets.CLIENT_PORT }}
-
-      - name: Build Client Application to Test Environment
-        if: ${{ github.ref == 'refs/heads/test' }}
-        run: |
-          rm -rf .next  # Clean up previous build artifacts
-          npm run build  # Build the client application
-          pm2 restart "${{ secrets.PM2_NAME_TEST }}" || pm2 start pm2.config.cjs
-          pm2 save
-        env:
-          NEXT_ENV: 'testing'
-          API_URL: ${{ secrets.API_URL_TEST }}
-          ANALYZE: ${{ secrets.ANALYZE_TEST }}
-          NEXT_JS_URL: ${{ secrets.NEXT_JS_URL_TEST }}
-          REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET_TEST }}
-          PM2_NAME: ${{ secrets.PM2_NAME_TEST }}
-          CLIENT_PORT: ${{ secrets.CLIENT_PORT_TEST }}
+          NEXT_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
+          API_URL: ${{ github.ref_name == 'main' && secrets.API_URL || secrets.API_URL_TEST }}
+          ANALYZE: ${{ github.ref_name == 'main' && secrets.ANALYZE || secrets.ANALYZE_TEST }}
+          NEXT_JS_URL: ${{ github.ref_name == 'main' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
+          REVALIDATION_SECRET: ${{ github.ref_name == 'main' && secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
+          PM2_NAME: ${{ github.ref_name == 'main' && secrets.PM2_NAME || secrets.PM2_NAME_TEST }}
+          Client_PORT: ${{ github.ref_name == 'main' && secrets.CLIENT_PORT || secrets.CLIENT_PORT_TEST }}
 
   deploy:
     runs-on: self-hosted
     needs: build-client # Wait for the client to build before deploying
     steps:
-      - name: Deploy Build to Production
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Deploy Client Build
         run: |
-          # Build the application in a temporary directory to minimize downtime
-          sudo mkdir -p /var/www/next_temp
-          sudo cp -r ~/actions-runner/_work/500kalima/500kalima/.next /var/www/next_temp/
-          sudo rm -rf /var/www/.next
-          # Replace the old version with the new version
-          sudo mv /var/www/next_temp/.next /var/www/.next
-          # Remove temp directory
-          sudo rm -rf /var/www/next_temp
+          if [ "${{ github.ref_name }}" == "main" ]; then
+            DEPLOY_DIR="/var/www"
+          else
+            sudo mkdir -p /var/www/test
+            DEPLOY_DIR="/var/www/test"
+          fi
 
-      - name: Deploy Build to Test Environment
-        if: ${{ github.ref == 'refs/heads/test' }}
-        run: |
-          # Build the application in a temporary directory to minimize downtime
-          sudo mkdir -p /var/www/test_temp
-          sudo cp -r ~/actions-runner/_work/500kalima/500kalima/.next /var/www/test_temp/
-          sudo rm -rf /var/www/test/.next
-          # Replace the old version with the new version
-          sudo mv /var/www/test_temp/.next /var/www/test/.next
-          # Remove temp directory
-          sudo rm -rf /var/www/test_temp
+          sudo cp -r ~/actions-runner-admin/_work/500kalima/500kalima/${{ github.ref_name }}/.next $DEPLOY_DIR/
 
       - name: Restart Nginx Service
         run: |
