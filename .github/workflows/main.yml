@@ -12,6 +12,7 @@ jobs:
           mkdir -p ${{ github.ref_name }}
 
   start-server:
+    needs: create_branch_directory
     runs-on: self-hosted
     outputs:
       cache-hit: ${{ steps.server_node_modules.outputs.cache-hit }}
