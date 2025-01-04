@@ -133,7 +133,7 @@ jobs:
           # Clean up previous build outputs but keep the cache
           [ -d ".next" ] && find .next -type f -not -path '*/cache/*' -delete
           npm run build  # Build the client application
-          pm2 start pm2.config.cjs
+          pm2 restart pm2.config.cjs
           pm2 save
         env:
           NEXT_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
