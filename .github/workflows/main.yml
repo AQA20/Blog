@@ -71,13 +71,13 @@ jobs:
           AWS_FILE_BUCKET: ${{ github.ref_name == 'main' &&  secrets.AWS_FILE_BUCKET || secrets.AWS_FILE_BUCKET_TEST }}
           AWS_REGION: ${{ github.ref_name == 'main' &&  secrets.AWS_REGION || secrets.AWS_REGION_TEST }}
           JWT_SECRET: ${{ github.ref_name == 'main' &&  secrets.JWT_SECRET || secrets.JWT_SECRET_TEST }}
-          JWT_REFRESH_SECRET: ${{ github.ref_name == 'main' &&  secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
+          JWT_REFRESH_SECRET: ${{ github.ref_name == 'main' && secrets.JWT_REFRESH_SECRET || secrets.JWT_REFRESH_SECRET_TEST }}
           SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
           PORT: ${{ github.ref_name == 'main' &&  secrets.PORT || secrets.PORT_TEST }}
           SERVER_IP: ${{ secrets.SERVER_IP }}
           COOKIE_SECRET: ${{ github.ref_name == 'main' &&  secrets.COOKIE_SECRET || secrets.COOKIE_SECRET_TEST }}
-          CLOUDFRONT_BASE_URL: ${{ secrets.CLOUDFRONT_BASE_URL == 'main' &&  secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
-          CLOUDFRONT_KEY_PAIR_ID: ${{secrets.CLOUDFRONT_KEY_PAIR_ID }}
+          CLOUDFRONT_BASE_URL: ${{ github.ref_name == 'main' &&  secrets.CLOUDFRONT_BASE_URL || secrets.CLOUDFRONT_BASE_URL_TEST }}
+          CLOUDFRONT_KEY_PAIR_ID: ${{ secrets.CLOUDFRONT_KEY_PAIR_ID }}
           CLOUDFRONT_PRIVATE_KEY: ${{ secrets.CLOUDFRONT_PRIVATE_KEY }}
           REVALIDATION_SECRET: ${{ github.ref_name == 'main' &&  secrets.REVALIDATION_SECRET || secrets.REVALIDATION_SECRET_TEST }}
           NEXT_JS_API_URL: ${{ github.ref_name == 'main' &&  secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
