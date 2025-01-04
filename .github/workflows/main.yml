@@ -133,6 +133,8 @@ jobs:
           # Clean up previous build outputs but keep the cache
           [ -d ".next" ] && find .next -type f -not -path '*/cache/*' -delete
           npm run build  # Build the client application
+          pm2 start pm2.config.cjs
+          pm2 save
         env:
           NEXT_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
           API_URL: ${{ github.ref_name == 'main' && secrets.API_URL || secrets.API_URL_TEST }}
@@ -142,11 +144,6 @@ jobs:
           PM2_NAME: ${{ github.ref_name == 'main' && secrets.PM2_NAME || secrets.PM2_NAME_TEST }}
           Client_PORT: ${{ github.ref_name == 'main' && secrets.CLIENT_PORT || secrets.CLIENT_PORT_TEST }}
     
-      - name: Start  Client Application
-        run: |
-          pm2 start pm2.config.cjs
-          pm2 save
-
   deploy:
     runs-on: self-hosted
     needs: build-client # Wait for the client to build before deploying
