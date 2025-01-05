@@ -33,15 +33,6 @@ const nextConfig = {
   staticPageGenerationTimeout: 600,
   // React strict mode
   reactStrictMode: process.env.NODE_ENV === 'development',
-
-  // Performance optimizations
-  output: 'standalone', // Enables optimized production builds
-  compress: true, // Enable gzip compression
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true, // Enable CSS optimization
-    turbo: true, // Enable Turbo
-  },
 };
 
 export default withBundleAnalyzer(nextConfig);
