@@ -1,6 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 
 const Footer = () => {
   const searchParams = useSearchParams();
@@ -19,36 +20,36 @@ const Footer = () => {
       <section>
         <ul className="flex flex-wrap gap-2 underline dark:decoration-dark-outlineVariant">
           <li>
-            <a
+            <Link
               className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=1')}`}
               href="/policy?index=1"
             >
               شروط الخدمة
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=2')}`}
               href="/policy?index=2"
             >
               سياسة الخصوصية
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=3')}`}
               href="/policy?index=3"
             >
               سياسة الكوكيز
-            </a>
+            </Link>
           </li>
           <li>
-            <a
+            <Link
               className={`hover:text-primary dark:text-onSurfaceVariant ${activeClass('index=3')}`}
               href="/node-api/sitemap.xml"
             >
               خريطة الموقع
-            </a>
+            </Link>
           </li>
         </ul>
         <div className="mt-4 text-onSurfaceVariant">

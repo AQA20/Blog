@@ -16,6 +16,7 @@ import MoonLine from './iconComponents/MoonLine';
 import SunLine from './iconComponents/SunLine';
 import { useTheme } from 'next-themes';
 import Logo from './Logo';
+import Link from 'next/link';
 
 const menuItems = [
   { name: 'الرئيسية', url: '/', icon: <Home2Line size={24} /> },
@@ -91,9 +92,9 @@ const Navbar = () => {
       return <p>جاري التحميل....</p>;
     } else if (isHomePage && !showSearch) {
       return (
-        <a href="/" className="text-2xl" aria-label="Home Page Link">
+        <Link href="/" className="text-2xl" aria-label="Home Page Link">
           <Logo fill={currentTheme === 'light' ? 'black' : 'white'} />
-        </a>
+        </Link>
       );
     }
   };
