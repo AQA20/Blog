@@ -7,7 +7,7 @@ jobs:
   create_branch_directory:
     runs-on: self-hosted
     steps:
-      - name: Create and Navigate to Branch Directory
+      - name: Create the Branch Directory
         run: |
           mkdir -p ${{ github.ref_name }}
 
@@ -54,7 +54,7 @@ jobs:
           cd server
           npm run migrate
           npm run seed 
-          pm2 restart ${{ env.PM2_SERVER_NAME }} || pm2 start npm --name ${{ env.PM2_SERVER_NAME }} -- start
+          pm2 restart pm2.config.cjs
           pm2 save
         env:
           NODE_ENV: ${{ github.ref_name == 'main' && 'production' || 'testing' }}
@@ -83,6 +83,7 @@ jobs:
           NEXT_JS_API_URL: ${{ github.ref_name == 'main' && secrets.NEXT_JS_API_URL || secrets.NEXT_JS_API_URL_TEST }}
           NEXT_JS_URL: ${{ github.ref_name == 'main' && secrets.NEXT_JS_URL || secrets.NEXT_JS_URL_TEST }}
           USERS: ${{ github.ref_name == 'main' && secrets.USERS || secrets.USERS_TEST }}
+          PM2_NAME: ${{ env.PM2_SERVER_NAME }}
 
   build-client:
     runs-on: self-hosted
