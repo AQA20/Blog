@@ -7,6 +7,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 });
 
 const nextConfig = {
+  // Environment variables accessible in the browser
+
   env: {
     API_URL: process.env.API_URL,
     REVALIDATION_SECRET: process.env.REVALIDATION_SECRET,
@@ -27,8 +29,19 @@ const nextConfig = {
       { protocol: 'https', hostname: 'abs.twimg.com', pathname: '**' },
     ],
   },
+  // Static page generation timeout
   staticPageGenerationTimeout: 600,
-  reactStrictMode: process.env.NODE_ENV === 'production',
+  // React strict mode
+  reactStrictMode: process.env.NODE_ENV === 'development',
+
+  // Performance optimizations
+  output: 'standalone', // Enables optimized production builds
+  compress: true, // Enable gzip compression
+  // Experimental features for better performance
+  experimental: {
+    optimizeCss: true, // Enable CSS optimization
+    turbo: true, // Enable Turbo
+  },
 };
 
 export default withBundleAnalyzer(nextConfig);
