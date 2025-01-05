@@ -32,10 +32,13 @@ const config = {
     port: process.env.DB_PORT,
     dialect: 'mysql',
     migrationStorageTableName: 'migrations',
+    dialectOptions: {
+      connectTimeout: 60000,
+    },
     pool: {
       max: 5,
       min: 0,
-      acquire: 30000,
+      acquire: 60000,
       idle: 10000,
     },
   },
