@@ -27,7 +27,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'abs.twimg.com', pathname: '**' },
     ],
   },
-  staticPageGenerationTimeout: 300,
+  staticPageGenerationTimeout: 600,
   reactStrictMode: process.env.NODE_ENV === 'production',
 };
 
