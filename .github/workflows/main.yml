@@ -21,6 +21,11 @@ jobs:
         working-directory: ${{ github.ref_name }}
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          path: ${{ github.ref_name }}
+
       - name: Set Environment Variables
         id: set-env
         run: |
