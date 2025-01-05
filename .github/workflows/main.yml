@@ -102,11 +102,10 @@ jobs:
           echo "PACKAGE_LOCK_PATH=${{ github.ref_name}}/package-lock.json" >> $GITHUB_ENV
 
       - name: Cache client npm dependencies
-        uses: actions/cache@v4
         id: client_node_modules
+        uses: actions/cache@v4
         with:
-          path: |
-            ${{ github.ref_name }}/node_modules
+          path: ${{ github.ref_name }}/node_modules
           key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles(env.PACKAGE_LOCK_PATH) }}
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
