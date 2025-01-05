@@ -111,14 +111,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
-      - name: Debug Cache Key and File Hash
-        run: |
-          echo "PACKAGE_LOCK_PATH: ${{ env.PACKAGE_LOCK_PATH }}"
-          echo "Cache Key: ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}-${{ hashFiles(env.PACKAGE_LOCK_PATH) }}"
+      - name: Debug Cache hit
+        run: echo ${{ steps.client_node_modules.outputs.cache-hit }}
+
+      - name: Check node_modules
+        run: ls -la ${{ github.ref_name }}/node_modules
 
       - name: Install client npm dependencies
-        run: |
-          npm ci
+        run: npm ci
         if: steps.client_node_modules.outputs.cache-hit != 'true'
 
       - name: Cache Next.js build artifacts
