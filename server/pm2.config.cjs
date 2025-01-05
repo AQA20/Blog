@@ -11,7 +11,7 @@ module.exports = {
       // PM2 specific configurations
       instances: 1, // Limit to 1 instance (since I have a single core)
       log_date_format: 'YYYY-MM-DD HH:mm:ss', // Specify log date format
-      autorestart: false, // Disable automatic restart on failure
+      autorestart: true, // Enable automatic restart on failure
       watch: false, // Disable watching for file changes (to reduce CPU usage)
     },
   ],

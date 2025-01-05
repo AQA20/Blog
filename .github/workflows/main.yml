@@ -110,12 +110,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-npm-client-${{ env.CACHE_KEY }}
 
-      - name: Debug Cache hit
-        run: echo ${{ steps.client_node_modules.outputs.cache-hit }}
-
-      - name: Check node_modules
-        run: ls -la ${{ github.ref_name }}/node_modules
-
       - name: Install client npm dependencies
         run: npm ci
         if: steps.client_node_modules.outputs.cache-hit != 'true'
