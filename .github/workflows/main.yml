@@ -55,7 +55,7 @@ jobs:
           key: ${{ runner.os }}-${{ github.ref_name }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           # If source files changed but packages didn't, rebuild from a prior cache.
           restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-${{ github.ref_name }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
       - name: Build Client Application
         run: |
