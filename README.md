@@ -35,8 +35,8 @@ images: {
 ### Clone the repository
 
 ```bash
-git clone git@github.com:AQA20/500kalima.git
-cd 500kalima
+git clone git@github.com:AQA20/blog.git
+cd blog
 ```
 
 ---
