@@ -86,7 +86,7 @@ jobs:
             DEPLOY_DIR="/var/www/test"
           fi
 
-          sudo cp -r ~/actions-runner/_work/500kalima/500kalima/${{ github.ref_name }}/.next $DEPLOY_DIR/
+          sudo cp -r ~/actions-runner/_work/blog/blog/${{ github.ref_name }}/.next $DEPLOY_DIR/
 
       - name: Restart Nginx Service
         run: |
