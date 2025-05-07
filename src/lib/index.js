@@ -9,6 +9,7 @@ import {
   fetchTagArticles,
   updateArticleShare,
   fetchArticleSlugs,
+  fetchRelatedArticles,
 } from './data';
 
 export {
@@ -22,4 +23,5 @@ export {
   fetchTagArticles,
   updateArticleShare,
   fetchArticleSlugs,
+  fetchRelatedArticles,
 };

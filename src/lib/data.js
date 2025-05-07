@@ -98,3 +98,14 @@ export const fetchTagArticles = handleAsyncError(async (tag, options) => {
 export const updateArticleShare = handleAsyncError(async (id) => {
   await apiClient.put(`/article/share/${id}`);
 });
+
+export const fetchRelatedArticles = handleAsyncError(async (articleId, categoryId, tags) => {
+  const tagIds = tags.map((tag) => tag.id).join(',');
+  const {
+    data: { data },
+  } = await apiClient.get(
+    `/articles/related/${articleId}?categoryId=${categoryId}&tagIds=${tagIds}`,
+  );
+  console.log(data)
+  return data;
+});

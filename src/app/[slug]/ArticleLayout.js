@@ -3,16 +3,16 @@ const SwapIt = dynamic(() => import('@/components/SwapIt'));
 import Badge from '@/components/Badge';
 import Card from '@/components/Card';
 import ShareButton from '@/components/ShareButton';
-import { fetchTags, fetchArticles } from '@/lib';
+import { fetchTags, fetchRelatedArticles } from '@/lib';
 import timeAgo from '@/lib/timeAgo';
 
 export default async function ArticleLayout({ article, children }) {
   const { tags } = await fetchTags();
-  const { articles } = await fetchArticles({
-    limit: 6,
-    orderBy: 'views',
-    order: 'DESC',
-  });
+  const articles = await fetchRelatedArticles(
+    article.id,
+    article.categoryId,
+    article.Tags,
+  );
 
   const card = (article) => {
     return (
