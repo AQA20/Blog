@@ -106,6 +106,5 @@ export const fetchRelatedArticles = handleAsyncError(async (articleId, categoryI
   } = await apiClient.get(
     `/articles/related/${articleId}?categoryId=${categoryId}&tagIds=${tagIds}`,
   );
-  console.log(data)
   return data;
 });
