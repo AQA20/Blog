@@ -4,16 +4,26 @@ import Paginate from '@/components/Paginate';
 import FilterBadges from '@/components/FilterBadges';
 import moment from 'moment';
 
+
+function normalizeOptions(searchParams) {
+  return {
+    orderBy: searchParams?.orderBy || 'createdAt',
+    order: searchParams?.order || 'DESC',
+    page: Number(searchParams?.page) || 1,
+    search: searchParams?.search || '',
+  };
+}
+
+async function getTagData(tag, searchParams) {
+  const options = normalizeOptions(searchParams);
+  return fetchTagArticles(tag, options);
+}
+
 export async function generateMetadata({ searchParams, params }) {
   const routeParams = await params;
   const urlSearchParams = await searchParams;
   const tag = routeParams?.tag.replace(/-/g, ' ').replace('#', '').trim();
-  const { articles } = await fetchTagArticles(tag, {
-    orderBy: urlSearchParams?.orderBy,
-    order: urlSearchParams?.order,
-    page: urlSearchParams?.page,
-    search: urlSearchParams?.search,
-  });
+  const { articles } = await getTagData(tag, urlSearchParams);;
   const title = `هاشتاغ #${tag} | اكتشف المواضيع المتعلقة بـ #${tag}`;
   const description = `تصفح جميع المقالات والمواضيع المرتبطة بـ #${tag}. محتوى مميز ومتنوع يغطي أحدث الاتجاهات والأفكار. اكتشف المزيد حول هذا الموضوع الآن!`;
   return {
@@ -52,12 +62,7 @@ export default async function Page({ searchParams, params }) {
   const routeParams = await params;
   const urlSearchParams = await searchParams;
   const tag = routeParams?.tag.replace(/-/g, ' ').replace('#', '').trim();
-  const { articles, totalPages } = await fetchTagArticles(tag, {
-    orderBy: urlSearchParams?.orderBy,
-    order: urlSearchParams?.order,
-    page: urlSearchParams?.page,
-    search: urlSearchParams?.search,
-  });
+  const { articles, totalPages } = await getTagData(tag, urlSearchParams);
   return (
     <div>
       {!articles.length && <p className="my-4">لم يتم العثور على نتائج</p>}
