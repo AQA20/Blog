@@ -82,7 +82,7 @@ export const fetchTags = cache(
   }),
 );
 
-export const fetchTagArticles = handleAsyncError(async (tag, options) => {
+export const fetchTagArticles = cache(handleAsyncError(async (tag, options) => {
   const { orderBy, order, page } = options;
   const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
   const normalizedOrder = order ? order : 'DESC';
@@ -93,7 +93,7 @@ export const fetchTagArticles = handleAsyncError(async (tag, options) => {
     `/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
   );
   return data;
-});
+}));
 
 export const updateArticleShare = handleAsyncError(async (id) => {
   await apiClient.put(`/article/share/${id}`);
