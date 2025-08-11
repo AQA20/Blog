@@ -1,108 +1,120 @@
-import apiClient from './apiClient';
+import Image from 'next/image';
+import Tag from '@/components/Tag';
 import { notFound } from 'next/navigation';
-import { cache } from 'react';
+import DOMPurify from 'isomorphic-dompurify';
+import ShareButton from '@/components/ShareButton';
+import ArticleLayout from './ArticleLayout';
+import { fetchArticle, fetchArticleSlugs } from '@/lib';
+import moment from 'moment';
+import Article from '@/components/Article/Article';
 
-// Wrapper function to handle asynchronous errors (Instead of repeating try/catch block in each asynchronous function)
-const handleAsyncError = (func) => {
-  return async (...args) => {
-    try {
-      return await func(...args);
-    } catch (error) {
-      console.error('error', error);
-      if (error?.message === 'Article is not found') {
-        return notFound();
-      }
-      if (error?.message && error?.statusCode) {
-        throw new Error(`${error?.message} - ${error?.statusCode}`);
-      }
-      throw new Error(error);
-    }
+// This function generates static parameters for each article
+export async function generateStaticParams() {
+  // Fetch all of the slugs from the API
+  const data = await fetchArticleSlugs();
+  // Each slug will be used to generate a static page
+  return data.map((article) => ({ slug: article.slug }));
+}
+
+export async function generateMetadata({ params }) {
+  const routeParams = await params;
+  // Even though we're calling fetchArticle twice once here and once
+  // In the page component the request will be sent once, as we're
+  // using react cache
+  const article = await fetchArticle(routeParams.slug);
+  !article && notFound();
+
+  const { title, description, featuredImg, author, createdAt, Tags, slug } =
+    article;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      // Open Graph (OG) tags
+      title,
+      description,
+      url: `${process.env.NEXT_JS_URL}/${slug}`,
+      siteName: '500kalima',
+      images: [
+        {
+          url: featuredImg, // Must be an absolute URL
+          width: 940,
+          height: 788,
+        },
+      ],
+      locale: 'ar_AR',
+      type: 'website',
+    },
+    // Other metadata
+    canonicalUrl: `${process.env.NEXT_JS_URL}/${slug}`,
+    author: author.name,
+    publicationDate: moment(createdAt).format('MMMM Do YYYY, h:mm:ss a'),
+    keywords: Tags.map((tag) => tag.name).join(', '),
+    language: 'ar',
   };
-};
+}
 
-// Using Cache for caching the previous calls, when the function is called again
-// with same arguments, wrap it with handleAsyncError to catch errors and fetch
-// the article by its slug
-export const fetchArticle = cache(
-  handleAsyncError(async (slug) => {
-    const {
-      data: { data },
-    } = await apiClient.get(`/article/${slug}`);
-    return data;
-  }),
-);
+export default async function Page({ params }) {
+  const routeParams = await params;
+  const article = await fetchArticle(routeParams.slug);
+  !article && notFound();
 
-// Using Cache for caching the previous calls, when the function is called again
-// with same arguments, wrap it with handleAsyncError to catch errors and fetch
-// the all the articles
-export const fetchArticles = cache(
-  handleAsyncError(async (options) => {
-    const { orderBy, order, search, limit, page } = options;
-    const normalizedPage = page ? page : 1;
-    const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
-    const normalizedOrder = order ? order : 'DESC';
-    const normalizedLimit = limit ? limit : 5;
-    const normalizedSearch = search ? search : '';
-    const {
-      data: { data },
-    } = await apiClient.get(
-      `/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&search=${normalizedSearch}&limit=${normalizedLimit}&page=${normalizedPage}`,
-    );
+  let cleanHtml = DOMPurify.sanitize(article.content, {
+    FORBID_TAGS: ['h1'], // Remove h1 tags
+    ALLOWED_TAGS: [
+      'h2',
+      'h3',
+      'p',
+      'iframe',
+      'link',
+      'a',
+      'footer',
+      'ol',
+      'ul',
+      'li',
+      'img',
+      'strong',
+      'cite',
+      'quote',
+      'div',
+      'br',
+      'blockquote',
+    ],
+  });
 
-    return data;
-  }),
-);
-
-// Wrap it with handleAsyncError to catch errors and fetch
-// all of article slugs
-export const fetchArticleSlugs = cache(handleAsyncError(async () => {
-  const {
-    data: { data },
-  } = await apiClient.get('/article/slugs');
-
-  return data;
-}));
-
-export const fetchSuggestions = handleAsyncError(async (search) => {
-  const term = search || '';
-
-  const {
-    data: { data },
-  } = await apiClient.get(`/articles/suggestions?search=${term}`);
-  return data;
-});
-
-export const fetchTags = cache(
-  handleAsyncError(async (limit = 6) => {
-    const {
-      data: { data },
-    } = await apiClient.get(`/tags/?limit=${limit}`);
-
-    return data;
-  }),
-);
-
-export const fetchTagArticles = cache(handleAsyncError(async (tag, options) => {
-  const { orderBy, order, page } = options;
-  const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
-  const normalizedOrder = order ? order : 'DESC';
-  const normalizedPage = page ? page : 1;
-  const url = `/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`
-  const res = await fetch(url, { next: { revalidate: 60 } });
-  const json = await res.json();
-  return json.data.data;
-}));
-
-export const updateArticleShare = handleAsyncError(async (id) => {
-  await apiClient.put(`/article/share/${id}`);
-});
-
-export const fetchRelatedArticles = handleAsyncError(async (articleId, categoryId, tags) => {
-  const tagIds = tags.map((tag) => tag.id).join(',');
-  const {
-    data: { data },
-  } = await apiClient.get(
-    `/articles/related/${articleId}?categoryId=${categoryId}&tagIds=${tagIds}`,
+  return (
+    <ArticleLayout article={article}>
+      <article>
+        <section className="truncate my-2">
+          {article.Tags.map((tag) => (
+            <Tag key={tag.name} name={tag.name} />
+          ))}
+        </section>
+        <header>
+          <h1 className="mb-2">{article.title}</h1>
+        </header>
+        <figure className="block w-full h-full md:w-[680px] md:h-[510px] overflow-hidden">
+          <Image
+            onClick={null}
+            src={article.featuredImg}
+            alt={article.title}
+            width={680}
+            height={510}
+            className="rounded-[8px] h-full w-full object-cover shrink-0 cursor-pointer"
+          />
+        </figure>
+        <section className="mt-4 mb-2">
+          <ShareButton
+            buttonStyle="bg-primary text-onPrimary"
+            textColor="text-onPrimary"
+            iconColor="fill-light-onPrimary dark:fill-dark-onPrimary"
+            id={article.id}
+            clipboardContent={article.slug}
+          />
+        </section>
+        <Article content={cleanHtml} />
+      </article>
+    </ArticleLayout>
   );
-  return data;
-});
+}
