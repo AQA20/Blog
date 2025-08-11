@@ -59,6 +59,13 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
+      <head>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3218714329930969"
+          crossorigin="anonymous"
+        ></script>
+      </head>
       <body className="w-full font-noto bg-surface">
         <NextThemesProvider
           attribute="class"

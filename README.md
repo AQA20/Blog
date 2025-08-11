@@ -1,6 +1,6 @@
 # Blog README
 
-Welcome to my blog repository! This is a blog project built with `Next.js`. The production version is live at **https://500kalima.com**. This document provides a guide about how to setup and run the project. Please follow the instructions below:
+Welcome to my blog repository! This is a blog project built with `Next.js`. The production version is live at **https://500kalima.site**. This document provides a guide about how to setup and run the project. Please follow the instructions below:
 
 ---
 
