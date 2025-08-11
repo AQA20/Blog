@@ -55,13 +55,13 @@ export const fetchArticles = cache(
 
 // Wrap it with handleAsyncError to catch errors and fetch
 // all of article slugs
-export const fetchArticleSlugs = handleAsyncError(async () => {
+export const fetchArticleSlugs = cache(handleAsyncError(async () => {
   const {
     data: { data },
   } = await apiClient.get('/article/slugs');
 
   return data;
-});
+}));
 
 export const fetchSuggestions = handleAsyncError(async (search) => {
   const term = search || '';
@@ -87,12 +87,10 @@ export const fetchTagArticles = cache(handleAsyncError(async (tag, options) => {
   const normalizedOrderBy = orderBy ? orderBy : 'createdAt';
   const normalizedOrder = order ? order : 'DESC';
   const normalizedPage = page ? page : 1;
-  const {
-    data: { data },
-  } = await apiClient.get(
-    `/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`,
-  );
-  return data;
+  const url = `/tag/${tag}/articles?orderBy=${normalizedOrderBy}&order=${normalizedOrder}&page=${normalizedPage}`
+  const res = await fetch(url, { next: { revalidate: 60 } });
+  const json = await res.json();
+  return json.data.data;
 }));
 
 export const updateArticleShare = handleAsyncError(async (id) => {

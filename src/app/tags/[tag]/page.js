@@ -5,13 +5,18 @@ import FilterBadges from '@/components/FilterBadges';
 import moment from 'moment';
 
 
-async function getTagData(tag, urlSearchParams) {
-  return fetchTagArticles(tag, {
-    orderBy: urlSearchParams?.orderBy,
-    order: urlSearchParams?.order,
-    page: urlSearchParams?.page,
-    search: urlSearchParams?.search,
-  });
+function normalizeOptions(searchParams) {
+  return {
+    orderBy: searchParams?.orderBy || 'createdAt',
+    order: searchParams?.order || 'DESC',
+    page: Number(searchParams?.page) || 1,
+    search: searchParams?.search || '',
+  };
+}
+
+async function getTagData(tag, searchParams) {
+  const options = normalizeOptions(searchParams);
+  return fetchTagArticles(tag, options);
 }
 
 export async function generateMetadata({ searchParams, params }) {
