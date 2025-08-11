@@ -23,14 +23,13 @@ const handleAsyncError = (func) => {
 // Using Cache for caching the previous calls, when the function is called again
 // with same arguments, wrap it with handleAsyncError to catch errors and fetch
 // the article by its slug
-export const fetchArticle = cache(
-  handleAsyncError(async (slug) => {
+export const fetchArticle = handleAsyncError(async (slug) => {
     const {
       data: { data },
     } = await apiClient.get(`/article/${slug}`);
     return data;
-  }),
-);
+  });
+
 
 // Using Cache for caching the previous calls, when the function is called again
 // with same arguments, wrap it with handleAsyncError to catch errors and fetch
