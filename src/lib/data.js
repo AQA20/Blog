@@ -49,15 +49,13 @@ export const fetchArticles = handleAsyncError(async (options) => {
 
 // Wrap it with handleAsyncError to catch errors and fetch
 // all of article slugs
-export const fetchArticleSlugs = cache(
-  handleAsyncError(async () => {
-    const {
-      data: { data },
-    } = await apiClient.get('/article/slugs');
+export const fetchArticleSlugs = handleAsyncError(async () => {
+  const {
+    data: { data },
+  } = await apiClient.get('/article/slugs');
 
-    return data;
-  }),
-);
+  return data;
+});
 
 export const fetchSuggestions = handleAsyncError(async (search) => {
   const term = search || '';
