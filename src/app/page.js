@@ -7,6 +7,8 @@ const FilterBadges = lazy(() => import('@/components/FilterBadges'));
 
 // Todo implement unit & integration tests
 
+export const revalidate = 60 * 60 * 23;
+
 export default async function Home({ searchParams }) {
   const urlSearchParams = await searchParams;
   const { orderBy, order, page } = urlSearchParams;

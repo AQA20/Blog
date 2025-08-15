@@ -55,6 +55,8 @@ export async function generateMetadata({ params }) {
   };
 }
 
+export const revalidate = 60 * 60 * 23;
+
 export default async function Page({ params }) {
   const routeParams = await params;
   const article = await fetchArticle(routeParams.slug);
