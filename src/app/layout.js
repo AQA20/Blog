@@ -59,6 +59,9 @@ export default async function RootLayout({ children }) {
       dir="rtl"
       suppressHydrationWarning
     >
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-3218714329930969" />
+      </head>
       <body className="w-full font-noto bg-surface">
         <NextThemesProvider
           attribute="class"
