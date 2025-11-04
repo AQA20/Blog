@@ -35,7 +35,7 @@ const nextConfig = {
     ],
   },
   // Static page generation timeout
-  staticPageGenerationTimeout: 600,
+  staticPageGenerationTimeout: 1200,
   // React strict mode
   reactStrictMode: process.env.NODE_ENV === 'development',
 };
