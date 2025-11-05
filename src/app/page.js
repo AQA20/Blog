@@ -32,7 +32,7 @@ export default async function Home({ searchParams }) {
                 slug={article.slug}
                 tags={article.Tags}
                 description={article.description}
-                imgUrl={article.featuredImg}
+                imgUrl={`https://d10l53fpfhdeev.cloudfront.net${article.featuredImg}`}
                 timeAgo={timeAgo(article.createdAt)}
                 width={180}
                 height={120}
