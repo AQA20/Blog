@@ -97,7 +97,7 @@ export default async function Page({ params }) {
         <figure className="block w-full h-full md:w-[680px] md:h-[510px] overflow-hidden">
           <Image
             onClick={null}
-            src={article.featuredImg}
+            src={`https://d10l53fpfhdeev.cloudfront.net${article.featuredImg}`}
             alt={article.title}
             width={680}
             height={510}

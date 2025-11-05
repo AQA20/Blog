@@ -18,7 +18,7 @@ const Hero = ({ article }) => {
           <Image
             onClick={() => router.push(`/${article.slug}`)}
             className="rounded-[8px] cursor-pointer h-full w-full object-cover"
-            src={article.featuredImg}
+            src={`https://d10l53fpfhdeev.cloudfront.net${article.featuredImg}`}
             width="680"
             height="510"
             alt={article.title}
