@@ -23,7 +23,7 @@ export default async function ArticleLayout({ article, children }) {
         id={article.id}
         description={article.description}
         tags={article.Tags}
-        imgUrl={article.featuredImg}
+        imgUrl={`https://d10l53fpfhdeev.cloudfront.net${article.featuredImg}`}
         timeAgo={timeAgo(article.createdAt)}
         isSmall={true}
         animate={false}

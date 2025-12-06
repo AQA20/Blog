@@ -25,7 +25,7 @@ const Sidebar = async () => {
               slug={article.slug}
               description={article.description}
               tags={article.Tags}
-              imgUrl={article.featuredImg}
+              imgUrl={`https://d10l53fpfhdeev.cloudfront.net${article.featuredImg}`}
               timeAgo={timeAgo(article.createdAt)}
               isSmall={true}
             />
