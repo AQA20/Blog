@@ -5,7 +5,7 @@ on:
     branches: [main, test]
 jobs:
   create_branch_directory:
-    runs-on: self-hosted 
+    runs-on: self-hosted
     steps:
       - name: Create the Branch Directory
         run: |
@@ -85,7 +85,6 @@ jobs:
             sudo mkdir -p /var/www/test
             DEPLOY_DIR="/var/www/test"
           fi
-
           sudo cp -r ~/actions-runner/_work/Blog/Blog/${{ github.ref_name }}/.next $DEPLOY_DIR/
 
       - name: Restart Nginx Service
